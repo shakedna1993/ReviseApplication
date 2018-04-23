@@ -1,0 +1,703 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ReviseDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="CatId" />
+          </Key>
+          <Property Name="CatId" Type="int" Nullable="false" />
+          <Property Name="CatName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="chat">
+          <Key>
+            <PropertyRef Name="chatId" />
+            <PropertyRef Name="msgId" />
+          </Key>
+          <Property Name="chatId" Type="int" Nullable="false" />
+          <Property Name="totalMsg" Type="int" Nullable="false" />
+          <Property Name="msgId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="depId" />
+          </Key>
+          <Property Name="depId" Type="int" Nullable="false" />
+          <Property Name="depName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="depScore" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="gamification">
+          <Key>
+            <PropertyRef Name="gamId" />
+          </Key>
+          <Property Name="gamId" Type="int" Nullable="false" />
+          <Property Name="gamName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="msgId" />
+          </Key>
+          <Property Name="msgId" Type="int" Nullable="false" />
+          <Property Name="msg" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="ProjId" />
+          </Key>
+          <Property Name="ProjId" Type="int" Nullable="false" />
+          <Property Name="ProjName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="creation_date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="projUser">
+          <Key>
+            <PropertyRef Name="projId" />
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="projId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="requirement">
+          <Key>
+            <PropertyRef Name="reqId" />
+          </Key>
+          <Property Name="reqId" Type="int" Nullable="false" />
+          <Property Name="reqName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userid" />
+          </Key>
+          <Property Name="userid" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="birthday" Type="date" />
+          <Property Name="PhoneNum" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="score" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="isConnected" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="userCatReq">
+          <Key>
+            <PropertyRef Name="catId" />
+            <PropertyRef Name="reqId" />
+          </Key>
+          <Property Name="catId" Type="int" Nullable="false" />
+          <Property Name="reqId" Type="int" Nullable="false" />
+          <Property Name="rate" Type="int" />
+        </EntityType>
+        <EntityType Name="userChat">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="chatId" />
+            <PropertyRef Name="msgId" />
+          </Key>
+          <Property Name="userId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="chatId" Type="int" Nullable="false" />
+          <Property Name="msgId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userRole">
+          <Key>
+            <PropertyRef Name="userid" />
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="userid" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="start_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="end_ip_address" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="create_date" Type="datetime" Nullable="false" />
+          <Property Name="modify_date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_cat_userCatReq">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="catId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_chat_message">
+          <End Role="message" Type="Self.message" Multiplicity="1" />
+          <End Role="chat" Type="Self.chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="msgId" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="msgId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chat_userChat">
+          <End Role="chat" Type="Self.chat" Multiplicity="1" />
+          <End Role="userChat" Type="Self.userChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chat">
+              <PropertyRef Name="chatId" />
+              <PropertyRef Name="msgId" />
+            </Principal>
+            <Dependent Role="userChat">
+              <PropertyRef Name="chatId" />
+              <PropertyRef Name="msgId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_proj_projUser">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="projUser" Type="Self.projUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="projUser">
+              <PropertyRef Name="projId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_req_userCatReq">
+          <End Role="requirement" Type="Self.requirement" Multiplicity="1" />
+          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirement">
+              <PropertyRef Name="reqId" />
+            </Principal>
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="reqId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_role_userRole">
+          <End Role="role" Type="Self.role" Multiplicity="1" />
+          <End Role="userRole" Type="Self.userRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="userRole">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_projUser">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="projUser" Type="Self.projUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="projUser">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="user1" Type="Self.user" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="user1">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_userChat">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="userChat" Type="Self.userChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="userChat">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_userRole">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="userRole" Type="Self.userRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="userRole">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReviseDBModelStoreContainer">
+          <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="chat" EntityType="Self.chat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="department" EntityType="Self.department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="gamification" EntityType="Self.gamification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="message" EntityType="Self.message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="projUser" EntityType="Self.projUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requirement" EntityType="Self.requirement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userCatReq" EntityType="Self.userCatReq" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userChat" EntityType="Self.userChat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userRole" EntityType="Self.userRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
+            <DefiningQuery>SELECT 
+    [database_firewall_rules].[id] AS [id], 
+    [database_firewall_rules].[name] AS [name], 
+    [database_firewall_rules].[start_ip_address] AS [start_ip_address], 
+    [database_firewall_rules].[end_ip_address] AS [end_ip_address], 
+    [database_firewall_rules].[create_date] AS [create_date], 
+    [database_firewall_rules].[modify_date] AS [modify_date]
+    FROM [sys].[database_firewall_rules] AS [database_firewall_rules]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_cat_userCatReq" Association="Self.FK_cat_userCatReq">
+            <End Role="category" EntitySet="category" />
+            <End Role="userCatReq" EntitySet="userCatReq" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chat_message" Association="Self.FK_chat_message">
+            <End Role="message" EntitySet="message" />
+            <End Role="chat" EntitySet="chat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_userChat" Association="Self.FK_Chat_userChat">
+            <End Role="chat" EntitySet="chat" />
+            <End Role="userChat" EntitySet="userChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_proj_projUser" Association="Self.FK_proj_projUser">
+            <End Role="project" EntitySet="project" />
+            <End Role="projUser" EntitySet="projUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_req_userCatReq" Association="Self.FK_req_userCatReq">
+            <End Role="requirement" EntitySet="requirement" />
+            <End Role="userCatReq" EntitySet="userCatReq" />
+          </AssociationSet>
+          <AssociationSet Name="FK_role_userRole" Association="Self.FK_role_userRole">
+            <End Role="role" EntitySet="role" />
+            <End Role="userRole" EntitySet="userRole" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_projUser" Association="Self.FK_user_projUser">
+            <End Role="user" EntitySet="user" />
+            <End Role="projUser" EntitySet="projUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_user" Association="Self.FK_user_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="user1" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_userChat" Association="Self.FK_user_userChat">
+            <End Role="user" EntitySet="user" />
+            <End Role="userChat" EntitySet="userChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_userRole" Association="Self.FK_user_userRole">
+            <End Role="user" EntitySet="user" />
+            <End Role="userRole" EntitySet="userRole" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ReviseDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="category">
+          <Key>
+            <PropertyRef Name="CatId" />
+          </Key>
+          <Property Name="CatId" Type="Int32" Nullable="false" />
+          <Property Name="CatName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="userCatReqs" Relationship="Self.FK_cat_userCatReq" FromRole="category" ToRole="userCatReq" />
+        </EntityType>
+        <EntityType Name="chat">
+          <Key>
+            <PropertyRef Name="chatId" />
+            <PropertyRef Name="msgId" />
+          </Key>
+          <Property Name="chatId" Type="Int32" Nullable="false" />
+          <Property Name="totalMsg" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="ReviseDBModel.userChat" FromRole="chat" ToRole="user" />
+          <Property Name="msgId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="message" Relationship="ReviseDBModel.FK_chat_message" FromRole="chat" ToRole="message" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="depId" />
+          </Key>
+          <Property Name="depId" Type="Int32" Nullable="false" />
+          <Property Name="depName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="depScore" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="gamification">
+          <Key>
+            <PropertyRef Name="gamId" />
+          </Key>
+          <Property Name="gamId" Type="Int32" Nullable="false" />
+          <Property Name="gamName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="message">
+          <Key>
+            <PropertyRef Name="msgId" />
+          </Key>
+          <Property Name="msgId" Type="Int32" Nullable="false" />
+          <Property Name="msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="chats" Relationship="ReviseDBModel.FK_chat_message" FromRole="message" ToRole="chat" />
+        </EntityType>
+        <EntityType Name="requirement">
+          <Key>
+            <PropertyRef Name="reqId" />
+          </Key>
+          <Property Name="reqId" Type="Int32" Nullable="false" />
+          <Property Name="reqName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="userCatReqs" Relationship="Self.FK_req_userCatReq" FromRole="requirement" ToRole="userCatReq" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="Self.userRole" FromRole="role" ToRole="user" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userid" />
+          </Key>
+          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="fname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="birthday" Type="DateTime" Precision="0" />
+          <Property Name="PhoneNum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="score" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isConnected" Type="Int32" />
+          <NavigationProperty Name="roles" Relationship="Self.userRole" FromRole="user" ToRole="role" />
+          <NavigationProperty Name="user1" Relationship="ReviseDBModel.FK_user_user" FromRole="user" ToRole="user1" />
+          <NavigationProperty Name="user2" Relationship="ReviseDBModel.FK_user_user" FromRole="user1" ToRole="user" />
+          <NavigationProperty Name="projects" Relationship="ReviseDBModel.projUser" FromRole="user" ToRole="project" />
+          <NavigationProperty Name="chats" Relationship="ReviseDBModel.userChat" FromRole="user" ToRole="chat" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="userCatReq">
+          <Key>
+            <PropertyRef Name="catId" />
+            <PropertyRef Name="reqId" />
+          </Key>
+          <Property Name="catId" Type="Int32" Nullable="false" />
+          <Property Name="reqId" Type="Int32" Nullable="false" />
+          <Property Name="rate" Type="Int32" />
+          <NavigationProperty Name="category" Relationship="Self.FK_cat_userCatReq" FromRole="userCatReq" ToRole="category" />
+          <NavigationProperty Name="requirement" Relationship="Self.FK_req_userCatReq" FromRole="userCatReq" ToRole="requirement" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="ProjId" />
+          </Key>
+          <Property Name="ProjId" Type="Int32" Nullable="false" />
+          <Property Name="ProjName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="users" Relationship="ReviseDBModel.projUser" FromRole="project" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_cat_userCatReq">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="catId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_req_userCatReq">
+          <End Role="requirement" Type="Self.requirement" Multiplicity="1" />
+          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirement">
+              <PropertyRef Name="reqId" />
+            </Principal>
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="reqId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="userRole">
+          <End Role="role" Type="Self.role" Multiplicity="*" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ReviseDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="categories" EntityType="Self.category" />
+          <EntitySet Name="chats" EntityType="Self.chat" />
+          <EntitySet Name="departments" EntityType="Self.department" />
+          <EntitySet Name="gamifications" EntityType="Self.gamification" />
+          <EntitySet Name="messages" EntityType="Self.message" />
+          <EntitySet Name="requirements" EntityType="Self.requirement" />
+          <EntitySet Name="roles" EntityType="Self.role" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="userCatReqs" EntityType="Self.userCatReq" />
+          <EntitySet Name="projects" EntityType="Self.project" />
+          <AssociationSet Name="FK_cat_userCatReq" Association="Self.FK_cat_userCatReq">
+            <End Role="category" EntitySet="categories" />
+            <End Role="userCatReq" EntitySet="userCatReqs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_req_userCatReq" Association="Self.FK_req_userCatReq">
+            <End Role="requirement" EntitySet="requirements" />
+            <End Role="userCatReq" EntitySet="userCatReqs" />
+          </AssociationSet>
+          <AssociationSet Name="userRole" Association="Self.userRole">
+            <End Role="role" EntitySet="roles" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_user" Association="ReviseDBModel.FK_user_user">
+            <End Role="user" EntitySet="users" />
+            <End Role="user1" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="projUser" Association="ReviseDBModel.projUser">
+            <End Role="project" EntitySet="projects" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="userChat" Association="ReviseDBModel.userChat">
+            <End Role="chat" EntitySet="chats" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_chat_message" Association="ReviseDBModel.FK_chat_message">
+            <End Role="message" EntitySet="messages" />
+            <End Role="chat" EntitySet="chats" />
+          </AssociationSet>
+          <EntitySet Name="database_firewall_rules" EntityType="ReviseDBModel.database_firewall_rules" />
+        </EntityContainer>
+        <Association Name="FK_user_user">
+          <End Type="ReviseDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="ReviseDBModel.user" Role="user1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="user1">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projUser">
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="*" />
+          <End Type="ReviseDBModel.user" Role="user" Multiplicity="*" />
+        </Association>
+        <Association Name="userChat">
+          <End Type="ReviseDBModel.chat" Role="chat" Multiplicity="*" />
+          <End Type="ReviseDBModel.user" Role="user" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_chat_message">
+          <End Type="ReviseDBModel.message" Role="message" Multiplicity="1" />
+          <End Type="ReviseDBModel.chat" Role="chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="message">
+              <PropertyRef Name="msgId" />
+            </Principal>
+            <Dependent Role="chat">
+              <PropertyRef Name="msgId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="database_firewall_rules">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="start_ip_address" />
+            <PropertyRef Name="end_ip_address" />
+            <PropertyRef Name="create_date" />
+            <PropertyRef Name="modify_date" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="start_ip_address" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="end_ip_address" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReviseDBModelStoreContainer" CdmEntityContainer="ReviseDBEntities">
+          <EntitySetMapping Name="categories">
+            <EntityTypeMapping TypeName="ReviseDBModel.category">
+              <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="CatId" ColumnName="CatId" />
+                <ScalarProperty Name="CatName" ColumnName="CatName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chats">
+            <EntityTypeMapping TypeName="ReviseDBModel.chat">
+              <MappingFragment StoreEntitySet="chat">
+                <ScalarProperty Name="msgId" ColumnName="msgId" />
+                <ScalarProperty Name="chatId" ColumnName="chatId" />
+                <ScalarProperty Name="totalMsg" ColumnName="totalMsg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="departments">
+            <EntityTypeMapping TypeName="ReviseDBModel.department">
+              <MappingFragment StoreEntitySet="department">
+                <ScalarProperty Name="depId" ColumnName="depId" />
+                <ScalarProperty Name="depName" ColumnName="depName" />
+                <ScalarProperty Name="depScore" ColumnName="depScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gamifications">
+            <EntityTypeMapping TypeName="ReviseDBModel.gamification">
+              <MappingFragment StoreEntitySet="gamification">
+                <ScalarProperty Name="gamId" ColumnName="gamId" />
+                <ScalarProperty Name="gamName" ColumnName="gamName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="messages">
+            <EntityTypeMapping TypeName="ReviseDBModel.message">
+              <MappingFragment StoreEntitySet="message">
+                <ScalarProperty Name="msgId" ColumnName="msgId" />
+                <ScalarProperty Name="msg" ColumnName="msg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requirements">
+            <EntityTypeMapping TypeName="ReviseDBModel.requirement">
+              <MappingFragment StoreEntitySet="requirement">
+                <ScalarProperty Name="reqId" ColumnName="reqId" />
+                <ScalarProperty Name="reqName" ColumnName="reqName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="ReviseDBModel.role">
+              <MappingFragment StoreEntitySet="role">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="ReviseDBModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="birthday" ColumnName="birthday" />
+                <ScalarProperty Name="PhoneNum" ColumnName="PhoneNum" />
+                <ScalarProperty Name="score" ColumnName="score" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="isConnected" ColumnName="isConnected" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userCatReqs">
+            <EntityTypeMapping TypeName="ReviseDBModel.userCatReq">
+              <MappingFragment StoreEntitySet="userCatReq">
+                <ScalarProperty Name="catId" ColumnName="catId" />
+                <ScalarProperty Name="reqId" ColumnName="reqId" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="ReviseDBModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="ProjId" ColumnName="ProjId" />
+                <ScalarProperty Name="ProjName" ColumnName="ProjName" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="userRole" TypeName="ReviseDBModel.userRole" StoreEntitySet="userRole">
+            <EndProperty Name="role">
+              <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+            </EndProperty>
+            <EndProperty Name="user">
+              <ScalarProperty Name="userid" ColumnName="userid" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="projUser" TypeName="ReviseDBModel.projUser" StoreEntitySet="projUser">
+            <EndProperty Name="user">
+              <ScalarProperty Name="userid" ColumnName="userId" />
+            </EndProperty>
+            <EndProperty Name="project">
+              <ScalarProperty Name="ProjId" ColumnName="projId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="userChat" TypeName="ReviseDBModel.userChat" StoreEntitySet="userChat">
+            <EndProperty Name="user">
+              <ScalarProperty Name="userid" ColumnName="userId" />
+            </EndProperty>
+            <EndProperty Name="chat">
+              <ScalarProperty Name="msgId" ColumnName="msgId" />
+              <ScalarProperty Name="chatId" ColumnName="chatId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="database_firewall_rules">
+            <EntityTypeMapping TypeName="ReviseDBModel.database_firewall_rules">
+              <MappingFragment StoreEntitySet="database_firewall_rules">
+                <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+                <ScalarProperty Name="create_date" ColumnName="create_date" />
+                <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
+                <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
