@@ -92,6 +92,28 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
         });
     }
 
+    $rootScope.deplist = function () {
+        $http({
+            method: "GET",
+            url: "/Authentication/GetDepartment"
+        }).then(function mySuccess(response) {
+            if (response.data.success) {
+                $rootScope.deplist = data;
+            }
+        });
+    }
+
+    $rootScope.rolelist = function () {
+        $http({
+            method: "GET",
+            url: "/Authentication/GetRole"
+        }).then(function mySuccess(response) {
+            if (response.data.success) {
+                $rootScope.rolelist = data;
+            }
+        });
+    }
+
     $rootScope.logout = function () {
         $http({
             method: "GET",
@@ -112,12 +134,12 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
 mainModel.config(function ($routeProvider) {
     $routeProvider
         .when("/login", {
-            templateUrl: "/Authentication/Login"
+            templateUrl: "/Authentication/Login.cshtml"
         })
         .when("/register", {
-            templateUrl: "/Authentication/Register"
+            templateUrl: "/Authentication/Register.cshtml"
         })
         .when("/logout", {
-            templateUrl: "/Authentication/Logout"
+            templateUrl: "/Authentication/Login.cshtml"
         })
 });

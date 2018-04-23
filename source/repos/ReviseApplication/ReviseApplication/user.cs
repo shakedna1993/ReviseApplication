@@ -32,6 +32,8 @@ namespace ReviseApplication
         public string password { get; set; }
         public Nullable<int> isConnected { get; set; }
         public string Email { get; set; }
+        public Nullable<System.Guid> ActivationCode { get; set; }
+        public string ResetPasswordCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<role> roles { get; set; }

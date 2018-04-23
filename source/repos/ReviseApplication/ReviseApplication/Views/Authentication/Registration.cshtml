@@ -96,26 +96,33 @@ else
                                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                        @*<div class="form-group">
-                                          @Html.LabelFor(x => Model.SelectedDepartment, htmlAttributes: new { @class = "control-label col-md-2" }) 
-                                          <div class="col-md-5">
-                                            @Html.DropDownListFor(x => Model.SelectedDepartment, new SelectList(Model.Departments, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Departments" })
-                                            @Html.ValidationMessageFor(x => x.SelectedDepartment, "", new { @class = "text-danger" })
-                                          </div> 
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input type="submit" value="Create" class="btn btn-default" />
                                         </div>
-                                        <div class="form-group">
-                                            @Html.LabelFor(x => Model.SelectedRole, htmlAttributes: new { @class = "control-label col-md-2" })
-                                            <div class="col-md-5">
-                                                @Html.DropDownListFor(x => Model.SelectedRole, new SelectList(Model.Roles, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Roles" })
-                                                @Html.ValidationMessageFor(x => x.SelectedRole, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>*@
-                                        <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-10">
-                                                <input type="submit" value="Create" class="btn btn-default" />
-                                            </div>
-                                        </div>
-</form>
+                                    </div>
+                                </form>
+                                @*<form id="list-form" method="get" role="form" ng-show="registered" ng-submit="register()">
+        <div class="form-group">
+            @Html.LabelFor(x => Model.SelectedDepartment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(x => Model.SelectedDepartment, new SelectList(Model.Departments, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Departments" })
+                @Html.ValidationMessageFor(x => x.SelectedDepartment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => Model.SelectedRole, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.DropDownListFor(x => Model.SelectedRole, new SelectList(Model.Roles, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Roles" })
+                @Html.ValidationMessageFor(x => x.SelectedRole, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </form>*@
                             </div>
                         </div>
                     </div>

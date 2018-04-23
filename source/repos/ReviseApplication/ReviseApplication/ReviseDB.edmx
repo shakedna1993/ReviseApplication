@@ -88,6 +88,8 @@
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="isConnected" Type="int" />
           <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="ActivationCode" Type="uniqueidentifier" />
+          <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="userCatReq">
           <Key>
@@ -387,7 +389,7 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Key>
             <PropertyRef Name="userid" />
           </Key>
-          <Property Name="userid" Type="String" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="fname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="birthday" Type="DateTime" Precision="0" />
@@ -402,6 +404,8 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <NavigationProperty Name="projects" Relationship="ReviseDBModel.projUser" FromRole="user" ToRole="project" />
           <NavigationProperty Name="chats" Relationship="ReviseDBModel.userChat" FromRole="user" ToRole="chat" />
           <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ActivationCode" Type="Guid" />
+          <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="userCatReq">
           <Key>
@@ -608,6 +612,8 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="ReviseDBModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="userid" ColumnName="userid" />
                 <ScalarProperty Name="fname" ColumnName="fname" />

@@ -472,6 +472,7 @@
     <Content Include="Views\Authentication\Registration.cshtml" />
     <Content Include="Views\Projects\ProjectMain.cshtml" />
     <Content Include="Views\Authentication\RenewPass.cshtml" />
+    <Content Include="Views\Authentication\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
