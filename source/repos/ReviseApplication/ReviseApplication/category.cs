@@ -18,12 +18,18 @@ namespace ReviseApplication
         public category()
         {
             this.userCatReqs = new HashSet<userCatReq>();
+            this.messages = new HashSet<message>();
         }
     
         public int CatId { get; set; }
         public string CatName { get; set; }
+        public Nullable<int> ProjId { get; set; }
+        public Nullable<int> status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<userCatReq> userCatReqs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<message> messages { get; set; }
+        public virtual project project { get; set; }
     }
 }

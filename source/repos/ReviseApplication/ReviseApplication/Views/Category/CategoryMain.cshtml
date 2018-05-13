@@ -1,0 +1,117 @@
+﻿@model ReviseApplication.Models.CategoryMain
+
+@{
+    Layout = "~/Views/Shared/my_layout.cshtml";
+    ViewBag.Title = "CategoryMain";
+}
+
+
+@section TitleSection{
+    Project @Convert.ToString(Session["projectName"])
+}
+@*@section HeaderSection{
+        <style>
+            .stylish-input-group .input-group-addon {
+                background: white !important;
+            }
+
+            .stylish-input-group .form-control {
+                border-right: 0;
+                box-shadow: 0 0 0;
+                border-color: #ccc;
+            }
+
+            .stylish-input-group button {
+                border: 0;
+                background: transparent;
+            }
+        </style>
+    }*@
+@section ContentBody{
+    <br /><br />
+          <div class="table-responsive">
+              <p style="font-size:25px;font-weight: bold;">
+                  Requierments for @Convert.ToString(Session["projectName"])
+                  project
+              </p>
+              <nav>
+                  <div class="form-group">
+                      @Html.LabelFor(model => model.score, htmlAttributes: new { @class = "control-label col-md-2" })
+                  </div>
+                  <div class="form-group">
+                      @Html.LabelFor(model => model.rate, htmlAttributes: new { @class = "control-label col-md-2" })
+                  </div>
+              </nav>
+              &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <br /><br />
+              &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              @foreach (var member in ViewBag.memberslist)
+    {
+          <a>
+              <img class="img-circle" src="@member.pic" width="60" height="60" alt="">
+          </a>
+}
+              <br /><br />
+              @Html.ValidationMessage("CredentialError", new { style = "color:green;" })
+              @* <br />
+        <img src="http://www.iconshock.com/img_jpg/BRILLIANT/graphics/jpg/16/ellipse_icon.jpg" /> - active requirement<br />
+        <img src="http://www.iconshock.com/img_jpg/BRILLIANT/transportation/jpg/16/no_entry_sign_icon.jpg" /> - nonactive requirement
+        <br />
+        <img src="~/images/bggreen.jpg" /> - requirement is Aprroved.
+        <br /><br />*@
+              <table class="table">
+                  <tr class="active">
+                      <th>
+
+                      </th>
+                      <th>
+                          Category
+                      </th>
+                      <th>
+                          Status
+                      </th>
+                      <th></th>
+                  </tr>
+
+                  @foreach (var item in Model.Cat)
+        {
+          <tr>
+              <td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.CatName)
+              </td>
+              <td>
+                  @Html.DisplayFor(modelItem => item.status)%
+              </td>
+              @* <td nowrap>
+            @if (item.isActive)
+            {
+                @Html.ActionLink("Chat", "Details", new { id = item.reqId }, new { @role = "button", @class = "btn btn-warning" })
+            }
+            else
+            {
+                <img src="../../images/disbtn2.jpg" />
+            }
+
+            @if ((Convert.ToBoolean(Session["IsAdmin"]) || (Convert.ToBoolean(Session["IsProjectAdmin"]))))
+            {
+                <label>
+                    |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.reqId }, new { @role = "button", @class = "btn btn-primary" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.reqId }, new { @role = "button", @class = "btn btn-danger" })
+                </label>
+            }
+        </td>*@
+          </tr>
+}
+              </table>
+              <div>
+                  <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-lg">
+                      <i class="fa fa-arrow-circle-left"></i>
+                      <span>
+                          <strong>Back</strong>
+                      </span>
+                  </a>
+              </div>
+          </div>
+}

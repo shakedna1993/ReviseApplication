@@ -31,7 +31,22 @@ namespace ReviseApplication.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
+        public JsonResult GetUserInfo()
+        {
+            var user = UserUtils.GetUser();
+            if (!UserUtils.IsLoggedIn())
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new
+            {
+                success = true,
+                fullname = string.Format("{0} {1}", user.fname, user.lname)
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+    [HttpPost]
     [AllowAnonymous]
     public ActionResult Login(string username, string password)
         {
@@ -82,13 +97,16 @@ namespace ReviseApplication.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Registration(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string password, Nullable<System.DateTime> DateOfBirth)
+        public ActionResult Registration(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string password, string pic, Nullable<System.DateTime> DateOfBirth)
         {
             if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname) || string.IsNullOrEmpty(username) ||
                 string.IsNullOrEmpty(EmailID) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(phonenum))
             {
                 return Json(new { success = false, message = "One or more fields is missing, Please fill all blank fields" });
             }
+
+            if (string.IsNullOrEmpty(pic))
+                pic = "https://he.gravatar.com/userimage/138919762/622efbcbeb0e8cea9b64cf6e8bffffc0.jpg";
 
             #region Save to Database
             try
@@ -108,7 +126,8 @@ namespace ReviseApplication.Controllers
                             userid = UserId,
                             UserName = username,
                             birthday = DateOfBirth,
-                            PhoneNum = phonenum
+                            PhoneNum = phonenum,
+                            pic = pic
                         };
                         con.users.Add(user);
                         con.SaveChanges();
@@ -122,41 +141,6 @@ namespace ReviseApplication.Controllers
             {
                 return Json(new { success = false, message = "Unknown error occurred!" });
             }
-        }
-
-        [HttpGet]
-        public JsonResult GetUserInfo()
-        {
-            var user = UserUtils.GetUser();
-            if (!UserUtils.IsLoggedIn())
-            {
-                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new
-            {
-                success = true,
-                fullname = string.Format("{0} {1}", user.fname, user.lname)
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetDepartment()
-        {
-            using(var con = new ReviseDBEntities())
-            {
-                var dep = con.departments.ToList();
-                return this.Json(dep, JsonRequestBehavior.AllowGet);
-            } 
- 
-        }
-
-        public JsonResult GetRole()
-        {
-            using (var con = new ReviseDBEntities())
-            {
-                var role = con.roles.ToList();
-                return this.Json(role, JsonRequestBehavior.AllowGet);
-            }
-
         }
 
         [Authorize]

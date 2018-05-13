@@ -1,0 +1,76 @@
+﻿
+@model ReviseApplication.Models.AssignToProj
+
+@{
+    Layout = "~/Views/Shared/my_layout.cshtml";
+    ViewBag.Title = "AssignToproj";
+}
+
+
+@section TitleSection{
+    Assign users to project
+}
+
+@section ContentBody{
+
+    @using (Html.BeginForm())
+    {
+        <table class="table" border="0">
+            <tr class="active">
+                <td></td>
+                <td>
+                    <b>
+                        Member Name
+                    </b>
+                </td>
+                <td>
+                    <b>
+                        Department
+                    </b>
+                </td>
+                <td>
+                    <b>
+                        Role To Assign
+                    </b>
+                </td>
+            </tr>
+            @foreach (var member in ViewBag.memberslist)
+            {
+                <tr>
+                    <td>
+                        <img class="img-circle" src="@member.pic" width="60" height="60" alt="">
+                    </td>
+                    <td>
+                        @member.UserName
+
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor(x => Model.SelectedDepartment, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                @Html.DropDownListFor(x => Model.SelectedDepartment, new SelectList(Model.Departments, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Department" })
+                                @Html.ValidationMessageFor(x => x.SelectedDepartment, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            @Html.LabelFor(x => Model.SelectedRole, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-5">
+                                @Html.DropDownListFor(x => Model.SelectedRole, new SelectList(Model.Roles, "Value", "Text"), htmlAttributes: new { @class = "form-control", id = "Role" })
+                                @Html.ValidationMessageFor(x => x.SelectedRole, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <input type="submit" class="btn btn-default btn-lg" value="Assign" />
+    }
+}
+
+
+
+
+

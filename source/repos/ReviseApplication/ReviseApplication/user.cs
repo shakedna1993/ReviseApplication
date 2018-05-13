@@ -20,6 +20,7 @@ namespace ReviseApplication
             this.roles = new HashSet<role>();
             this.projects = new HashSet<project>();
             this.chats = new HashSet<chat>();
+            this.messages = new HashSet<message>();
         }
     
         public string userid { get; set; }
@@ -34,6 +35,10 @@ namespace ReviseApplication
         public string Email { get; set; }
         public Nullable<System.Guid> ActivationCode { get; set; }
         public string ResetPasswordCode { get; set; }
+        public byte[] IsAdmin { get; set; }
+        public string pic { get; set; }
+        public Nullable<int> dep { get; set; }
+        public Nullable<int> role { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<role> roles { get; set; }
@@ -43,5 +48,8 @@ namespace ReviseApplication
         public virtual ICollection<project> projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chat> chats { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<message> messages { get; set; }
+        public virtual department department { get; set; }
     }
 }

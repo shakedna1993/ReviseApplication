@@ -25,18 +25,11 @@
 
     <script src="~/Scripts/views/angular.view.models.js"></script>
 
-</head>
+</head> 
 <body ng-app="mainModel" ng-controller="mainController">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-               <a href="#!top"> <img src="~/css/revise.jpg" style="max-height: 120px; max-width: 140px; padding: 0px 1px 1px 5px;" /></a>
-                <a href="{{ UserConnectionUrl }}" class="navbar-brand" style="max-height: 120px !important"> <i class="fa {{ fontAwasomeUserName }}" aria-hidden="true"> </i> {{ UserConnectionText }}</a>
-            </div>
-            <div class="navbar-collapse collapse">
-            </div>
-        </div>
-    </div>
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00004d;">
+           <a href="#!top"> <img src="~/css/revise_main.png" style="max-height: 120px; max-width: 140px; padding: 0px 1px 1px 5px;" /></a>
+      </nav>
 
     <div class="container body-content">
         @RenderBody()

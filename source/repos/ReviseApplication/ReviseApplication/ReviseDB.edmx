@@ -11,6 +11,8 @@
           </Key>
           <Property Name="CatId" Type="int" Nullable="false" />
           <Property Name="CatName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProjId" Type="int" />
+          <Property Name="status" Type="int" />
         </EntityType>
         <EntityType Name="chat">
           <Key>
@@ -42,15 +44,20 @@
           </Key>
           <Property Name="msgId" Type="int" Nullable="false" />
           <Property Name="msg" Type="text" Nullable="false" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="userid" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="projId" Type="int" Nullable="false" />
+          <Property Name="CatId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="ProjId" />
           </Key>
-          <Property Name="ProjId" Type="int" Nullable="false" />
+          <Property Name="ProjId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProjName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="status" Type="int" Nullable="false" />
           <Property Name="creation_date" Type="date" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="projUser">
           <Key>
@@ -90,6 +97,10 @@
           <Property Name="Email" Type="varchar" MaxLength="250" />
           <Property Name="ActivationCode" Type="uniqueidentifier" />
           <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsAdmin" Type="binary" MaxLength="50" />
+          <Property Name="pic" Type="nvarchar(max)" />
+          <Property Name="dep" Type="int" />
+          <Property Name="role" Type="int" />
         </EntityType>
         <EntityType Name="userCatReq">
           <Key>
@@ -148,6 +159,18 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_category_Proj">
+          <End Role="project" Type="Self.project" Multiplicity="0..1" />
+          <End Role="category" Type="Self.category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="category">
+              <PropertyRef Name="ProjId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_chat_message">
           <End Role="message" Type="Self.message" Multiplicity="1" />
           <End Role="chat" Type="Self.chat" Multiplicity="*" />
@@ -171,6 +194,42 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             <Dependent Role="userChat">
               <PropertyRef Name="chatId" />
               <PropertyRef Name="msgId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_Category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="CatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_proj">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="projId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_user">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="message" Type="Self.message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="userid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -210,6 +269,18 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_user_dep">
+          <End Role="department" Type="Self.department" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="department">
+              <PropertyRef Name="depId" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="dep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_user_projUser">
           <End Role="user" Type="Self.user" Multiplicity="1" />
           <End Role="projUser" Type="Self.projUser" Multiplicity="*" />
@@ -219,18 +290,6 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             </Principal>
             <Dependent Role="projUser">
               <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_user_user">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="user1" Type="Self.user" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="user1">
-              <PropertyRef Name="userid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -247,14 +306,14 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_user_userRole">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="role" Type="Self.role" Multiplicity="1" />
           <End Role="userRole" Type="Self.userRole" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userid" />
+            <Principal Role="role">
+              <PropertyRef Name="RoleID" />
             </Principal>
             <Dependent Role="userRole">
-              <PropertyRef Name="userid" />
+              <PropertyRef Name="RoleID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -286,6 +345,10 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             <End Role="category" EntitySet="category" />
             <End Role="userCatReq" EntitySet="userCatReq" />
           </AssociationSet>
+          <AssociationSet Name="FK_category_Proj" Association="Self.FK_category_Proj">
+            <End Role="project" EntitySet="project" />
+            <End Role="category" EntitySet="category" />
+          </AssociationSet>
           <AssociationSet Name="FK_chat_message" Association="Self.FK_chat_message">
             <End Role="message" EntitySet="message" />
             <End Role="chat" EntitySet="chat" />
@@ -293,6 +356,18 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <AssociationSet Name="FK_Chat_userChat" Association="Self.FK_Chat_userChat">
             <End Role="chat" EntitySet="chat" />
             <End Role="userChat" EntitySet="userChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_Category" Association="Self.FK_message_Category">
+            <End Role="category" EntitySet="category" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_proj" Association="Self.FK_message_proj">
+            <End Role="project" EntitySet="project" />
+            <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_user" Association="Self.FK_message_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="message" EntitySet="message" />
           </AssociationSet>
           <AssociationSet Name="FK_proj_projUser" Association="Self.FK_proj_projUser">
             <End Role="project" EntitySet="project" />
@@ -306,20 +381,20 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             <End Role="role" EntitySet="role" />
             <End Role="userRole" EntitySet="userRole" />
           </AssociationSet>
+          <AssociationSet Name="FK_user_dep" Association="Self.FK_user_dep">
+            <End Role="department" EntitySet="department" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
           <AssociationSet Name="FK_user_projUser" Association="Self.FK_user_projUser">
             <End Role="user" EntitySet="user" />
             <End Role="projUser" EntitySet="projUser" />
-          </AssociationSet>
-          <AssociationSet Name="FK_user_user" Association="Self.FK_user_user">
-            <End Role="user" EntitySet="user" />
-            <End Role="user1" EntitySet="user" />
           </AssociationSet>
           <AssociationSet Name="FK_user_userChat" Association="Self.FK_user_userChat">
             <End Role="user" EntitySet="user" />
             <End Role="userChat" EntitySet="userChat" />
           </AssociationSet>
           <AssociationSet Name="FK_user_userRole" Association="Self.FK_user_userRole">
-            <End Role="user" EntitySet="user" />
+            <End Role="role" EntitySet="role" />
             <End Role="userRole" EntitySet="userRole" />
           </AssociationSet>
         </EntityContainer>
@@ -334,6 +409,10 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="CatId" Type="Int32" Nullable="false" />
           <Property Name="CatName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="userCatReqs" Relationship="Self.FK_cat_userCatReq" FromRole="category" ToRole="userCatReq" />
+          <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_Category" FromRole="category" ToRole="message" />
+          <Property Name="ProjId" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_category_Proj" FromRole="category" ToRole="project" />
+          <Property Name="status" Type="Int32" />
         </EntityType>
         <EntityType Name="chat">
           <Key>
@@ -353,6 +432,7 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="depId" Type="Int32" Nullable="false" />
           <Property Name="depName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="depScore" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="ReviseDBModel.FK_user_dep" FromRole="department" ToRole="user" />
         </EntityType>
         <EntityType Name="gamification">
           <Key>
@@ -368,6 +448,13 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="msgId" Type="Int32" Nullable="false" />
           <Property Name="msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="chats" Relationship="ReviseDBModel.FK_chat_message" FromRole="message" ToRole="chat" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="userid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="projId" Type="Int32" Nullable="false" />
+          <Property Name="CatId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="category" Relationship="ReviseDBModel.FK_message_Category" FromRole="message" ToRole="category" />
+          <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_message_proj" FromRole="message" ToRole="project" />
+          <NavigationProperty Name="user" Relationship="ReviseDBModel.FK_message_user" FromRole="message" ToRole="user" />
         </EntityType>
         <EntityType Name="requirement">
           <Key>
@@ -406,6 +493,12 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="ActivationCode" Type="Guid" />
           <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_user" FromRole="user" ToRole="message" />
+          <Property Name="IsAdmin" Type="Binary" MaxLength="50" FixedLength="true" />
+          <Property Name="pic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="dep" Type="Int32" />
+          <Property Name="role" Type="Int32" />
+          <NavigationProperty Name="department" Relationship="ReviseDBModel.FK_user_dep" FromRole="user" ToRole="department" />
         </EntityType>
         <EntityType Name="userCatReq">
           <Key>
@@ -427,6 +520,9 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="status" Type="Int32" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="users" Relationship="ReviseDBModel.projUser" FromRole="project" ToRole="user" />
+          <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_proj" FromRole="project" ToRole="message" />
+          <NavigationProperty Name="categories" Relationship="ReviseDBModel.FK_category_Proj" FromRole="project" ToRole="category" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_cat_userCatReq">
           <End Role="category" Type="Self.category" Multiplicity="1" />
@@ -496,6 +592,26 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
             <End Role="chat" EntitySet="chats" />
           </AssociationSet>
           <EntitySet Name="database_firewall_rules" EntityType="ReviseDBModel.database_firewall_rules" />
+          <AssociationSet Name="FK_message_Category" Association="ReviseDBModel.FK_message_Category">
+            <End Role="category" EntitySet="categories" />
+            <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_proj" Association="ReviseDBModel.FK_message_proj">
+            <End Role="project" EntitySet="projects" />
+            <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_message_user" Association="ReviseDBModel.FK_message_user">
+            <End Role="user" EntitySet="users" />
+            <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_category_Proj" Association="ReviseDBModel.FK_category_Proj">
+            <End Role="project" EntitySet="projects" />
+            <End Role="category" EntitySet="categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_dep" Association="ReviseDBModel.FK_user_dep">
+            <End Role="department" EntitySet="departments" />
+            <End Role="user" EntitySet="users" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_user_user">
           <End Type="ReviseDBModel.user" Role="user" Multiplicity="1" />
@@ -545,6 +661,66 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <Association Name="FK_message_Category">
+          <End Type="ReviseDBModel.category" Role="category" Multiplicity="1" />
+          <End Type="ReviseDBModel.message" Role="message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="CatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_proj">
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="1" />
+          <End Type="ReviseDBModel.message" Role="message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="projId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_message_user">
+          <End Type="ReviseDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="ReviseDBModel.message" Role="message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userid" />
+            </Principal>
+            <Dependent Role="message">
+              <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_category_Proj">
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="ReviseDBModel.category" Role="category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="category">
+              <PropertyRef Name="ProjId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_dep">
+          <End Type="ReviseDBModel.department" Role="department" Multiplicity="0..1" />
+          <End Type="ReviseDBModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="department">
+              <PropertyRef Name="depId" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="dep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -554,6 +730,8 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <EntitySetMapping Name="categories">
             <EntityTypeMapping TypeName="ReviseDBModel.category">
               <MappingFragment StoreEntitySet="category">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="ProjId" ColumnName="ProjId" />
                 <ScalarProperty Name="CatId" ColumnName="CatId" />
                 <ScalarProperty Name="CatName" ColumnName="CatName" />
               </MappingFragment>
@@ -588,6 +766,10 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <EntitySetMapping Name="messages">
             <EntityTypeMapping TypeName="ReviseDBModel.message">
               <MappingFragment StoreEntitySet="message">
+                <ScalarProperty Name="CatId" ColumnName="CatId" />
+                <ScalarProperty Name="projId" ColumnName="projId" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="msgId" ColumnName="msgId" />
                 <ScalarProperty Name="msg" ColumnName="msg" />
               </MappingFragment>
@@ -612,6 +794,10 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="ReviseDBModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="dep" ColumnName="dep" />
+                <ScalarProperty Name="pic" ColumnName="pic" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
                 <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
                 <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -639,6 +825,7 @@ warning 6002: The table/view 'ReviseDB.sys.database_firewall_rules' does not hav
           <EntitySetMapping Name="projects">
             <EntityTypeMapping TypeName="ReviseDBModel.project">
               <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="ProjId" ColumnName="ProjId" />
                 <ScalarProperty Name="ProjName" ColumnName="ProjName" />
                 <ScalarProperty Name="status" ColumnName="status" />

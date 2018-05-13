@@ -18,14 +18,21 @@ namespace ReviseApplication
         public project()
         {
             this.users = new HashSet<user>();
+            this.messages = new HashSet<message>();
+            this.categories = new HashSet<category>();
         }
     
         public int ProjId { get; set; }
         public string ProjName { get; set; }
         public int status { get; set; }
         public System.DateTime creation_date { get; set; }
+        public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user> users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<message> messages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<category> categories { get; set; }
     }
 }

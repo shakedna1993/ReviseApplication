@@ -76,7 +76,8 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
                 username: this.register_username,
                 email: this.register_email,
                 password: this.register_password,
-                birthday: this.register_birthday
+                birthday: this.register_birthday,
+                picture: this.register_picture
             },
             method: "POST",
             url: "/Authentication/Registration"
@@ -92,27 +93,6 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
         });
     }
 
-    $rootScope.deplist = function () {
-        $http({
-            method: "GET",
-            url: "/Authentication/GetDepartment"
-        }).then(function mySuccess(response) {
-            if (response.data.success) {
-                $rootScope.deplist = data;
-            }
-        });
-    }
-
-    $rootScope.rolelist = function () {
-        $http({
-            method: "GET",
-            url: "/Authentication/GetRole"
-        }).then(function mySuccess(response) {
-            if (response.data.success) {
-                $rootScope.rolelist = data;
-            }
-        });
-    }
 
     $rootScope.logout = function () {
         $http({

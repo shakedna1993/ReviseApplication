@@ -6,15 +6,15 @@
     <edmx:Diagrams>
       <Diagram DiagramId="851279344afa44d18b4f3e13df1050dc" Name="Diagram1" ZoomLevel="109">
         <EntityTypeShape EntityType="ReviseDBModel.category" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReviseDBModel.chat" Width="1.5" PointX="5.875" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviseDBModel.chat" Width="1.5" PointX="6.375" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.department" Width="1.5" PointX="11.125" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="13.375" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReviseDBModel.message" Width="1.5" PointX="3.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviseDBModel.message" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="8.25" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.role" Width="1.5" PointX="0.5" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.user" Width="1.5" PointX="3.25" PointY="0.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ReviseDBModel.userCatReq" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReviseDBModel.project" Width="1.5" PointX="0.5" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviseDBModel.project" Width="1.5" PointX="0.5" PointY="3.25" IsExpanded="true" />
         <AssociationConnector Association="ReviseDBModel.FK_cat_userCatReq" ManuallyRouted="false" />
         <AssociationConnector Association="ReviseDBModel.FK_req_userCatReq" ManuallyRouted="false" />
         <AssociationConnector Association="ReviseDBModel.userRole" ManuallyRouted="false" />
@@ -23,6 +23,10 @@
         <AssociationConnector Association="ReviseDBModel.userChat" />
         <AssociationConnector Association="ReviseDBModel.FK_chat_message" />
         <EntityTypeShape EntityType="ReviseDBModel.database_firewall_rules" Width="1.5" PointX="0.75" PointY="6.75" />
+        <AssociationConnector Association="ReviseDBModel.FK_message_Category" />
+        <AssociationConnector Association="ReviseDBModel.FK_message_proj" />
+        <AssociationConnector Association="ReviseDBModel.FK_message_user" />
+        <AssociationConnector Association="ReviseDBModel.FK_category_Proj" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

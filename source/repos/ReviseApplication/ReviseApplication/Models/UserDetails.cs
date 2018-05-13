@@ -8,7 +8,7 @@ using System.Web.WebPages.Html;
 
 namespace ReviseApplication.Models
 {
-    public class User
+    public class UserDetails
     {
     }
 
@@ -43,8 +43,8 @@ namespace ReviseApplication.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your ID")]
         public string UserId { get; set; }
 
-        [Display(Name = "Email ID")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your Email")]
+        [Display(Name = "Email Address")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your Email Address")]
         [DataType(DataType.EmailAddress)]
         public string EmailID { get; set; }
 
@@ -54,6 +54,7 @@ namespace ReviseApplication.Models
 
         [Display(Name = "Date of birth")]
         [DataType(DataType.Date)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter your Date of birth")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime DateOfBirth { get; set; }
 
@@ -67,28 +68,27 @@ namespace ReviseApplication.Models
         [Compare("Password", ErrorMessage = "Confirm password and password do not match")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
-        [Display(Name = "Depatrment")]
-        public string SelectedDepartment { get; set; }
-        public IEnumerable<SelectListItem> Departments { get; set; }
-
-        [Required]
-        [Display(Name = "Role")]
-        public string SelectedRole { get; set; }
-        public IEnumerable<SelectListItem> Roles { get; set; }
+        [Display(Name = "Profile picture")]
+        public string pic { get; set; }
 
     }
     public class ResetPasswordModel
     {
+        [Display(Name = "New Password")]
         [Required(ErrorMessage = "New password required", AllowEmptyStrings = false)]
         [DataType(DataType.Password)]
+        [MinLength(6, ErrorMessage = "Minimum 6 characters required")]
         public string NewPassword { get; set; }
 
+        [Display(Name = "Confirm Password")]
         [DataType(DataType.Password)]
         [Compare("NewPassword", ErrorMessage = "New password and confirm password does not match")]
         public string ConfirmPassword { get; set; }
 
+
         [Required]
         public string ResetCode { get; set; }
     }
+
+
 }

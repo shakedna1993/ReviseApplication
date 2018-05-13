@@ -14,8 +14,17 @@ namespace ReviseApplication
     
     public partial class department
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public department()
+        {
+            this.users = new HashSet<user>();
+        }
+    
         public int depId { get; set; }
         public string depName { get; set; }
         public int depScore { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<user> users { get; set; }
     }
 }

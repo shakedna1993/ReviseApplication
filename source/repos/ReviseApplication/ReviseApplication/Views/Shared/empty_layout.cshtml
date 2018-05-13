@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - Revise Application</title>
+
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/custom.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/bootswatch.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/angular-material.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
+	<script src="~/Scripts/modernizr-2.6.2.js"></script>
+	<script src="~/Scripts/angular.js"></script>
+	<script src="~/Scripts/jquery-3.0.0.min.js"></script>
+	<script src="~/Scripts/angular-aria.js"></script>
+	<script src="~/Scripts/angular-material.js"></script>
+	<script src="~/Scripts/angular-route.js"></script>
+	<script src="~/Scripts/angular-animate.js"></script>
+	<script src="~/Scripts/bootstrap-toggle.js"></script>
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+
+	<script src="~/Scripts/views/angular.view.models.js"></script>
+
+</head>
+<body ng-app="mainModel" ng-controller="mainController">
+
+
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - Revise S&R</p>
+		</footer>
+	</div>
+
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("Scripts", false)
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿
+@{
+	ViewBag.Title = "my_layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Revise @RenderSection("TitleSection")</title>
+    <title>@ViewBag.Title - Revise Application</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/custom.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootswatch.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/angular-material.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/angular-aria.js"></script>
+    <script src="~/Scripts/angular-material.js"></script>
+    <script src="~/Scripts/angular-route.js"></script>
+    <script src="~/Scripts/angular-animate.js"></script>
+    <script src="~/Scripts/bootstrap-toggle.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script src="~/Scripts/views/angular.view.models.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body ng-app="mainModel" ng-controller="mainController">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00004d;">
+        <a class="navbar-brand" href="#!top"> <img src="~/css/revise_main.png" style="max-height: 120px; max-width: 140px; padding: 0px 1px 1px 5px;" /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ UserConnectionUrl }}"><i class="fa fa-user white"></i> @Convert.ToString(Session["UserName"])</a>
+                </li>
+
+                @*
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user white"></i> User Name
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
+                            <a class="dropdown-item" href="#">Personal File</a>
+                        </div>
+                    </li>
+                *@
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">
+                        Notifications <span class="badge badge-light">9</span>
+                        <span class="sr-only">unread messages</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-comments"></i> Chat History
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
+                        <a class="dropdown-item" href="#">?</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"><i class="fa fa-sign-out"></i> Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    @*
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="{{ UserConnectionUrl }}" class="navbar-brand" style="max-height: 120px !important"> <i class="fa {{ fontAwasomeUserName }}" aria-hidden="true"> </i> {{ UserConnectionText }}</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                </div>
+            </div>
+        </div>
+    *@
+
+   <div id="page-wrapper">
+
+        <div class="container-fluid">
+
+            @RenderSection("ContentBody")
+
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Revise S&R</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", false)
+</body>
+</html>

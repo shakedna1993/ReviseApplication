@@ -22,8 +22,15 @@ namespace ReviseApplication
     
         public int msgId { get; set; }
         public string msg { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public string userid { get; set; }
+        public int projId { get; set; }
+        public int CatId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chat> chats { get; set; }
+        public virtual category category { get; set; }
+        public virtual project project { get; set; }
+        public virtual user user { get; set; }
     }
 }
