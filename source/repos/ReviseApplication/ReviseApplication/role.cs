@@ -17,13 +17,13 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public role()
         {
-            this.users = new HashSet<user>();
+            this.projUsers = new HashSet<projUser>();
         }
     
         public int RoleID { get; set; }
         public string RoleName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<user> users { get; set; }
+        public virtual ICollection<projUser> projUsers { get; set; }
     }
 }

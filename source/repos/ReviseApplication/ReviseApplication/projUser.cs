@@ -12,13 +12,16 @@ namespace ReviseApplication
     using System;
     using System.Collections.Generic;
     
-    public partial class database_firewall_rules
+    public partial class projUser
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string start_ip_address { get; set; }
-        public string end_ip_address { get; set; }
-        public System.DateTime create_date { get; set; }
-        public System.DateTime modify_date { get; set; }
+        public string userid { get; set; }
+        public int projid { get; set; }
+        public Nullable<int> role { get; set; }
+        public Nullable<int> dep { get; set; }
+    
+        public virtual department department { get; set; }
+        public virtual project project { get; set; }
+        public virtual role role1 { get; set; }
+        public virtual user user { get; set; }
     }
 }

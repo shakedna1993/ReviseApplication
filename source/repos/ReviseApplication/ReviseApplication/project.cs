@@ -17,9 +17,9 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public project()
         {
-            this.users = new HashSet<user>();
-            this.messages = new HashSet<message>();
             this.categories = new HashSet<category>();
+            this.messages = new HashSet<message>();
+            this.projUsers = new HashSet<projUser>();
         }
     
         public int ProjId { get; set; }
@@ -29,10 +29,10 @@ namespace ReviseApplication
         public string description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<user> users { get; set; }
+        public virtual ICollection<category> categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<message> messages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<category> categories { get; set; }
+        public virtual ICollection<projUser> projUsers { get; set; }
     }
 }

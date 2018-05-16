@@ -17,10 +17,9 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public user()
         {
-            this.roles = new HashSet<role>();
-            this.projects = new HashSet<project>();
-            this.chats = new HashSet<chat>();
             this.messages = new HashSet<message>();
+            this.projUsers = new HashSet<projUser>();
+            this.chats = new HashSet<chat>();
         }
     
         public string userid { get; set; }
@@ -37,19 +36,12 @@ namespace ReviseApplication
         public string ResetPasswordCode { get; set; }
         public byte[] IsAdmin { get; set; }
         public string pic { get; set; }
-        public Nullable<int> dep { get; set; }
-        public Nullable<int> role { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<role> roles { get; set; }
-        public virtual user user1 { get; set; }
-        public virtual user user2 { get; set; }
+        public virtual ICollection<message> messages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<project> projects { get; set; }
+        public virtual ICollection<projUser> projUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chat> chats { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<message> messages { get; set; }
-        public virtual department department { get; set; }
     }
 }

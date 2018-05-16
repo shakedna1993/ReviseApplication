@@ -18,17 +18,10 @@ namespace ReviseApplication.Controllers
             List<user> memberslist = new List<user>();
             ReviseDBEntities con = new ReviseDBEntities();
             List<user> Allusers = new List<user>();
+            var prj = con.projUsers.Where(u => u.projid == id).ToList();
 
-            foreach (var usr in con.users)
-                Allusers.Add(usr);
-
-            foreach (var usr2 in Allusers)
-            {
-                var prj = usr2.projects.Select(p => p.ProjId);
-                foreach (var p in prj)
-                    if (p == id)
-                        memberslist.Add(usr2);
-            }
+            foreach (var p in prj)
+                memberslist.Add(con.users.SingleOrDefault(u => u.userid == p.userid));
 
             ViewBag.memberslist = memberslist;
             Session["AssignList"] = memberslist;
@@ -73,7 +66,7 @@ namespace ReviseApplication.Controllers
                 {
                     ProjName = projname,
                     creation_date = DateTime.Today,
-                   description = projdesc
+                    description = projdesc
                 };
 
                 var usrList= new List<user>();
@@ -82,7 +75,21 @@ namespace ReviseApplication.Controllers
                     var newusr = (con.users.Where(u => u.UserName == usr));
                     usrList.Add(newusr.FirstOrDefault());
                 }
-                proj.users = usrList;
+
+                List<projUser> Allusers = new List<projUser>();
+
+                foreach (var usr in usrList)
+                {
+                    var prjusr = new projUser();
+                    prjusr.project = proj;
+                    prjusr.user = usr;
+                    prjusr.projid = proj.ProjId;
+                    prjusr.userid = usr.userid;
+                    Allusers.Add(prjusr);
+                }
+                //proj.users = usrList;
+                foreach(var user in Allusers)
+                    con.projUsers.Add(user);
                 con.projects.Add(proj);
                 con.SaveChanges();
 
@@ -132,11 +139,20 @@ namespace ReviseApplication.Controllers
                     var role = con.roles.Where(r => r.RoleID == role_id);
                     var dep = con.departments.Where(d => d.depId == dep_id);
                     var myId = UsersToAssign[i].userid;
-                    var usr = con.users.SingleOrDefault(u => u.userid == myId);
-                    usr.dep = dep_id;
-                    usr.role = role_id;
-                    usr.department = dep.First();
-                    usr.roles.Add(role.First());
+                    var uspr = con.projUsers.Where(u => u.userid == myId).ToList();
+                    foreach(var usr in uspr)
+                    {
+                        if (usr.projid == proj)
+                        {
+                            usr.department = dep.First();
+                            usr.role1 = role.First();
+                            usr.role = role.First().RoleID;
+                            usr.dep = dep.First().depId;
+
+                        }
+                            
+
+                    }
                 }
                 con.SaveChanges();
             }

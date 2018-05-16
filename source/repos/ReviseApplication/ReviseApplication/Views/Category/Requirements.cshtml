@@ -1,0 +1,47 @@
+﻿@model ReviseApplication.Models.Requirements
+@{
+    ViewBag.Title = "Requirements";
+}
+
+<body>
+    <table class="table">
+        <tr class="active">
+            <th>
+                @Html.LabelFor(model => model.Req, htmlAttributes: new { @class = "control-label col-md-2" })
+            </th>
+            <th>
+                1
+            </th>
+            <th>
+                2
+            </th>
+            <th>
+                3
+            </th>
+            <th>
+                4
+            </th>
+            <th>
+                5
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.CheckBox("my option")
+            </td>
+            <td>
+                @Html.CheckBox("my option")
+            </td>
+            <td>
+                @Html.CheckBox("my option")
+            </td>
+            <td>
+                @Html.CheckBox("my option")
+            </td>
+            <td>
+                @Html.CheckBox("my option")
+            </td>
+        </tr>
+    </table>
+</body>

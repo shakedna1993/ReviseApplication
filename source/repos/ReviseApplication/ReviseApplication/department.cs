@@ -17,7 +17,7 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public department()
         {
-            this.users = new HashSet<user>();
+            this.projUsers = new HashSet<projUser>();
         }
     
         public int depId { get; set; }
@@ -25,6 +25,6 @@ namespace ReviseApplication
         public int depScore { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<user> users { get; set; }
+        public virtual ICollection<projUser> projUsers { get; set; }
     }
 }

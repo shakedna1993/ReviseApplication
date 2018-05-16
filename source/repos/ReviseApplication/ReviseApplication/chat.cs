@@ -24,8 +24,8 @@ namespace ReviseApplication
         public int totalMsg { get; set; }
         public int msgId { get; set; }
     
+        public virtual message message { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user> users { get; set; }
-        public virtual message message { get; set; }
     }
 }

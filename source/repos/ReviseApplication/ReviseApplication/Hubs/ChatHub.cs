@@ -58,32 +58,34 @@ namespace ReviseApplication.Hubs
             rolesList = con.roles.ToList();
             //Query - Join Query which returns Records of Members Details and theirs Roles.
 
-            var projectMembersDetails = from pm in con.projects.AsQueryable()
+            var projectMembersDetails = from pm in con.projUsers.AsQueryable()
                                         join md in con.users.AsQueryable()
-                                        on pm.users.Select(us => us.userid).FirstOrDefault() equals md.userid
-                                        where pm.ProjId == projId
+                                        on pm.user.userid equals md.userid
+                                        where pm.project.ProjId == projId
                                         select new
                                         {
                                             userId = md.userid,
                                             userName = md.UserName.ToString(),
                                             firstName = md.fname,
                                             lastName = md.lname,
-                                           // picURL = md.pic,
-                                            roleName = pm.users.Select(r => r.role),
+                                            picURL = md.pic,
+                                            roleId = pm.role1.RoleID,
+                                            //roleName
+                                            //grade
                                         };
 
-           string userid = Clients.Caller.userId;
+            string userid = Clients.Caller.userId;
 
             var currentMemberDetails = projectMembersDetails.Where(m => m.userId == userid).First();
 
-            var projAttached = con.projects.Where(p => p.users.Select(u => u.userid).First() == currentMemberDetails.userId);
+            var projAttached = con.projUsers.Where(p => p.user.userid == currentMemberDetails.userId);
 
             var catAttached = con.categories;
 
             //Query - Join Query which return a list of Rooms that to User attached to.
             var roomList = from sc in projAttached
                            join soc in catAttached
-                           on sc.ProjId equals soc.project.ProjId
+                           on sc.projid equals soc.project.ProjId
                            select new { roomName = soc.CatId.ToString() };
 
             joinChatRoom(catid.ToString());

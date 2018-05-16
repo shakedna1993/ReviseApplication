@@ -22,23 +22,26 @@ namespace ReviseApplication.Controllers
             string name = proj.ProjName.ToString();
             Session["projectName"] = name;
             Session["projectid"] = id;
+            var prj = con.projUsers.Where(u => u.projid == id).ToList();
 
             foreach (var usr in con.users)
                 Allusers.Add(usr);
 
-            foreach (var usr2 in Allusers)
-            {
-                var prj = usr2.projects.Select(p => p.ProjId);
-                foreach (var p in prj)
-                    if (p == id)
-                        memberslist.Add(usr2);
-            }
+            foreach (var p in prj)
+                memberslist.Add(p.user);
+
             ViewBag.memberslist = memberslist;
             Session["MemberInProj"] = memberslist;
 
             var repo = new MainRepository();
             var Main = repo.CatView();
             return View(Main);
+        }
+
+        [HttpGet]
+        public ActionResult Requirements()
+        {
+            return View();
         }
     }
 }

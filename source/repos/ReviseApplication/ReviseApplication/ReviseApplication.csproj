@@ -194,9 +194,6 @@
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="database_firewall_rules.cs">
-      <DependentUpon>ReviseDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="department.cs">
       <DependentUpon>ReviseDB.tt</DependentUpon>
     </Compile>
@@ -214,9 +211,13 @@
     <Compile Include="Models\Categories.cs" />
     <Compile Include="Models\ChatUserDetails.cs" />
     <Compile Include="Models\MessageDetail.cs" />
+    <Compile Include="Models\Requirements.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="MyUtils\UserUtils.cs" />
     <Compile Include="project.cs">
+      <DependentUpon>ReviseDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="projUser.cs">
       <DependentUpon>ReviseDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -536,6 +537,7 @@
     <Content Include="Views\Shared\my_layout2.cshtml" />
     <Content Include="Views\Category\CategoryMain.cshtml" />
     <Content Include="Views\Shared\empty_layout.cshtml" />
+    <Content Include="Views\Category\Requirements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
