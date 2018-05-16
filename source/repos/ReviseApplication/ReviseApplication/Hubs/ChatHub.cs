@@ -44,7 +44,7 @@ namespace ReviseApplication.Hubs
         /// <summary>
         /// Function which responsible to deal with an User (Client) that connect to the Hub.
         /// </summary>
-        public void join()
+       /* public void join()
         {
 
             CurrentMessages = con.messages.ToList();
@@ -85,7 +85,7 @@ namespace ReviseApplication.Hubs
             //Query - Join Query which return a list of Rooms that to User attached to.
             var roomList = from sc in projAttached
                            join soc in catAttached
-                           on sc.projid equals soc.project.ProjId
+                           on sc.projid equals soc.pr.ProjId
                            select new { roomName = soc.CatId.ToString() };
 
             joinChatRoom(catid.ToString());
@@ -101,7 +101,7 @@ namespace ReviseApplication.Hubs
                 // send to all except caller client
                 Clients.Group(catid.ToString(), id).onNewUserConnected(id, userName);
             }
-        }
+        }*/
 
         /// <summary>
         /// Function which resposible to add the current connected user to a Requirment ChatRoom.
@@ -160,7 +160,8 @@ namespace ReviseApplication.Hubs
 
             msg.userid = con.users.Find(userContext.userid).ToString();
             msg.CatId = Convert.ToInt32(con.categories.Find(userContext.CatId));
-            msg.projId = Convert.ToInt32(con.projects.Find(msg.category.project.ProjId));
+            var p = con.projCats.Where(c => c.catId == msg.CatId).ToList();
+           // msg.projId = Convert.ToInt32(con.projCats.Find(msg.category.CatId.ProjId));
             con.messages.Add(msg);
             con.SaveChanges();
 

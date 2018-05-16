@@ -34,9 +34,10 @@ namespace ReviseApplication.Controllers
             ViewBag.memberslist = memberslist;
             Session["MemberInProj"] = memberslist;
 
-            var repo = new MainRepository();
-            var Main = repo.CatView();
-            return View(Main);
+            // var repo = new MainRepository();
+            //var Main = repo.CatView();
+            //return View(Main);
+            return View();
         }
 
         [HttpGet]

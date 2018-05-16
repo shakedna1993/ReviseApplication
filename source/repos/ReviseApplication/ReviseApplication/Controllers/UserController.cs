@@ -16,5 +16,9 @@ namespace ReviseApplication.Controllers
         {
             return View();
         }
+        public ActionResult welcome()
+        {
+            return View();
+        }
     }
 }

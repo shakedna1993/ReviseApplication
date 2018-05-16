@@ -541,6 +541,7 @@
     <Content Include="Views\Category\CategoryMain.cshtml" />
     <Content Include="Views\Shared\empty_layout.cshtml" />
     <Content Include="Views\Category\Requirements.cshtml" />
+    <Content Include="Views\User\welcome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

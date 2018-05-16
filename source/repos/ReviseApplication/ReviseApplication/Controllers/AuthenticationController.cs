@@ -58,6 +58,22 @@ namespace ReviseApplication.Controllers
                 }
                 using (var con = new ReviseDBEntities())
                 {
+                    List<category> catlist = new List<category>();
+                    catlist = con.categories.ToList();
+                    List<project> projlist = new List<project>();
+                    projlist = con.projects.ToList();
+                    foreach (var cat in catlist)
+                        foreach(var proj in projlist)
+                        {
+                            projCat entity = new projCat();
+                            entity.category = cat;
+                            entity.catId = cat.CatId;
+                            entity.project = proj;
+                            entity.projId = proj.ProjId;
+                            con.projCats.Add(entity);
+                            con.SaveChanges();
+                        }
+
                     var usr = username;
                     var users = con.users.Where(u => u.UserName == usr).ToList();
                     if (users.First().isConnected == 1)

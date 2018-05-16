@@ -24,19 +24,18 @@ namespace ReviseApplication.Models
     {
         public int projid { get; set; }
 
-        [Required(ErrorMessage = "Please enter The project name")]
-        [Display(Name ="Project name")]
+        [Display(Name = "Project name:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter project name")]
         public string projname { get; set; }
 
-        [Required(ErrorMessage = "Please enter The project description")]
-        [Display(Name = "Description")]
+        [Display(Name = "Description:")]
+        //        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter project description")]
         public string projdesc { get; set; }
 
-        [Required(ErrorMessage = "Please choose participents")]
-        [Display(Name = "Users to assigin")]
+        [Display(Name = "Select participants:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please choose participents")]
         public string SelectedUser { get; set; }
         public IEnumerable<SelectListItem> Users { get; set; }
-
-
     }
+
 }
