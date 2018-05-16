@@ -214,6 +214,9 @@
     <Compile Include="Models\Requirements.cs" />
     <Compile Include="Models\UserDetails.cs" />
     <Compile Include="MyUtils\UserUtils.cs" />
+    <Compile Include="projCat.cs">
+      <DependentUpon>ReviseDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="project.cs">
       <DependentUpon>ReviseDB.tt</DependentUpon>
     </Compile>

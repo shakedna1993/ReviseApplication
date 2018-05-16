@@ -11,8 +11,7 @@
           </Key>
           <Property Name="CatId" Type="int" Nullable="false" />
           <Property Name="CatName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ProjId" Type="int" />
-          <Property Name="status" Type="int" />
+          <Property Name="totalLimit" Type="int" />
         </EntityType>
         <EntityType Name="chat">
           <Key>
@@ -48,6 +47,20 @@
           <Property Name="userid" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="projId" Type="int" Nullable="false" />
           <Property Name="CatId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="projCat">
+          <Key>
+            <PropertyRef Name="projId" />
+            <PropertyRef Name="catId" />
+          </Key>
+          <Property Name="projId" Type="int" Nullable="false" />
+          <Property Name="catId" Type="int" Nullable="false" />
+          <Property Name="status" Type="int" />
+          <Property Name="score" Type="int" />
+          <Property Name="isActive" Type="bit" />
+          <Property Name="isFinish" Type="bit" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="endDate" Type="datetime" />
         </EntityType>
         <EntityType Name="project">
           <Key>
@@ -133,18 +146,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_category_Proj">
-          <End Role="project" Type="Self.project" Multiplicity="0..1" />
-          <End Role="category" Type="Self.category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="project">
-              <PropertyRef Name="ProjId" />
-            </Principal>
-            <Dependent Role="category">
-              <PropertyRef Name="ProjId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_chat_message">
           <End Role="message" Type="Self.message" Multiplicity="1" />
           <End Role="chat" Type="Self.chat" Multiplicity="*" />
@@ -204,6 +205,30 @@
             </Principal>
             <Dependent Role="message">
               <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_projCat_category">
+          <End Role="category" Type="Self.category" Multiplicity="1" />
+          <End Role="projCat" Type="Self.projCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="projCat">
+              <PropertyRef Name="catId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_projCat_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="projCat" Type="Self.projCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="projCat">
+              <PropertyRef Name="projId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -285,6 +310,7 @@
           <EntitySet Name="department" EntityType="Self.department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="gamification" EntityType="Self.gamification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="message" EntityType="Self.message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="projCat" EntityType="Self.projCat" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="projUser" EntityType="Self.projUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="requirement" EntityType="Self.requirement" Schema="dbo" store:Type="Tables" />
@@ -295,10 +321,6 @@
           <AssociationSet Name="FK_cat_userCatReq" Association="Self.FK_cat_userCatReq">
             <End Role="category" EntitySet="category" />
             <End Role="userCatReq" EntitySet="userCatReq" />
-          </AssociationSet>
-          <AssociationSet Name="FK_category_Proj" Association="Self.FK_category_Proj">
-            <End Role="project" EntitySet="project" />
-            <End Role="category" EntitySet="category" />
           </AssociationSet>
           <AssociationSet Name="FK_chat_message" Association="Self.FK_chat_message">
             <End Role="message" EntitySet="message" />
@@ -319,6 +341,14 @@
           <AssociationSet Name="FK_message_user" Association="Self.FK_message_user">
             <End Role="user" EntitySet="user" />
             <End Role="message" EntitySet="message" />
+          </AssociationSet>
+          <AssociationSet Name="FK_projCat_category" Association="Self.FK_projCat_category">
+            <End Role="category" EntitySet="category" />
+            <End Role="projCat" EntitySet="projCat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_projCat_project" Association="Self.FK_projCat_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="projCat" EntitySet="projCat" />
           </AssociationSet>
           <AssociationSet Name="FK_projUser_department" Association="Self.FK_projUser_department">
             <End Role="department" EntitySet="department" />
@@ -355,6 +385,7 @@
           <EntitySet Name="departments" EntityType="ReviseDBModel.department" />
           <EntitySet Name="gamifications" EntityType="ReviseDBModel.gamification" />
           <EntitySet Name="messages" EntityType="ReviseDBModel.message" />
+          <EntitySet Name="projCats" EntityType="ReviseDBModel.projCat" />
           <EntitySet Name="projects" EntityType="ReviseDBModel.project" />
           <EntitySet Name="projUsers" EntityType="ReviseDBModel.projUser" />
           <EntitySet Name="requirements" EntityType="ReviseDBModel.requirement" />
@@ -365,13 +396,13 @@
             <End Role="category" EntitySet="categories" />
             <End Role="userCatReq" EntitySet="userCatReqs" />
           </AssociationSet>
-          <AssociationSet Name="FK_category_Proj" Association="ReviseDBModel.FK_category_Proj">
-            <End Role="project" EntitySet="projects" />
-            <End Role="category" EntitySet="categories" />
-          </AssociationSet>
           <AssociationSet Name="FK_message_Category" Association="ReviseDBModel.FK_message_Category">
             <End Role="category" EntitySet="categories" />
             <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_projCat_category" Association="ReviseDBModel.FK_projCat_category">
+            <End Role="category" EntitySet="categories" />
+            <End Role="projCat" EntitySet="projCats" />
           </AssociationSet>
           <AssociationSet Name="FK_chat_message" Association="ReviseDBModel.FK_chat_message">
             <End Role="message" EntitySet="messages" />
@@ -388,6 +419,10 @@
           <AssociationSet Name="FK_message_user" Association="ReviseDBModel.FK_message_user">
             <End Role="user" EntitySet="users" />
             <End Role="message" EntitySet="messages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_projCat_project" Association="ReviseDBModel.FK_projCat_project">
+            <End Role="project" EntitySet="projects" />
+            <End Role="projCat" EntitySet="projCats" />
           </AssociationSet>
           <AssociationSet Name="FK_projUser_project" Association="ReviseDBModel.FK_projUser_project">
             <End Role="project" EntitySet="projects" />
@@ -416,11 +451,10 @@
           </Key>
           <Property Name="CatId" Type="Int32" Nullable="false" />
           <Property Name="CatName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProjId" Type="Int32" />
-          <Property Name="status" Type="Int32" />
+          <Property Name="totalLimit" Type="Int32" />
           <NavigationProperty Name="userCatReqs" Relationship="ReviseDBModel.FK_cat_userCatReq" FromRole="category" ToRole="userCatReq" />
-          <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_category_Proj" FromRole="category" ToRole="project" />
           <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_Category" FromRole="category" ToRole="message" />
+          <NavigationProperty Name="projCats" Relationship="ReviseDBModel.FK_projCat_category" FromRole="category" ToRole="projCat" />
         </EntityType>
         <EntityType Name="chat">
           <Key>
@@ -464,6 +498,22 @@
           <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_message_proj" FromRole="message" ToRole="project" />
           <NavigationProperty Name="user" Relationship="ReviseDBModel.FK_message_user" FromRole="message" ToRole="user" />
         </EntityType>
+        <EntityType Name="projCat">
+          <Key>
+            <PropertyRef Name="projId" />
+            <PropertyRef Name="catId" />
+          </Key>
+          <Property Name="projId" Type="Int32" Nullable="false" />
+          <Property Name="catId" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="score" Type="Int32" />
+          <Property Name="isActive" Type="Boolean" />
+          <Property Name="isFinish" Type="Boolean" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="category" Relationship="ReviseDBModel.FK_projCat_category" FromRole="projCat" ToRole="category" />
+          <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_projCat_project" FromRole="projCat" ToRole="project" />
+        </EntityType>
         <EntityType Name="project">
           <Key>
             <PropertyRef Name="ProjId" />
@@ -473,8 +523,8 @@
           <Property Name="status" Type="Int32" Nullable="false" />
           <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="categories" Relationship="ReviseDBModel.FK_category_Proj" FromRole="project" ToRole="category" />
           <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_proj" FromRole="project" ToRole="message" />
+          <NavigationProperty Name="projCats" Relationship="ReviseDBModel.FK_projCat_project" FromRole="project" ToRole="projCat" />
           <NavigationProperty Name="projUsers" Relationship="ReviseDBModel.FK_projUser_project" FromRole="project" ToRole="projUser" />
         </EntityType>
         <EntityType Name="projUser">
@@ -552,18 +602,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_category_Proj">
-          <End Type="ReviseDBModel.project" Role="project" Multiplicity="0..1" />
-          <End Type="ReviseDBModel.category" Role="category" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="project">
-              <PropertyRef Name="ProjId" />
-            </Principal>
-            <Dependent Role="category">
-              <PropertyRef Name="ProjId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_message_Category">
           <End Type="ReviseDBModel.category" Role="category" Multiplicity="1" />
           <End Type="ReviseDBModel.message" Role="message" Multiplicity="*" />
@@ -573,6 +611,18 @@
             </Principal>
             <Dependent Role="message">
               <PropertyRef Name="CatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_projCat_category">
+          <End Type="ReviseDBModel.category" Role="category" Multiplicity="1" />
+          <End Type="ReviseDBModel.projCat" Role="projCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="category">
+              <PropertyRef Name="CatId" />
+            </Principal>
+            <Dependent Role="projCat">
+              <PropertyRef Name="catId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -621,6 +671,18 @@
             </Principal>
             <Dependent Role="message">
               <PropertyRef Name="userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_projCat_project">
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="1" />
+          <End Type="ReviseDBModel.projCat" Role="projCat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="ProjId" />
+            </Principal>
+            <Dependent Role="projCat">
+              <PropertyRef Name="projId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -685,8 +747,7 @@
           <EntitySetMapping Name="categories">
             <EntityTypeMapping TypeName="ReviseDBModel.category">
               <MappingFragment StoreEntitySet="category">
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="ProjId" ColumnName="ProjId" />
+                <ScalarProperty Name="totalLimit" ColumnName="totalLimit" />
                 <ScalarProperty Name="CatName" ColumnName="CatName" />
                 <ScalarProperty Name="CatId" ColumnName="CatId" />
               </MappingFragment>
@@ -727,6 +788,20 @@
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="msg" ColumnName="msg" />
                 <ScalarProperty Name="msgId" ColumnName="msgId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projCats">
+            <EntityTypeMapping TypeName="ReviseDBModel.projCat">
+              <MappingFragment StoreEntitySet="projCat">
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="isFinish" ColumnName="isFinish" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="score" ColumnName="score" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="catId" ColumnName="catId" />
+                <ScalarProperty Name="projId" ColumnName="projId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

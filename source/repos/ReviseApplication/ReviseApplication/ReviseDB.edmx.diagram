@@ -5,24 +5,26 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="851279344afa44d18b4f3e13df1050dc" Name="Diagram1" ZoomLevel="109">
-        <EntityTypeShape EntityType="ReviseDBModel.category" Width="1.5" PointX="3" PointY="4.625" />
-        <EntityTypeShape EntityType="ReviseDBModel.chat" Width="1.5" PointX="10.5" PointY="4.875" />
-        <EntityTypeShape EntityType="ReviseDBModel.department" Width="1.5" PointX="12.75" PointY="9.125" />
-        <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="5.75" PointY="1.875" />
-        <EntityTypeShape EntityType="ReviseDBModel.message" Width="1.5" PointX="8.25" PointY="4.375" />
-        <EntityTypeShape EntityType="ReviseDBModel.project" Width="1.5" PointX="0.75" PointY="4.5" />
-        <EntityTypeShape EntityType="ReviseDBModel.projUser" Width="1.5" PointX="15" PointY="4.5" />
-        <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="3" PointY="2" />
-        <EntityTypeShape EntityType="ReviseDBModel.role" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ReviseDBModel.user" Width="1.5" PointX="12.75" PointY="3.625" />
-        <EntityTypeShape EntityType="ReviseDBModel.userCatReq" Width="1.5" PointX="5.25" PointY="4.875" />
+        <EntityTypeShape EntityType="ReviseDBModel.category" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="ReviseDBModel.chat" Width="1.5" PointX="8.25" PointY="5.75" />
+        <EntityTypeShape EntityType="ReviseDBModel.department" Width="1.5" PointX="10.5" PointY="10" />
+        <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ReviseDBModel.message" Width="1.5" PointX="6" PointY="5.25" />
+        <EntityTypeShape EntityType="ReviseDBModel.projCat" Width="1.5" PointX="3" PointY="5.25" />
+        <EntityTypeShape EntityType="ReviseDBModel.project" Width="1.5" PointX="3.75" PointY="9.375" />
+        <EntityTypeShape EntityType="ReviseDBModel.projUser" Width="1.5" PointX="12.75" PointY="5.375" />
+        <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="0.75" PointY="1.875" />
+        <EntityTypeShape EntityType="ReviseDBModel.role" Width="1.5" PointX="10.5" PointY="1.625" />
+        <EntityTypeShape EntityType="ReviseDBModel.user" Width="1.5" PointX="10.5" PointY="4.625" />
+        <EntityTypeShape EntityType="ReviseDBModel.userCatReq" Width="1.5" PointX="3" PointY="1.75" />
         <AssociationConnector Association="ReviseDBModel.FK_cat_userCatReq" />
-        <AssociationConnector Association="ReviseDBModel.FK_category_Proj" />
         <AssociationConnector Association="ReviseDBModel.FK_message_Category" />
+        <AssociationConnector Association="ReviseDBModel.FK_projCat_category" />
         <AssociationConnector Association="ReviseDBModel.FK_chat_message" />
         <AssociationConnector Association="ReviseDBModel.FK_projUser_department" />
         <AssociationConnector Association="ReviseDBModel.FK_message_proj" />
         <AssociationConnector Association="ReviseDBModel.FK_message_user" />
+        <AssociationConnector Association="ReviseDBModel.FK_projCat_project" />
         <AssociationConnector Association="ReviseDBModel.FK_projUser_project" />
         <AssociationConnector Association="ReviseDBModel.FK_projUser_role" />
         <AssociationConnector Association="ReviseDBModel.FK_projUser_user" />

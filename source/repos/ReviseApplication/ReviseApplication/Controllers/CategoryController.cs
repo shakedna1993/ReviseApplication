@@ -23,6 +23,7 @@ namespace ReviseApplication.Controllers
             Session["projectName"] = name;
             Session["projectid"] = id;
             var prj = con.projUsers.Where(u => u.projid == id).ToList();
+            var numOfMembers = con.projUsers.Where(u => u.projid == id).Count();
 
             foreach (var usr in con.users)
                 Allusers.Add(usr);

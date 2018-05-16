@@ -25,7 +25,7 @@ namespace ReviseApplication.Repository
                 var userType = new SelectListItem()
                 {
                     Value = null,
-                    Text = "--- select user ---"
+                    Text = ""
                 };
                 users.Insert(0, userType);
                 return new SelectList(users, "Value", "Text");

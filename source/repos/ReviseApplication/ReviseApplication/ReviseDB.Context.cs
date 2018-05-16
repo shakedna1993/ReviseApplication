@@ -30,6 +30,7 @@ namespace ReviseApplication
         public virtual DbSet<department> departments { get; set; }
         public virtual DbSet<gamification> gamifications { get; set; }
         public virtual DbSet<message> messages { get; set; }
+        public virtual DbSet<projCat> projCats { get; set; }
         public virtual DbSet<project> projects { get; set; }
         public virtual DbSet<projUser> projUsers { get; set; }
         public virtual DbSet<requirement> requirements { get; set; }
