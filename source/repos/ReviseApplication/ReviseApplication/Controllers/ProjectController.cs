@@ -93,6 +93,19 @@ namespace ReviseApplication.Controllers
                 con.projects.Add(proj);
                 con.SaveChanges();
 
+                List<category> catlist = new List<category>();
+                catlist = con.categories.ToList();
+                foreach (var cat in catlist)
+                {
+                    projCat entity = new projCat();
+                    entity.category = cat;
+                    entity.catId = cat.CatId;
+                    entity.project = proj;
+                    entity.projId = proj.ProjId;
+                    con.projCats.Add(entity);
+                    con.SaveChanges();
+                }
+
                 // the new id of project that create
                 Session["IdProjectToAssign"] = proj.ProjId;
 
