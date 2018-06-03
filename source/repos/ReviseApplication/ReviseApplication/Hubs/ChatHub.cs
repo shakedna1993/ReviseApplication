@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using ReviseApplication.Models;
 
 namespace ReviseApplication.Hubs
@@ -21,6 +22,7 @@ namespace ReviseApplication.Hubs
     /// <summary>
     /// Hub Class which resposible to deal with event from the Client side and prompt functions in the Client side by by the Server side.
     /// </summary>
+    [HubName("chatHub")]
     public class ChatHub : Hub
     {
 
@@ -44,7 +46,7 @@ namespace ReviseApplication.Hubs
         /// <summary>
         /// Function which responsible to deal with an User (Client) that connect to the Hub.
         /// </summary>
-       /* public void join()
+        public void join()
         {
 
             CurrentMessages = con.messages.ToList();
@@ -52,8 +54,8 @@ namespace ReviseApplication.Hubs
             var id = Context.ConnectionId;
             var userName = Context.User.Identity.Name.ToString();
             int catid = Convert.ToInt32(Clients.Caller.catid);
-
-            int projId = con.categories.Where(r => r.CatId == catid).SingleOrDefault().project.ProjId;
+            int projid = Convert.ToInt32(Clients.Caller.projid);
+            string userid = Clients.Caller.userid;
 
             rolesList = con.roles.ToList();
             //Query - Join Query which returns Records of Members Details and theirs Roles.
@@ -61,7 +63,7 @@ namespace ReviseApplication.Hubs
             var projectMembersDetails = from pm in con.projUsers.AsQueryable()
                                         join md in con.users.AsQueryable()
                                         on pm.user.userid equals md.userid
-                                        where pm.project.ProjId == projId
+                                        where pm.project.ProjId == projid
                                         select new
                                         {
                                             userId = md.userid,
@@ -69,30 +71,28 @@ namespace ReviseApplication.Hubs
                                             firstName = md.fname,
                                             lastName = md.lname,
                                             picURL = md.pic,
-                                            roleId = pm.role1.RoleID,
-                                            //roleName
-                                            //grade
+                                            //roleId = pm.,
+                                            //roleName = con.roles.Find(pm.role).RoleName,
+                                            grade = pm.grade
                                         };
-
-            string userid = Clients.Caller.userId;
 
             var currentMemberDetails = projectMembersDetails.Where(m => m.userId == userid).First();
 
             var projAttached = con.projUsers.Where(p => p.user.userid == currentMemberDetails.userId);
 
-            var catAttached = con.categories;
+            var catAttached = con.projCats.Where(c => c.project.ProjId == projid);
 
             //Query - Join Query which return a list of Rooms that to User attached to.
             var roomList = from sc in projAttached
                            join soc in catAttached
-                           on sc.projid equals soc.pr.ProjId
-                           select new { roomName = soc.CatId.ToString() };
+                           on sc.projid equals soc.project.ProjId
+                           select new { roomName = soc.category.CatId.ToString() };
 
             joinChatRoom(catid.ToString());
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new ChatUserDetails { CatId = catid, userid = currentMemberDetails.userId, ConnectionId = id, UserName = userName });
+                ConnectedUsers.Add(new ChatUserDetails { CatId = catid, userid = currentMemberDetails.userId, ConnectionId = id, UserName = userName, projid = projid });
 
                 // send to caller
                 var messages = CurrentMessages.Where(c => c.CatId.Equals(catid)).Select(m => new MessageDetail { UserName = m.user.UserName, Message = m.msg, Date = m.createDate.ToString() });
@@ -101,7 +101,7 @@ namespace ReviseApplication.Hubs
                 // send to all except caller client
                 Clients.Group(catid.ToString(), id).onNewUserConnected(id, userName);
             }
-        }*/
+        }
 
         /// <summary>
         /// Function which resposible to add the current connected user to a Requirment ChatRoom.
@@ -119,10 +119,10 @@ namespace ReviseApplication.Hubs
         /// <param name="CatId">Requirment ID key </param>
         /// <param name="projId">Project ID key </param>
         /// <returns>Task of startChatRoom</returns>
-        public Task startChatRoom(string reqId, string projId)
+        public Task startChatRoom(string catid, string projid)
         {
 
-            return Groups.Add(Context.ConnectionId, reqId);
+            return Groups.Add(Context.ConnectionId, catid);
 
 
         }
@@ -133,9 +133,9 @@ namespace ReviseApplication.Hubs
         /// <param name="CatId">Requirment ID key </param>
         /// <param name="projId">Project ID key</param>
         /// <returns>>Task of disconChatRoom</returns>
-        public Task disconChatRoom(string reqId, string projId)
+        public Task disconChatRoom(string catid, string projid)
         {
-            return Groups.Remove(Context.ConnectionId, reqId);
+            return Groups.Remove(Context.ConnectionId, catid);
 
         }
 
@@ -158,10 +158,10 @@ namespace ReviseApplication.Hubs
             msg.createDate = DateTime.Now;
             var idd = Context.User.Identity.ToString();
 
-            msg.userid = con.users.Find(userContext.userid).ToString();
-            msg.CatId = Convert.ToInt32(con.categories.Find(userContext.CatId));
-            var p = con.projCats.Where(c => c.catId == msg.CatId).ToList();
-           // msg.projId = Convert.ToInt32(con.projCats.Find(msg.category.CatId.ProjId));
+            msg.userid = con.users.Find(userContext.userid).userid;
+            msg.CatId = con.categories.Find(userContext.CatId).CatId;
+            //var p = con.projCats.Where(c => c.catId == msg.CatId).ToList();
+            msg.projId = con.projects.Find(userContext.projid).ProjId;
             con.messages.Add(msg);
             con.SaveChanges();
 

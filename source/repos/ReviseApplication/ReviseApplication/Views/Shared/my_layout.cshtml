@@ -23,10 +23,6 @@
     <link href="~/Content/angular-material.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="~/Scripts/angular.js"></script>
     <script src="~/Scripts/jquery-3.0.0.min.js"></script>
@@ -37,33 +33,48 @@
     <script src="~/Scripts/bootstrap-toggle.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-
     <script src="~/Scripts/views/angular.view.models.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <!-- Website CSS style -->
+    <link href="~/css/main.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Website Font style -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+    <style>
+        h1 {
+            display: block;
+            font-family: Berlin Sans FB;
+            font-size: 20px;
+            color: darkblue;
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body ng-app="mainModel" ng-controller="mainController">
+<body ng-app="mainModel" ng-controller="mainController" style="background-color:#E8E8E8;">
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00004d;">
-        <a href="#!top"> <img src="~/css/revise_main.png" style="max-height: 120px; max-width: 140px; padding: 0px 1px 1px 5px;" /></a>
+        <a href="#!top"> <img src="~/css/revise_main.png" style="max-height: 120px; max-width: 140px; padding: 10px 1px 1px 5px;" /></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ UserConnectionUrl }}"><i class="fa fa-user white"></i> @Convert.ToString(Session["UserName"])</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user white"></i> @Convert.ToString(Session["UserName"])
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/personalFile">Personal File</a>
+                    </div>
                 </li>
-
-                @*
-                    <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user white"></i> User Name
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
-                            <a class="dropdown-item" href="#">Personal File</a>
-                        </div>
-                    </li>
-                *@
                 <li class="nav-item active">
                     <a class="nav-link" href="#">
                         Notifications <span class="badge badge-light">9</span>
@@ -71,10 +82,10 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-comments"></i> Chat History
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">?</a>
                     </div>
                 </li>
@@ -84,18 +95,6 @@
             </ul>
         </div>
     </nav>
-
-    @*
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a href="{{ UserConnectionUrl }}" class="navbar-brand" style="max-height: 120px !important"> <i class="fa {{ fontAwasomeUserName }}" aria-hidden="true"> </i> {{ UserConnectionText }}</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                </div>
-            </div>
-        </div>
-    *@
 
     <div id="page-wrapper">
 

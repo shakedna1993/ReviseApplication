@@ -31,10 +31,37 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+
+        /// <summary>
+        /// the function shows project for a specific member.
+        /// </summary>
+        /// <returns>list of projects the user belongs to</returns>
+        // GET: projects
         [HttpGet]
         public ActionResult ProjectMain()
         {
-            return View();
+            List<IEnumerable<projUser>> memberslist = new List<IEnumerable<projUser>>();
+            List<projectModel> ProjectsList = new List<projectModel>();
+            ReviseDBEntities con = new ReviseDBEntities();
+            string userId = Session["userid"].ToString();
+            var prj = con.projUsers.Where(u => u.userid == userId).ToList();
+
+            foreach(var pr in prj)
+            {
+                projectModel proj = new projectModel();
+                proj.projid = pr.projid;
+                proj.Date = pr.project.creation_date.ToString();
+                proj.status = pr.project.status;
+                proj.projname = pr.project.ProjName;
+                proj.score = pr.project.totalScore ?? 0;
+                memberslist.Add(con.projUsers.Where(u => u.projid == pr.projid));
+                ProjectsList.Add(proj);
+            }
+
+            Session["members"] = memberslist;
+            Session["projects"] = ProjectsList.ToList();
+
+            return View(ProjectsList.ToList());
         }
 
         [HttpGet]
@@ -43,6 +70,109 @@ namespace ReviseApplication.Controllers
             var repo = new MainRepository();
             var Main = repo.ProjCreateView();
             return View(Main);
+        }
+
+        [HttpGet]
+        public ActionResult ProjectDetails(int? id)
+        {
+            Session["projId"] = id;
+            var repo = new MainRepository();
+            var Main = repo.ProjView(id);
+            ReviseDBEntities con = new ReviseDBEntities();
+            List<projUser> proj = con.projUsers.Where(p => p.projid == id).ToList();
+            ViewBag.members = proj;
+            return View(Main);
+        }
+
+        [HttpGet]
+        public ActionResult EditProject(int? id)
+        {
+            var repo = new MainRepository();
+            var Main = repo.EditProjView(id);
+           
+            Session["projId"] = id;     
+
+            return View(Main);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Authorize]
+        public ActionResult EditProject(string projname, string projdesc, IEnumerable<string> SelectRemoveUser, IEnumerable<string> SelectedUser)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            int id = Convert.ToInt32(Session["projId"]);
+            string Pname = con.projects.Find(id).ProjName;
+            string Pdesc = con.projects.Find(id).description;
+            project proj = con.projects.Find(id);
+            List<projUser> tempList = new List<projUser>();
+            List<user> Assigned = new List<user>();
+            List<user> Remove = new List<user>();
+
+            try
+            {
+                if (projname == Pname && projdesc == Pdesc && SelectedUser == null && SelectRemoveUser == null)
+                    return RedirectToAction("ProjectMain", "Project");
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Unknown error occurred!" });
+            }
+
+            if (ModelState.IsValid)
+            {
+                con.projects.Find(id).ProjName = projname;
+                con.projects.Find(id).description = projdesc;
+
+                if(SelectRemoveUser != null)
+                {
+                    foreach (var usr in SelectRemoveUser.ToList())
+                    {
+                        var newusr = (con.users.Where(u => u.UserName == usr));
+                        Remove.Add(newusr.FirstOrDefault());
+                    }
+
+                    foreach (var usr in Remove)
+                        tempList.Add(con.projUsers.Find(usr.userid, id));
+
+
+                    foreach(var tmp in tempList)
+                        con.projUsers.Remove(tmp);
+                    con.SaveChanges();
+                }
+                con.SaveChanges();
+
+                if (SelectedUser != null)
+                {
+                    foreach (var usr in SelectedUser.ToList())
+                    {
+                        var newusr = (con.users.Where(u => u.UserName == usr));
+                        Assigned.Add(newusr.FirstOrDefault());
+                    }
+
+                    List<projUser> prjUser = new List<projUser>();
+
+                    foreach (var usr in Assigned)
+                    {
+                        var prjusr = new projUser();
+                        prjusr.project = proj;
+                        prjusr.user = usr;
+                        prjusr.projid = proj.ProjId;
+                        prjusr.userid = usr.userid;
+                        prjUser.Add(prjusr);
+                    }
+
+                    foreach (var user in prjUser)
+                        con.projUsers.Add(user);
+                    con.SaveChanges();
+
+                    Session["IdProjectToAssign"] = proj.ProjId;
+                    return RedirectToAction("AssignMembers", new { id = proj.ProjId });
+                }
+
+                return RedirectToAction("ProjectMain", "Project");
+            }
+            return Json(new { success = false, message = "Unknown error occurred!" });
         }
 
         [HttpPost]
@@ -66,7 +196,8 @@ namespace ReviseApplication.Controllers
                 {
                     ProjName = projname,
                     creation_date = DateTime.Today,
-                    description = projdesc
+                    description = projdesc,
+                    status = "Open" 
                 };
 
                 var usrList= new List<user>();
@@ -108,6 +239,7 @@ namespace ReviseApplication.Controllers
 
                 // the new id of project that create
                 Session["IdProjectToAssign"] = proj.ProjId;
+                Session["projectName"] = proj.ProjName;
 
                 // now the user Redirect To assign role every member in project. 
                 return RedirectToAction("AssignMembers", new{ id = proj.ProjId });

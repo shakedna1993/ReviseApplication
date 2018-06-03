@@ -34,7 +34,7 @@ namespace ReviseApplication
         public string Email { get; set; }
         public Nullable<System.Guid> ActivationCode { get; set; }
         public string ResetPasswordCode { get; set; }
-        public byte[] IsAdmin { get; set; }
+        public Nullable<bool> IsAdmin { get; set; }
         public string pic { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

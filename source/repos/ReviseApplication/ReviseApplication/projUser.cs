@@ -18,10 +18,11 @@ namespace ReviseApplication
         public int projid { get; set; }
         public Nullable<int> role { get; set; }
         public Nullable<int> dep { get; set; }
+        public Nullable<int> grade { get; set; }
     
         public virtual department department { get; set; }
-        public virtual project project { get; set; }
         public virtual role role1 { get; set; }
         public virtual user user { get; set; }
+        public virtual project project { get; set; }
     }
 }

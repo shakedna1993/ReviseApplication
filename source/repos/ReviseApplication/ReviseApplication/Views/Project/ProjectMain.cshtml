@@ -1,14 +1,125 @@
-﻿
+﻿@model IEnumerable<ReviseApplication.Models.projectModel>
+
+@using ReviseApplication.Models;
+@*
+    @{
+        if ((Session["UserName"] == null) || (Convert.ToString(Session["UserName"]) == ""))
+        {
+            FormsAuthentication.SignOut();
+            Response.Redirect("~/Authentication/Login");
+        }
+    }*@
+
 @{
     Layout = "~/Views/Shared/my_layout.cshtml";
-    ViewBag.Title = "ProjectMain";
 }
 
-
 @section TitleSection{
-    Projects
+    My Projects
 }
 
 @section ContentBody{
+    <br /><br />
+    <div class="table-responsive">
+        <p>
+            @if (Convert.ToBoolean(Session["IsAdmin"]))
+            {
+                @Html.ActionLink("Create New Project", "CreateProj", null, new { @role = "button", @class = "btn btn-success" })
+            }
+        </p>
+        <br />
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-3">
+                <div id="imaginary_container">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="input-group stylish-input-group">
+                            <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search">
+                            <span class="input-group-addon">
+                                <button type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <table class="table">
+            <tr class="active">
+                <th>
+                    Project Name
+                </th>
+                <th>
+                    Creation Date
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Score
+                </th>
+                <th>
+                    Participants
+                </th>
+                <th></th>
+            </tr>
+            @{
+                var i = 0;
+            }
 
-    }
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        <a href="@Url.Action("CategoryMain", "Category", new { id = item.projid, name = item.projname}, Request.Url.Scheme)">@item.projname</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.score)
+                    </td>
+
+                    <td>
+                        @{
+                            List<IEnumerable<projUser>> mpp = (List<IEnumerable<projUser>>)Session["members"];
+                            List<projUser> pm = mpp[i].ToList();
+
+                            foreach (var m1 in pm)
+                            {
+                                <a @*href="~/Members/details/@m1.MemberId.MemberId"*@>
+                                    <img class="img-circle" src="@m1.user.pic" width="30" height="30" alt="">
+                                </a>
+                            }
+
+                        }
+
+                    </td>
+
+                    <td nowrap>
+                        @Html.ActionLink("Details","ProjectDetails", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-primary" })
+                        @if (Convert.ToBoolean(Session["IsAdmin"]))
+                            {
+                                <a href="@Url.Action("EditProject", "Project", new { id = item.projid })" class="btn btn-default btn-lg">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <label>
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger" })
+                                </label>
+
+                            }
+                        </td>
+                </tr>
+                i++;
+            }
+
+        </table>
+    </div>
+
+}

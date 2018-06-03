@@ -6,8 +6,9 @@ $(function () {
     // Declare a proxy to reference the hub.
     //var chatHub = $.connection.chatHub;
     $.connection.hub.logging = true;
-    chatHub.state.userId = $("#userId").val();
+    chatHub.state.userid = $("#userid").val();
     chatHub.state.catid = $("#catid").val();
+    chatHub.state.projid = $("#projid").val();
 
     registerClientMethods(chatHub);
 
@@ -56,7 +57,7 @@ function sendMessage() {
     var msg = $("#btn-input").val();
     if (msg.length > 0) {
 
-        var userName = $("#userName").val(); // need to add user name from session
+        var userName = $("#UserName").val(); // need to add user name from session
         chatHub.server.sendMessageToAll(userName, msg);
         $("#btn-input").val('');
         scrollingDownMessages();
@@ -74,13 +75,13 @@ function scrollingDownMessages() {
 function registerClientMethods(chatHub) {
 
     // Calls when user successfully logged in
-    chatHub.client.onConnected = function (id, userName, allUsers, messages, projMembersDetails) {
+    chatHub.client.onConnected = function (id, UserName, allUsers, messages, projMembersDetails) {
 
         projectMembersDetails = projMembersDetails;
 
         $('#hdId').val(id);
-        $('#hdUserName').val(userName);
-        $('#spanUser').html(userName);
+        $('#hdUserName').val(UserName);
+        $('#spanUser').html(UserName);
 
         // Add All Users
         for (i = 0; i < allUsers.length; i++) {
@@ -121,9 +122,9 @@ function registerClientMethods(chatHub) {
 
     }
 
-    chatHub.client.messageReceived = function (userName, message, createdDate) {
+    chatHub.client.messageReceived = function (UserName, message, createdDate) {
 
-        AddMessage(userName, message, createdDate);
+        AddMessage(UserName, message, createdDate);
     }
 
 

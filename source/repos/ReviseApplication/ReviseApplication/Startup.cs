@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(ReviseApplication.Startup))]
+[assembly: OwinStartup(typeof(ReviseApplication.Startup))]
 
 namespace ReviseApplication
 {

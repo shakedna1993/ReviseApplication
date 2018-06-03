@@ -96,7 +96,7 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
 
     $rootScope.logout = function () {
         $http({
-            method: "GET",
+            method: "POST",
             url: "/Authentication/Logout"
         }).then(function mySuccess(response) {
             if (response.data.success) {

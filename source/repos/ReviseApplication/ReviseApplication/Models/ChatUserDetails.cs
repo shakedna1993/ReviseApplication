@@ -13,5 +13,6 @@ namespace ReviseApplication.Models
         public string UserName { get; set; }
         public string ConnectionId { get; set; }
         public int CatId { get; set; }
+        public int projid { get; set; }
     }
 }

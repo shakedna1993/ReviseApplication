@@ -1,7 +1,7 @@
-﻿@model ReviseApplication.Models.CreateProj
+﻿@model ReviseApplication.Models.EditProject
 @{
     Layout = "~/Views/Shared/my_Layout2.cshtml";
-    ViewBag.Title = "Create New Project";
+    ViewBag.Title = "Edit Project";
 }
 
 <!DOCTYPE html>
@@ -52,10 +52,19 @@
             <div class="container" ng-controller="mainController">
                 <div class="row main">
                     <div class="main-center">
-                        <h1> Create New Project</h1>
+                        <h1> Edit Project</h1>
                     </div>
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"></span>
+                            @Html.DisplayFor(model => model.projid, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
                     <div class="form-group">
                         @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group col-md-4">
@@ -68,21 +77,27 @@
                         @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
-                            <textarea class="form-control text-box single-line" data-val="true" data-val-length="Maximum length of 3000 characters" data-val-length-max="3000" data-val-required="Please enter project description" id="projdesc" name="projdesc" value="" rows="6"></textarea>
+                            @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc" })
                         </div>
                         @Html.ValidationMessageFor(model => model.projdesc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.SelectRemoveUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                            @Html.ListBoxFor(model => model.SelectRemoveUser, Model.RemoveUser, new { @style = "width: 20%; height: 105px;" })
+                        </div>
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(x => Model.SelectedUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
-                            @Html.ListBoxFor(model => model.SelectedUser, Model.Users, new { @style = "width: 20%; height: 105px;" })
+                            @Html.ListBoxFor(model => model.SelectedUser, Model.AssignUser, new { @style = "width: 20%; height: 105px;" })
                         </div>
-                        @Html.ValidationMessageFor(model => Model.SelectedUser, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <button type="submit" value="Create" class="btn btn-primary btn-lg btn-block login-button">Create</button>
+                    <button type="submit" value="Submit" class="btn btn-primary btn-lg btn-block login-button">Submit</button>
                 </div>
             </div>
             <div>

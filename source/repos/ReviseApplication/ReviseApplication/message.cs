@@ -30,7 +30,7 @@ namespace ReviseApplication
         public virtual category category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<chat> chats { get; set; }
-        public virtual project project { get; set; }
         public virtual user user { get; set; }
+        public virtual project project { get; set; }
     }
 }

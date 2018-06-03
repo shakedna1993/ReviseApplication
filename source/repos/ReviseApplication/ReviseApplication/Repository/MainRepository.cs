@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ReviseApplication.Models;
+using System.Web.Mvc;
 
 namespace ReviseApplication.Repository
 {
@@ -28,6 +29,35 @@ namespace ReviseApplication.Repository
                 Users = uRepo.GetUsers(),
             };
             return ShowView;
+        }
+
+        public EditProject EditProjView(int? id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            var uRepo = new AssignUserRepository();
+            var rRepo = new RemoveUsers();
+
+            var ShowView = new EditProject()
+            {
+                AssignUser = uRepo.GetUsers(id),
+                RemoveUser = rRepo.GetUsers(id),
+                projid = id ?? default(int),
+                projname = con.projects.Find(id).ProjName,
+                projdesc = con.projects.Find(id).description,
+            };
+            return (ShowView);
+        }
+
+        public ProjectDetails ProjView(int? id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            var ShowView = new ProjectDetails()
+            {
+                projid = id ?? default(int),
+                projname = con.projects.Find(id).ProjName,
+                projdesc = con.projects.Find(id).description
+            };
+            return (ShowView);
         }
 
         public CategoryMain CatView()

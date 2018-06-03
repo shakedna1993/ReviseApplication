@@ -35,13 +35,13 @@ namespace ReviseApplication.Controllers
             ViewBag.memberslist = memberslist;
             Session["MemberInProj"] = memberslist;
 
-           /* foreach(var cat in catlist)
+           foreach(var cat in catlist)
             {
                 var prjcat = cat.projCats.SingleOrDefault(p => p.project.ProjId == id);
 
                 // the calculation of the thresholdScoreValue
                 double denominator = numOfMembers * 5;
-                var numerator = prjcat.score;
+                int numerator = prjcat.score ?? 0;
                 double total = Convert.ToDouble((numerator / denominator)) * 100;
                 con.projCats.SingleOrDefault(p => p.project.ProjId == id).score = Convert.ToInt32(total);
                 
@@ -57,7 +57,7 @@ namespace ReviseApplication.Controllers
                 }
 
                 con.SaveChanges();
-            }*/
+            }
 
             var repo = new MainRepository();
             var Main = repo.CatView();

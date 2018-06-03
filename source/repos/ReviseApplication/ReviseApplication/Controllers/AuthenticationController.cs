@@ -71,13 +71,10 @@ namespace ReviseApplication.Controllers
                         users.First().isConnected = 1;
                         con.SaveChanges();
                         System.Web.HttpContext.Current.Session["username"] = user.UserName;
+                        Session["userid"] = user.userid;
+                        Session["IsAdmin"] = user.IsAdmin;
                         System.Web.HttpContext.Current.Session.Timeout = 30;
-                        return Json(new
-                        {
-                            success = true,
-                            message = "Connected! Loading your Projects, please wait.",
-                            Yourname = user.fname + " " + user.lname
-                        });
+                        return RedirectToAction("ProjectMain", "Project");
                     }
                     else
                     {
@@ -155,6 +152,8 @@ namespace ReviseApplication.Controllers
                 System.Web.HttpContext.Current.Session.RemoveAll();
                 System.Web.HttpContext.Current.Session.Abandon();
 
+                ReviseDBEntities con = new ReviseDBEntities();
+                con.users.Find(Convert.ToInt32(Session["userid"])).isConnected = 0;
                 return RedirectToAction("Login", "Authentication");
             }
             catch

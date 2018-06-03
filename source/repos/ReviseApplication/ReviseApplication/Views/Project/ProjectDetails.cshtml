@@ -1,7 +1,7 @@
-﻿@model ReviseApplication.Models.CreateProj
+﻿@model ReviseApplication.Models.ProjectDetails
 @{
     Layout = "~/Views/Shared/my_Layout2.cshtml";
-    ViewBag.Title = "Create New Project";
+    ViewBag.Title = "Project Details";
 }
 
 <!DOCTYPE html>
@@ -52,37 +52,58 @@
             <div class="container" ng-controller="mainController">
                 <div class="row main">
                     <div class="main-center">
-                        <h1> Create New Project</h1>
+                        <h1>Project Details</h1>
                     </div>
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
+                            @Html.TextBoxFor(model => model.projid, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+                        </div>
+                    </div>
                     <div class="form-group">
                         @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                            @Html.EditorFor(model => model.projname, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.TextBoxFor(model => model.projname, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
                         </div>
-                        @Html.ValidationMessageFor(model => model.projname, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
                         @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
-                            <textarea class="form-control text-box single-line" data-val="true" data-val-length="Maximum length of 3000 characters" data-val-length-max="3000" data-val-required="Please enter project description" id="projdesc" name="projdesc" value="" rows="6"></textarea>
+                            @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc", @class = "form-control", disabled = "disabled", @readonly = "readonly" })
                         </div>
                         @Html.ValidationMessageFor(model => model.projdesc, "", new { @class = "text-danger" })
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(x => Model.SelectedUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
-                            @Html.ListBoxFor(model => model.SelectedUser, Model.Users, new { @style = "width: 20%; height: 105px;" })
-                        </div>
-                        @Html.ValidationMessageFor(model => Model.SelectedUser, "", new { @class = "text-danger" })
+                        <table class="table">
+                            <tr class="active" align="center">
+                                <td></td>
+                                <td>
+                                    <b>   User name </b>
+                                </td>
+                                <td>
+                                    <b> Role</b>
+                                </td>
+                            </tr>
+                            @foreach(var usr in ViewBag.members)
+                                {
+                                <tr align="center">
+                                    <td>
+                                        <img class="img-circle" src="@usr.user.pic" width="30" height="30" alt="">
+                                    </td>
+                                    <td>
+                                        @usr.user.UserName.ToString()
+                                    </td>
+                                    <td>
+                                        @usr.role1.RoleName.ToString()
+                                    </td>
+                            </tr>
+                        }
+                           
+                </table>
                     </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <button type="submit" value="Create" class="btn btn-primary btn-lg btn-block login-button">Create</button>
                 </div>
             </div>
             <div>
