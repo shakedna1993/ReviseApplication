@@ -30,5 +30,7 @@ namespace ReviseApplication.Models
         [Required]
         [Display(Name = "Participants")]
         public List<user> members { get; set; }
+
+        public int MemberRole { get; set; }
     }
 }

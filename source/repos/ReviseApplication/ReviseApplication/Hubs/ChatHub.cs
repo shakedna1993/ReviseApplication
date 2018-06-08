@@ -95,7 +95,7 @@ namespace ReviseApplication.Hubs
                 ConnectedUsers.Add(new ChatUserDetails { CatId = catid, userid = currentMemberDetails.userId, ConnectionId = id, UserName = userName, projid = projid });
 
                 // send to caller
-                var messages = CurrentMessages.Where(c => c.CatId.Equals(catid)).Select(m => new MessageDetail { UserName = m.user.UserName, Message = m.msg, Date = m.createDate.ToString() });
+                var messages = CurrentMessages.Where(c => c.CatId.Equals(catid)).Where(p => p.projId == projid).Select(m => new MessageDetail { UserName = m.user.UserName, Message = m.msg, Date = m.createDate.ToString() });
                 Clients.Caller.onConnected(id, userName, ConnectedUsers.Where(x => x.CatId == catid), messages, projectMembersDetails);
 
                 // send to all except caller client

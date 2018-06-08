@@ -33,9 +33,9 @@
                     @using (Html.BeginForm())
                     {
                         <h1>
-                            Assign users to project:
+                            Assign users to project:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            @Convert.ToString(Session["projectName"])
                         </h1>
-                        @Convert.ToString(Session["projectName"])
                         <table class="table" border="0" style="color:darkblue;background-color:white;">
                             <tr class="active">
                                 <td></td>
@@ -84,8 +84,9 @@
                             }
 
                         </table>
-                        <div class="form-group col-md-4" style="margin-top: 20px; margin-left:100px;">
-                            <button type="submit" value="Assign" class="btn btn-primary btn-lg btn-block login-button">Assign</button>
+                        <br />
+                        <div class="form-group col-md-5 col-sm-offset-7">
+                            <button type="submit" value="Assign" class="btn btn-primary btn-md btn-block">Assign Members</button>
                         </div>
 
                     }

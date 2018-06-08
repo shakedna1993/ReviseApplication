@@ -74,5 +74,19 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        public Requirements ReqView(int? catid)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            List<userCatReq> CatList = con.userCatReqs.Where(c => c.catId == catid).ToList();
+            List<requirement> ReqList = new List<requirement>();
+            foreach (var cat in CatList)
+                ReqList.Add(cat.requirement);
+
+            var ShowView = new Requirements()
+            {
+                Req = ReqList
+            };
+            return ShowView;
+        }
     }
 }

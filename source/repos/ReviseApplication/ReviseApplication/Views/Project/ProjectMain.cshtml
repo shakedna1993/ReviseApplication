@@ -1,125 +1,170 @@
 ﻿@model IEnumerable<ReviseApplication.Models.projectModel>
 
-@using ReviseApplication.Models;
-@*
-    @{
-        if ((Session["UserName"] == null) || (Convert.ToString(Session["UserName"]) == ""))
-        {
-            FormsAuthentication.SignOut();
-            Response.Redirect("~/Authentication/Login");
+<html>
+<head>
+    <style>
+        table {
+            display: table-row;
+            width: inherit;
         }
-    }*@
 
-@{
-    Layout = "~/Views/Shared/my_layout.cshtml";
-}
+        td {
+            text-align: center;
+        }
 
-@section TitleSection{
-    My Projects
-}
+        th {
+            color: darkblue;
+            text-align: center;
+        }
 
-@section ContentBody{
-    <br /><br />
-    <div class="table-responsive">
-        <p>
-            @if (Convert.ToBoolean(Session["IsAdmin"]))
+        h1 {
+            margin-left: 15px;
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    @using ReviseApplication.Models;
+    @*
+        @{
+            if ((Session["UserName"] == null) || (Convert.ToString(Session["UserName"]) == ""))
             {
-                @Html.ActionLink("Create New Project", "CreateProj", null, new { @role = "button", @class = "btn btn-success" })
+                FormsAuthentication.SignOut();
+                Response.Redirect("~/Authentication/Login");
             }
-        </p>
+        }*@
+
+    @{
+        Layout = "~/Views/Shared/my_layout.cshtml";
+    }
+
+    @section TitleSection{
+        My Projects
+    }
+
+    @section ContentBody{
         <br />
-        <div class="row">
-            <div class="col-sm-5 col-sm-offset-3">
-                <div id="imaginary_container">
-                    @using (Html.BeginForm())
-                    {
-                        <div class="input-group stylish-input-group">
-                            <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search">
-                            <span class="input-group-addon">
-                                <button type="submit">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </button>
-                            </span>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-        <br />
-        <table class="table">
-            <tr class="active">
-                <th>
-                    Project Name
-                </th>
-                <th>
-                    Creation Date
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Score
-                </th>
-                <th>
-                    Participants
-                </th>
-                <th></th>
-            </tr>
-            @{
-                var i = 0;
-            }
 
-            @foreach (var item in Model)
-            {
-                <tr>
-
-                    <td>
-                        <a href="@Url.Action("CategoryMain", "Category", new { id = item.projid, name = item.projname}, Request.Url.Scheme)">@item.projname</a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.score)
-                    </td>
-
-                    <td>
-                        @{
-                            List<IEnumerable<projUser>> mpp = (List<IEnumerable<projUser>>)Session["members"];
-                            List<projUser> pm = mpp[i].ToList();
-
-                            foreach (var m1 in pm)
+        <div class="table col-sm-offset-1">
+            <div class="row">
+                <h1>Projects List:</h1>
+                @if (Convert.ToBoolean(Session["IsAdmin"]))
+                {
+                    <div class="col-md-2 col-sm-offset-1">
+                        <div id="imaginary_container">
+                            @using (Html.BeginForm())
                             {
-                                <a @*href="~/Members/details/@m1.MemberId.MemberId"*@>
-                                    <img class="img-circle" src="@m1.user.pic" width="30" height="30" alt="">
-                                </a>
+                                <div class="input-group stylish-input-group">
+                                    <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search for project">
+                                    <span class="input-group-addon">
+                                        <button type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        @Html.ActionLink("Create New Project", "CreateProj", null, new { @role = "button", @class = "btn btn-success" })
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-2 col-sm-offset-2">
+                        <div id="imaginary_container">
+                            @using (Html.BeginForm())
+                            {
+                                <div class="input-group stylish-input-group">
+                                    <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search for project">
+                                    <span class="input-group-addon">
+                                        <button type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <table class="table  table-responsive-lg">
+                <tr class="active">
+                    <th>
+                        Project Name
+                    </th>
+                    <th>
+                        Creation Date
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Score
+                    </th>
+                    <th>
+                        Participants
+                    </th>
+                    <th></th>
+                </tr>
+                @{
+                    var i = 0;
+                }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            <a href="@Url.Action("CategoryMain", "Category", new { id = item.projid, name = item.projname}, Request.Url.Scheme)">@item.projname</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.score)
+                        </td>
+
+                        <td style="text-align: left;">
+                            @{
+                                List<IEnumerable<projUser>> mpp = (List<IEnumerable<projUser>>)Session["members"];
+                                List<projUser> pm = mpp[i].ToList();
+
+                                foreach (var m1 in pm)
+                                {
+                                    <a @*href="~/Members/details/@m1.MemberId.MemberId"*@>
+                                        <img class="img-circle" src="@m1.user.pic" width="30" height="30" alt="">
+                                    </a>
+                                }
+
                             }
 
-                        }
+                        </td>
 
-                    </td>
-
-                    <td nowrap>
-                        @Html.ActionLink("Details","ProjectDetails", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-primary" })
-                        @if (Convert.ToBoolean(Session["IsAdmin"]))
+                        <td nowrap>
+                            @Html.ActionLink(" ", "ProjectDetails", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-primary glyphicon glyphicon-info-sign" })
+                            @if (Convert.ToBoolean(Session["IsAdmin"]) || item.MemberRole == 6)
                             {
-                                <a href="@Url.Action("EditProject", "Project", new { id = item.projid })" class="btn btn-default btn-lg">
-                                    <i class="fa fa-edit"></i>
-                                </a>
+                                @Html.ActionLink(" ", "EditProject", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
                                 <label>
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger" })
+                                    @Html.ActionLink(" ", "Delete", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
                                 </label>
 
                             }
                         </td>
-                </tr>
-                i++;
-            }
+                    </tr>
+                    i++;
+                }
 
-        </table>
-    </div>
+            </table>
+        </div>
 
-}
+    }
+</body>
+</html>

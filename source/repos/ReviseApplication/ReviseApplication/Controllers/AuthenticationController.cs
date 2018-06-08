@@ -140,20 +140,15 @@ namespace ReviseApplication.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
+       
         public ActionResult Logout()
         {
             try
             {
-                HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
-
-                System.Web.HttpContext.Current.Session.Clear();
-                System.Web.HttpContext.Current.Session.RemoveAll();
-                System.Web.HttpContext.Current.Session.Abandon();
-
                 ReviseDBEntities con = new ReviseDBEntities();
-                con.users.Find(Convert.ToInt32(Session["userid"])).isConnected = 0;
+                con.users.Find(Session["userid"].ToString()).isConnected = 0;
+                con.SaveChanges();
+                FormsAuthentication.SignOut();
                 return RedirectToAction("Login", "Authentication");
             }
             catch

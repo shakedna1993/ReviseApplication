@@ -65,10 +65,13 @@ namespace ReviseApplication.Controllers
             //return View();
         }
 
+
         [HttpGet]
-        public ActionResult Requirements()
+        public ActionResult Requirements(int? catid, int? projid)
         {
-            return View();
+            var repo = new MainRepository();
+            var Main = repo.ReqView(catid);
+            return View(Main);
         }
     }
 }

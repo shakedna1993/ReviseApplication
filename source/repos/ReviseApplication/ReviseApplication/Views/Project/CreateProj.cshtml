@@ -6,34 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="~/css/bootstrap.css" rel="stylesheet" />
-    <!-- Website CSS style -->
-    <link href="~/css/main.css" rel="stylesheet" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- Website Font style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
-    <style>
-        h1 {
-            display: block;
-            font-family: Berlin Sans FB;
-            font-size: 20px;
-            color: darkblue;
-            text-decoration: underline;
-        }
-    </style>
-</head>
 <body>
     @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
     {
@@ -76,22 +49,22 @@
                         @Html.LabelFor(x => Model.SelectedUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
-                            @Html.ListBoxFor(model => model.SelectedUser, Model.Users, new { @style = "width: 20%; height: 105px;" })
+                            @Html.ListBoxFor(model => model.SelectedUser, Model.Users, new { @class = "col-sm-3", style = "height:105px;" })
                         </div>
                         @Html.ValidationMessageFor(model => Model.SelectedUser, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <button type="submit" value="Create" class="btn btn-primary btn-lg btn-block login-button">Create</button>
+                <div class="row">
+                    <div>
+                        <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                            <i class="fa fa-chevron-circle-left"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Create</button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-lg">
-                    <i class="fa fa-arrow-circle-left"></i>
-                    <span>
-                        <strong>Back</strong>
-                    </span>
-                </a>
             </div>
             if (ViewBag.Message != null)
             {

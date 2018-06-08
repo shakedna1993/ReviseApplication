@@ -22,7 +22,7 @@ namespace ReviseApplication.Controllers
 
             foreach (var p in prj)
                 memberslist.Add(con.users.SingleOrDefault(u => u.userid == p.userid));
-
+    
             ViewBag.memberslist = memberslist;
             Session["AssignList"] = memberslist;
 
@@ -46,6 +46,9 @@ namespace ReviseApplication.Controllers
             string userId = Session["userid"].ToString();
             var prj = con.projUsers.Where(u => u.userid == userId).ToList();
 
+            if (con.users.Find(userId).IsAdmin == true)
+                prj = con.projUsers.ToList();
+
             foreach(var pr in prj)
             {
                 projectModel proj = new projectModel();
@@ -54,6 +57,7 @@ namespace ReviseApplication.Controllers
                 proj.status = pr.project.status;
                 proj.projname = pr.project.ProjName;
                 proj.score = pr.project.totalScore ?? 0;
+                proj.MemberRole = pr.role ?? 7;
                 memberslist.Add(con.projUsers.Where(u => u.projid == pr.projid));
                 ProjectsList.Add(proj);
             }
@@ -94,6 +98,17 @@ namespace ReviseApplication.Controllers
 
             return View(Main);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Authorize]
+        public ActionResult ProjectMain(String findproj)
+        {
+            var ProjList = Session["projects"] as List<projectModel>;
+            var projects = (ProjList.Where(p => p.projname.Contains(findproj)));
+            return View(projects.ToList());
+        }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -216,6 +231,8 @@ namespace ReviseApplication.Controllers
                     prjusr.user = usr;
                     prjusr.projid = proj.ProjId;
                     prjusr.userid = usr.userid;
+                    prjusr.role = 7;
+                    prjusr.dep = 5;
                     Allusers.Add(prjusr);
                 }
                 //proj.users = usrList;

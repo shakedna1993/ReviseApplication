@@ -10,6 +10,6 @@ namespace ReviseApplication.Models
     {
         [Required]
         [Display(Name = "Requirement")]
-        public List<category> Req { get; set; }
+        public List<requirement> Req { get; set; }
     }
 }

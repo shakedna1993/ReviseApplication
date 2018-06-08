@@ -96,7 +96,7 @@ mainModel.controller("mainController", function ($scope, $rootScope, $http, $loc
 
     $rootScope.logout = function () {
         $http({
-            method: "POST",
+            method: "GET",
             url: "/Authentication/Logout"
         }).then(function mySuccess(response) {
             if (response.data.success) {
@@ -118,8 +118,5 @@ mainModel.config(function ($routeProvider) {
         })
         .when("/register", {
             templateUrl: "/Authentication/Register.cshtml"
-        })
-        .when("/logout", {
-            templateUrl: "/Authentication/Login.cshtml"
         })
 });

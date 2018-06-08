@@ -7,32 +7,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link href="~/css/bootstrap.css" rel="stylesheet" />
-    <!-- Website CSS style -->
-    <link href="~/css/main.css" rel="stylesheet" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!-- Website Font style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
     <style>
-        h1 {
-            display: block;
-            font-family: Berlin Sans FB;
-            font-size: 20px;
+        table {
+            display: table-row;
+        }
+
+        td {
             color: darkblue;
-            text-decoration: underline;
+        }
+
+        th {
+            color: black;
+            margin-left: 10px;
         }
     </style>
+
 </head>
 <body>
     @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
@@ -49,69 +38,77 @@
         using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            <div class="container" ng-controller="mainController">
-                <div class="row main">
-                    <div class="main-center">
-                        <h1>Project Details</h1>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                        <div class="input-group col-md-4">
-                            <span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
-                            @Html.TextBoxFor(model => model.projid, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                        <div class="input-group col-md-4">
-                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                            @Html.TextBoxFor(model => model.projname, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                        <div class="input-group col-md-4">
-                            <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
-                            @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc", @class = "form-control", disabled = "disabled", @readonly = "readonly" })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.projdesc, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="form-group">
-                        <table class="table">
-                            <tr class="active" align="center">
-                                <td></td>
-                                <td>
-                                    <b>   User name </b>
-                                </td>
-                                <td>
-                                    <b> Role</b>
-                                </td>
-                            </tr>
-                            @foreach(var usr in ViewBag.members)
-                                {
-                                <tr align="center">
-                                    <td>
-                                        <img class="img-circle" src="@usr.user.pic" width="30" height="30" alt="">
-                                    </td>
-                                    <td>
-                                        @usr.user.UserName.ToString()
-                                    </td>
-                                    <td>
-                                        @usr.role1.RoleName.ToString()
-                                    </td>
-                            </tr>
-                        }
-                           
-                </table>
-                    </div>
-                </div>
+
+
+            <div class="main-center">
+                <h1>Project Details</h1>
             </div>
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.projid, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.projname, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc", @class = "form-control", disabled = "disabled", @readonly = "readonly", style = "border-color:transparent; background: transparent; color: darkblue;" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Participants:
+                    </th>
+                    <td>
+                        <div class="form-group">
+                            <table class="table" style="">
+                                <tr class="active">
+                                    <th>			</th>
+                                    <th>
+                                        <b>User name</b>
+                                    </th>
+                                    <th>
+                                        <b>Role</b>
+                                    </th>
+                                </tr>
+                                @foreach (var usr in ViewBag.members)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img class="img-circle" src="@usr.user.pic" width="30" height="30" alt="">
+                                        </td>
+                                        <td>
+                                            @usr.user.UserName.ToString()
+                                        </td>
+                                        <td>
+                                            @usr.role1.RoleName.ToString()
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
             <div>
-                <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-lg">
-                    <i class="fa fa-arrow-circle-left"></i>
-                    <span>
-                        <strong>Back</strong>
-                    </span>
+                <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                    <i class="fa fa-chevron-circle-left"></i>
+                    <span>Back</span>
                 </a>
             </div>
             if (ViewBag.Message != null)
