@@ -14,16 +14,8 @@ namespace ReviseApplication
     
     public partial class requirement
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public requirement()
-        {
-            this.userCatReqs = new HashSet<userCatReq>();
-        }
-    
         public int reqId { get; set; }
         public string reqName { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<userCatReq> userCatReqs { get; set; }
+        public string description { get; set; }
     }
 }

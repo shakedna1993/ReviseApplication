@@ -17,20 +17,19 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public category()
         {
-            this.userCatReqs = new HashSet<userCatReq>();
             this.messages = new HashSet<message>();
             this.projCats = new HashSet<projCat>();
+            this.userCatReqs = new HashSet<userCatReq>();
         }
     
         public int CatId { get; set; }
         public string CatName { get; set; }
-        public Nullable<int> totalLimit { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<userCatReq> userCatReqs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<message> messages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<projCat> projCats { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<userCatReq> userCatReqs { get; set; }
     }
 }

@@ -15,6 +15,19 @@ namespace ReviseApplication.Models
 
         [Required]
         public int status { get; set; }
+
+        [Display(Name = "Requirement Name:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement name")]
+        public string reqname { get; set; }
+
+        [Display(Name = "Description:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement description")]
+        public string reqdesc { get; set; }
+
+        [Display(Name = "Please enter a number between 0-100:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement rate")]
+        [Range(0,100)]
+        public int reqvote { get; set; }
     }
 
     public class CategoryMain
@@ -31,6 +44,24 @@ namespace ReviseApplication.Models
 
         [Display(Name = "Project score:")]
         public int rate { get; set; }
+
+        [Display(Name = "Satisfaction limit:")]
+        public int totalLimit { get; set; }
+        public int role { get; set; }
+    }
+
+    public class CreateCategory
+    {
+        [Display(Name = "Category Name:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter category name")]
+        public string catname { get; set; }
+
+        [Display(Name = "Satisfaction limit:")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter category satasfiction limit")]
+        [Range(0,100)]
+        public int totalLimit { get; set; }
+        public int catid { get; set; }
+        public int projid { get; set; }
 
     }
 }

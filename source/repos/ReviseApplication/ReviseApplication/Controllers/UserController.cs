@@ -45,6 +45,8 @@ namespace ReviseApplication.Controllers
             ViewBag.catid = catid;
             ViewBag.projid = projid;
 
+            Session["Catid"] = catid;
+
             var showView = new Categories()
             {
                 category = cat.CatName,
@@ -53,5 +55,65 @@ namespace ReviseApplication.Controllers
 
             return View(showView);
         }
+
+        [HttpPost]
+        public ActionResult Chat(string reqname, string reqdesc, int reqvote)
+        {
+            int projId = Convert.ToInt32(Session["projectid"]);
+            int catId = Convert.ToInt32(Session["Catid"]);
+
+            try
+            {
+                if(string.IsNullOrEmpty(reqname) || string.IsNullOrEmpty(reqdesc) && reqvote == 0)
+                {
+                    ModelState.AddModelError("", "No changes made");
+                    return RedirectToAction("CategoryMain", "Category", new { id = projId, name = Session["projectName"].ToString() });
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Unknown error occurred!" });
+            }
+
+            try
+            {
+                if (string.IsNullOrEmpty(reqname) || string.IsNullOrEmpty(reqdesc) && reqvote != 0)
+                {
+                    ModelState.AddModelError("", "No requirement created");
+                    return RedirectToAction("CategoryMain", "Category", new { id = projId, name = Session["projectName"].ToString() });
+                }
+            }
+            catch
+            {
+                return Json(new { success = false, message = "Unknown error occurred!" });
+            }
+
+            if (ModelState.IsValid)
+            {
+                ReviseDBEntities con = new ReviseDBEntities();
+                var req = new requirement()
+                {
+                    reqName = reqname,
+                    description = reqdesc
+                };
+
+                var requsr = new userCatReq()
+                {
+                    reqId = req.reqId,
+                    catId = Convert.ToInt32(Session["Catid"]),
+                    usrid = Session["userid"].ToString(),
+                    rate = reqvote
+                };
+
+                con.requirements.Add(req);
+                con.userCatReqs.Add(requsr);
+                con.SaveChanges();
+
+                return RedirectToAction("CategoryMain", "Category", new { id = projId, name = Session["projectName"].ToString() });
+            }
+
+            return RedirectToAction("CategoryMain", "Category", new { id = projId, name = Session["projectName"].ToString() });
+        }
+
     }
 }

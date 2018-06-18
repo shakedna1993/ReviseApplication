@@ -92,54 +92,58 @@
                 <br />
                 <img src="~/images/bggreen.jpg" /> - requirement is Aprroved.
                 <br /><br />*@
+            @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
+            {
+                 <div>
+                        @Html.ActionLink("Create New Category", "CreateCategory", "Category", new {projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
+                 </div>
+            }
+            <br />
             <div class="table">
                 <table class="table">
                     <tr class="active">
-                        <th></th>
                         <th>
                             Category
                         </th>
                         <th>
                             Status
                         </th>
+                        <th>
+                            Limit
+                        </th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
-
                     @foreach (var item in Model.Cat)
-                    {
+                     {
                         <tr>
                             <td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CatName, new { @class = "onclick", id = "Cat" })
+                                @Html.DisplayFor(modelItem => item.CatName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).status)%
                             </td>
                             <td>
-                                @Html.ActionLink("Rate Requirements", "Requirements", "Category", new { catid = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
+                                @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).totalLimit)%
                             </td>
                             <td nowrap>
                                 @if (item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).isActive ?? true)
-                                {
+                                 {
                                     @Html.ActionLink("Chat", "Chat", "User", new { catid = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-warning" })
-                                }
-                                @*  else
-                                    {
-                                        <img src="../../images/disbtn2.jpg" />
-                                    }
-
-                                    @if ((Convert.ToBoolean(Session["IsAdmin"]) || (Convert.ToBoolean(Session["IsProjectAdmin"]))))
-                                    {
-                                        <label>
-                                            |
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.reqId }, new { @role = "button", @class = "btn btn-primary" }) |
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.reqId }, new { @role = "button", @class = "btn btn-danger" })
-                                        </label>
-                                    }*@
+                                 }
+                            </td>
+                            <td>
+                                @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
+                                 {
+                                    <label>
+                                        @Html.ActionLink(" ", "EditCategory", "Category", new { id = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
+                                        @Html.ActionLink(" ", "Delete", new { id = item.CatId }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
+                                    </label>
+                                 }
                             </td>
                         </tr>
-                    }
+                     }
                 </table>
             </div>
 

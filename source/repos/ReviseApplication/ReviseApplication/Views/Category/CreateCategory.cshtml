@@ -1,0 +1,75 @@
+﻿@model ReviseApplication.Models.CreateCategory
+@{
+    Layout = "~/Views/Shared/my_Layout2.cshtml";
+    ViewBag.Title = "Create New Category";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>@ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="container" ng-controller="mainController">
+                <div class="row main">
+                    <div class="main-center">
+                        <h1> Create New Category</h1>
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.catname, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.catname, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.catname, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.totalLimit, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.totalLimit, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.totalLimit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <a href="@Url.Action("CategoryMain", "Category", new { id = Convert.ToInt32( Session["projectid"]), name = Session["projectName"].ToString() } )" class="btn btn-default btn-md" style="border:none; width:110px;">
+                            <i class="fa fa-chevron-circle-left"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Create</button>
+                    </div>
+                </div>
+            </div>
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>@ViewBag.Message
+                </div>
+            }
+        }
+    }
+    @section Scripts{
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

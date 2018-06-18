@@ -60,6 +60,7 @@ namespace ReviseApplication.Controllers
                 {
                     var usr = username;
                     var users = con.users.Where(u => u.UserName == usr).ToList();
+                    var user = users.First();
                     if (users.First().isConnected == 1)
                     {
                         return Json(new { success = false, message = "User is alredy logged in" });
@@ -67,7 +68,6 @@ namespace ReviseApplication.Controllers
 
                     if (users.First().password == password)
                     {
-                        var user = users.First();
                         users.First().isConnected = 1;
                         con.SaveChanges();
                         System.Web.HttpContext.Current.Session["username"] = user.UserName;

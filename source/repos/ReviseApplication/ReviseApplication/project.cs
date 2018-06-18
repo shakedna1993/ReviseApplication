@@ -20,6 +20,7 @@ namespace ReviseApplication
             this.messages = new HashSet<message>();
             this.projCats = new HashSet<projCat>();
             this.projUsers = new HashSet<projUser>();
+            this.userCatReqs = new HashSet<userCatReq>();
         }
     
         public int ProjId { get; set; }
@@ -35,5 +36,7 @@ namespace ReviseApplication
         public virtual ICollection<projCat> projCats { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<projUser> projUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<userCatReq> userCatReqs { get; set; }
     }
 }

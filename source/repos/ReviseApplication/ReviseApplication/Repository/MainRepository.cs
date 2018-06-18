@@ -60,33 +60,40 @@ namespace ReviseApplication.Repository
             return (ShowView);
         }
 
-        public CategoryMain CatView()
+        public CategoryMain CatView(string uid, int? pid)
         {
             List<category> CatList = new List<category>();
             ReviseDBEntities con = new ReviseDBEntities();
 
             foreach (var cat in con.categories)
                 CatList.Add(cat);
+
+            int roleNum = con.projUsers.Where(u => u.userid == uid).SingleOrDefault(p => p.projid == pid).role ?? 7;
+
             var ShowView = new CategoryMain()
             {
-                Cat = CatList
+                Cat = CatList,
+                role = roleNum
             };
             return ShowView;
         }
 
-        public Requirements ReqView(int? catid)
+        public CreateCategory CatEditView(int? catid, int projid)
         {
             ReviseDBEntities con = new ReviseDBEntities();
-            List<userCatReq> CatList = con.userCatReqs.Where(c => c.catId == catid).ToList();
-            List<requirement> ReqList = new List<requirement>();
-            foreach (var cat in CatList)
-                ReqList.Add(cat.requirement);
-
-            var ShowView = new Requirements()
+            int cat = con.categories.Find(catid).CatId;
+            int limit = con.projCats.Where(c => c.catId == catid).SingleOrDefault(p => p.projId == projid).totalLimit ?? 0;
+            string catName = con.categories.Find(catid).CatName;
+            var ShowView = new CreateCategory()
             {
-                Req = ReqList
+                catid = cat,
+                catname = catName,
+                totalLimit = limit,
+                projid = projid
             };
             return ShowView;
+
         }
+
     }
 }

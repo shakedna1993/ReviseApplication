@@ -542,11 +542,11 @@
     <Content Include="Views\Shared\my_layout2.cshtml" />
     <Content Include="Views\Category\CategoryMain.cshtml" />
     <Content Include="Views\Shared\empty_layout.cshtml" />
-    <Content Include="Views\Category\Requirements.cshtml" />
-    <Content Include="Views\User\welcome.cshtml" />
     <Content Include="Views\User\Chat.cshtml" />
     <Content Include="Views\Project\EditProject.cshtml" />
     <Content Include="Views\Project\ProjectDetails.cshtml" />
+    <Content Include="Views\Category\CreateCategory.cshtml" />
+    <Content Include="Views\Category\EditCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

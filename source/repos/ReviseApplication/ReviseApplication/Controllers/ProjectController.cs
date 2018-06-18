@@ -45,11 +45,20 @@ namespace ReviseApplication.Controllers
             ReviseDBEntities con = new ReviseDBEntities();
             string userId = Session["userid"].ToString();
             var prj = con.projUsers.Where(u => u.userid == userId).ToList();
+            List<projUser> Nodup = new List<projUser>();
 
             if (con.users.Find(userId).IsAdmin == true)
                 prj = con.projUsers.ToList();
 
-            foreach(var pr in prj)
+            foreach (var temp in con.projects)
+                foreach(var tmp in prj)
+                    if(tmp.projid == temp.ProjId)
+                    {
+                        Nodup.Add(tmp);
+                        break;
+                    }
+
+            foreach(var pr in Nodup)
             {
                 projectModel proj = new projectModel();
                 proj.projid = pr.projid;
@@ -102,10 +111,10 @@ namespace ReviseApplication.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Authorize]
-        public ActionResult ProjectMain(String findproj)
+        public ActionResult ProjectMain(String txtfind)
         {
             var ProjList = Session["projects"] as List<projectModel>;
-            var projects = (ProjList.Where(p => p.projname.Contains(findproj)));
+            var projects = (ProjList.Where(p => p.projname.Contains(txtfind)));
             return View(projects.ToList());
         }
 

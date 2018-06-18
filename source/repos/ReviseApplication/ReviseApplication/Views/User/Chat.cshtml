@@ -101,7 +101,7 @@
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#"><i class="fa fa-sign-out"></i> Log out</a>
+                    <a class="nav-link" href="/Authentication/Logout"><i class="fa fa-sign-out"></i> Log out</a>
                 </li>
             </ul>
         </div>
@@ -128,15 +128,15 @@
                                 <dt><label>Members:</label></dt>
                                 <dd>
                                     @foreach (var member in ViewBag.memberslist)
-                                    {
-                                        @member.UserName.ToString();
-                                        <br />
-                                    }
+                        {
+                            @member.UserName.ToString();
+                <br />
+}
                                 </dd>
                             </dl>
                         </div>
                     </div>
-                </th>
+                </th>              
                 <td style="margin-top:0;">
                     <label>Chat Status:&nbsp</label><span id="status" class="label label-danger">offline</span><br>
                     <label>Online Users:&nbsp </label><div id="divusers" class="ussers"></div><br>
@@ -160,6 +160,47 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </td>
+                <td style="margin-top:0;">
+                    <label>Requierment:&nbsp</label><br>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.reqname, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.reqname, new { htmlAttributes = new { @class = "form-control", style = "width:200px" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.reqname, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.reqdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                            <textarea class="form-control text-box single-line" style="width:300px" data-val="true" data-val-length="Maximum length of 3000 characters" data-val-length-max="3000" data-val-required="Please enter project description" id="reqdesc" name="reqdesc" value="" rows="6"></textarea>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.reqdesc, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Set</button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <label>Vote:&nbsp</label><br>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.reqvote, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.reqvote, new { htmlAttributes = new { @class = "form-control", style = "width:50px" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.reqvote, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Vote</button>
                     </div>
                 </td>
             </tr>

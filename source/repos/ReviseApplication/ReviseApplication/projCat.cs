@@ -20,6 +20,7 @@ namespace ReviseApplication
         public Nullable<int> score { get; set; }
         public Nullable<bool> isActive { get; set; }
         public Nullable<bool> isFinish { get; set; }
+        public Nullable<int> totalLimit { get; set; }
     
         public virtual category category { get; set; }
         public virtual project project { get; set; }
