@@ -19,7 +19,7 @@ namespace ReviseApplication
         {
             this.messages = new HashSet<message>();
             this.projCats = new HashSet<projCat>();
-            this.userCatReqs = new HashSet<userCatReq>();
+            this.requirements = new HashSet<requirement>();
         }
     
         public int CatId { get; set; }
@@ -30,6 +30,6 @@ namespace ReviseApplication
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<projCat> projCats { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<userCatReq> userCatReqs { get; set; }
+        public virtual ICollection<requirement> requirements { get; set; }
     }
 }

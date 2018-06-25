@@ -17,5 +17,10 @@ namespace ReviseApplication
         public int reqId { get; set; }
         public string reqName { get; set; }
         public string description { get; set; }
+        public int projid { get; set; }
+        public int catid { get; set; }
+    
+        public virtual category category { get; set; }
+        public virtual project project { get; set; }
     }
 }

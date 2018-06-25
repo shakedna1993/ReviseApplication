@@ -7,6 +7,11 @@ using ReviseApplication.Repository;
 using ReviseApplication.Models;
 using System.Text;
 using System.Collections;
+using System.Data.SqlClient;
+using System.Data.Entity.Infrastructure;
+using System.Web.UI;
+using Vereyon.Web;
+using System.Net;
 
 namespace ReviseApplication.Controllers
 {
@@ -216,6 +221,8 @@ namespace ReviseApplication.Controllers
 
             if (ModelState.IsValid)
             {
+                ReviseDBEntities con = new ReviseDBEntities();
+
                 var proj = new project
                 {
                     ProjName = projname,
@@ -223,9 +230,8 @@ namespace ReviseApplication.Controllers
                     description = projdesc,
                     status = "Open" 
                 };
-
                 var usrList= new List<user>();
-                ReviseDBEntities con = new ReviseDBEntities();
+                
                 foreach (var usr in SelectedUser.ToList()) {
                     var newusr = (con.users.Where(u => u.UserName == usr));
                     usrList.Add(newusr.FirstOrDefault());
@@ -247,9 +253,17 @@ namespace ReviseApplication.Controllers
                 //proj.users = usrList;
                 foreach(var user in Allusers)
                     con.projUsers.Add(user);
-                con.projects.Add(proj);
-                con.SaveChanges();
-
+                try
+                {
+                    con.projects.Add(proj);
+                    con.SaveChanges();
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["FailedProj"] = "Project with this name already exist";
+                    return RedirectToAction("CreateProj", "Project");
+                }
+                
                 List<category> catlist = new List<category>();
                 catlist = con.categories.ToList();
                 foreach (var cat in catlist)
@@ -332,5 +346,56 @@ namespace ReviseApplication.Controllers
             // return RedirectToAction("CategoryMain/" + Convert.ToInt32(Session["IdProjectToAssign"]) + "", "Category", new { id = proj });
         }
 
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                TempData["emptyIDprj"] = "An error occurred while trying to delete";
+                return RedirectToAction("ProjectMain", "Project");
+            }
+            var repo = new MainRepository();
+            var Main = repo.ProjView(id);
+            ReviseDBEntities con = new ReviseDBEntities();
+            List<projUser> proj = con.projUsers.Where(p => p.projid == id).ToList();
+            ViewBag.members = proj;
+            return View(Main);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            project proj = con.projects.Find(id);
+            var prjusr = con.projUsers.Where(p => p.projid == id).ToList();
+            if (prjusr != null)
+            {
+                foreach (var prj in prjusr)
+                    con.projUsers.Remove(prj);
+            }
+
+            var prjcat = con.projCats.Where(p => p.projId == id).ToList();
+            foreach (var prj in prjcat)
+                con.projCats.Remove(prj);
+
+            var Projreq = con.requirements.Where(p => p.projid == id).ToList();
+            if (Projreq != null)
+            {
+                foreach (var req in Projreq)
+                    con.requirements.Remove(req);
+            }
+            
+            var message = con.messages.Where(p => p.projId == id).ToList();
+            if(message != null)
+            {
+                foreach (var msg in message)
+                    con.messages.Remove(msg);
+            }
+
+            con.projects.Remove(proj);
+            con.SaveChanges();
+            return RedirectToAction("ProjectMain", "Project");
+        }
     }
 }

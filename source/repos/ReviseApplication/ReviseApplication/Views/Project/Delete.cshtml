@@ -1,0 +1,144 @@
+﻿@model ReviseApplication.Models.ProjectDetails
+@{
+    Layout = "~/Views/Shared/my_layout2.cshtml";
+    ViewBag.Title = "Delete Project";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table {
+            display: table-row;
+        }
+
+        td {
+            color: darkblue;
+        }
+
+        th {
+            color: black;
+            margin-left: 10px;
+        }
+    </style>
+
+</head>
+<body>
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>@ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            <div class="main-center">
+                <h1>Project Details</h1>
+            </div>
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.projid, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.projname, new { @class = "form-control", disabled = "disabled", @readonly = "readonly" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    </th>
+                    <td>
+                        @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc", @class = "form-control", disabled = "disabled", @readonly = "readonly", style = "border-color:transparent; background: transparent; color: darkblue;" })
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Participants:
+                    </th>
+                    <td>
+                        <div class="form-group">
+                            <table class="table" style="">
+                                <tr class="active">
+                                    <th>			</th>
+                                    <th>
+                                        <b>User name</b>
+                                    </th>
+                                    <th>
+                                        <b>Role</b>
+                                    </th>
+                                </tr>
+                                @foreach (var usr in ViewBag.members)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img class="img-circle" src="@usr.user.pic" width="30" height="30" alt="">
+                                        </td>
+                                        <td>
+                                            @usr.user.UserName.ToString()
+                                        </td>
+                                        <td>
+                                            @usr.role1.RoleName.ToString()
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="row">
+                <div>
+                    <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                        <i class="fa fa-chevron-circle-left"></i>
+                        <span>Back</span>
+                    </a>
+                </div>
+                <div class="form-group col-md-2 col-md-offset-1">
+                    <input type="submit" value="Delete" class="btn btn-danger glyphicon glyphicon-trash" style="border:none; width:110px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 15px;" onclick="return ConfirmationDialog();" />
+                </div>
+            </div>
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>@ViewBag.Message
+                </div>
+            }
+        }
+    }
+    @section Scripts{
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>
+
+<script type="text/javascript">
+    function ConfirmationDialog() {
+        if (confirm("Are you sure to continue?"))
+            return true;
+        else
+            return false;
+    }
+</script>
+
+

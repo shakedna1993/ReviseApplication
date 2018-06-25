@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -40,7 +41,9 @@ namespace ReviseApplication.Controllers
             {
                 var prjcat = cat.projCats.SingleOrDefault(p => p.project.ProjId == id);
                 int catid = cat.CatId;
-
+                if (prjcat == null)
+                    continue;
+                    
                 // the calculation of the thresholdScoreValue
                 double denominator = numOfMembers * 5;
                 int numerator = prjcat.score ?? 0;
@@ -84,6 +87,86 @@ namespace ReviseApplication.Controllers
             var repo = new MainRepository();
             var Main = repo.CatEditView(id, projid);
             return View(Main);
+        }
+
+        [HttpGet]
+        public ActionResult Requirement()
+        {
+            int projId = Convert.ToInt32(Session["projectid"]);
+            int catId = Convert.ToInt32(Session["Catid"]);
+
+            ReviseDBEntities con = new ReviseDBEntities();
+            int req = 0;
+            if (con.requirements.Where(p => p.projid == projId).SingleOrDefault(c => c.catid == catId) != null)
+                req = con.requirements.Where(p => p.projid == projId).SingleOrDefault(c => c.catid == catId).reqId;
+            if (req == 0)
+            {
+                Session["ReqExisit"] = 0;
+                return View();
+            }
+            else
+            {
+                Session["ReqId"] = req;
+                Session["ReqExisit"] = 1;
+                var repo = new MainRepository();
+                var Main = repo.Requirement(req);
+                return View(Main);
+            }
+        }
+
+        public ActionResult Vote()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Requirement(string reqname, string reqdesc)
+        {
+            int projId = Convert.ToInt32(Session["projectid"]);
+            int catId = Convert.ToInt32(Session["Catid"]);
+
+            try
+            {
+                if (string.IsNullOrEmpty(reqname) || string.IsNullOrEmpty(reqdesc))
+                {
+                    TempData["NoReq"] = "No requirement created";
+                    return RedirectToAction("CategoryMain", "Category", new { id = projId, name = Session["projectName"].ToString() });
+                }
+            }
+            catch
+            {
+                TempData["FailedReq"] = "Unknown error occurred!";
+                return RedirectToAction("Requirement", "Category");  //need to add projid, catid
+            }
+
+            if (ModelState.IsValid)
+            {
+                ReviseDBEntities con = new ReviseDBEntities();
+                if (Convert.ToInt32(Session["ReqExisit"]) == 0)
+                {
+                    var req = new requirement()
+                    {
+                        reqName = reqname,
+                        description = reqdesc,
+                        projid = projId,
+                        catid = catId
+                    };
+
+                    con.requirements.Add(req);
+                }
+                else
+                {
+                    int id = Convert.ToInt32(Session["ReqId"]);
+                    con.requirements.SingleOrDefault(r => r.reqId == id).reqName = reqname;
+                    con.requirements.SingleOrDefault(r => r.reqId == id).description = reqdesc;
+                }
+                
+                con.SaveChanges();
+
+                return RedirectToAction("Requirement", "Category");
+            }
+
+            return RedirectToAction("Requirement", "Category");
         }
 
         [HttpPost]
@@ -141,30 +224,106 @@ namespace ReviseApplication.Controllers
             {
                 int total = 0;
                 ReviseDBEntities con = new ReviseDBEntities();
-                var cat = new category
+                var catTemp = con.categories.SingleOrDefault(c => c.CatName == catname);
+                int catid = 0;
+                if (catTemp != null)
                 {
-                    CatName = catname
-                };
-                
-                foreach (var prj in con.projects)
-                {
-                    if (prj.ProjId != projid)
-                        total = 0;
-                    else
-                        total = totalLimit ?? 0;
-
-                    var prjcat = new projCat
+                    catid = catTemp.CatId;
+                    var prjcat = con.projCats.Where(c => c.catId == catid).SingleOrDefault(p => p.projId == projid);
+                    if(prjcat != null)
                     {
-                        catId = cat.CatId,
-                        projId = prj.ProjId,
-                        totalLimit = total
-                    };
-                    con.projCats.Add(prjcat);
+                        TempData["FailedCat"] = "Category with this name already exist";
+                        return RedirectToAction("CreateCategory", "Category", new { id = projid });
+                    }
+                    else
+                    {
+                        total = totalLimit ?? 0;
+                        var projcat = new projCat
+                        {
+                            catId = catid,
+                            projId = projid,
+                            totalLimit = total
+                        };
+                        con.projCats.Add(projcat);
+                    }
                 }
-                con.categories.Add(cat);
-                con.SaveChanges();
+                else
+                {
+                    var cat = new category
+                    {
+                        CatName = catname
+                    };
+
+                    foreach (var prj in con.projects)
+                    {
+                        if (prj.ProjId != projid)
+                            total = 0;
+                        else
+                            total = totalLimit ?? 0;
+
+                        var prjcat = new projCat
+                        {
+                            catId = cat.CatId,
+                            projId = prj.ProjId,
+                            totalLimit = total
+                        };
+                        con.projCats.Add(prjcat);
+                    }
+
+                    con.categories.Add(cat);
+                }
+                try
+                {
+                    
+                    con.SaveChanges();
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["FailedCat"] = "Category with this name already exist";
+                    return RedirectToAction("CreateCategory", "Category", new { id = projid });
+                }
+
                 return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
             }
+            return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                TempData["emptyIDcat"] = "An error occurred while trying to delete";
+                return RedirectToAction("CategoryMain", "Category", new { id = Convert.ToInt32(Session["projectid"]), name = Session["projectName"].ToString() });
+            }
+            var repo = new MainRepository();
+            var Main = repo.CatEditView(id, Convert.ToInt32(Session["projectid"]));
+            return View(Main);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            int projid = Convert.ToInt32(Session["projectid"]);
+            ReviseDBEntities con = new ReviseDBEntities();
+
+            category cat = con.categories.Find(id);
+            var catprj = con.projCats.Where(c => c.catId == id).SingleOrDefault(p => p.projId == projid);
+            con.projCats.Remove(catprj);
+
+            var catreq = con.requirements.Where(c => c.catid == id).SingleOrDefault(p => p.projid == projid);
+            if(catreq !=null)
+                con.requirements.Remove(catreq);
+
+            var message = con.messages.Where(c => c.CatId == id).Where(p => p.projId == projid).ToList();
+            if (message != null)
+            {
+                foreach (var msg in message)
+                    con.messages.Remove(msg);
+            }
+
+            con.SaveChanges();
             return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
         }
     }

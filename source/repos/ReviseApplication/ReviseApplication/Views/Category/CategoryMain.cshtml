@@ -53,8 +53,14 @@
     </style>
 </head>
 <body>
-
-
+    @if (TempData["NoReq"] != null)
+    {
+        <p class="alert alert-warning" id="failedMessage">@TempData["NoReq"]</p>
+    }
+    @if (TempData["emptyIDcat"] != null)
+    {
+        <p class="alert alert-warning" id="failedMessage">@TempData["emptyIDcat"]</p>
+    }
     @section ContentBody{
         <nav style="margin-top:-35px;" class="col-sm-offset-2">
             <div class="form-group">
@@ -94,9 +100,9 @@
                 <br /><br />*@
             @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
             {
-                 <div>
-                        @Html.ActionLink("Create New Category", "CreateCategory", "Category", new {projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
-                 </div>
+                <div>
+                    @Html.ActionLink("Create New Category", "CreateCategory", "Category", new { projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
+                </div>
             }
             <br />
             <div class="table">
@@ -116,7 +122,7 @@
                         <th></th>
                     </tr>
                     @foreach (var item in Model.Cat)
-                     {
+                    {
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CatName)
@@ -129,24 +135,23 @@
                             </td>
                             <td nowrap>
                                 @if (item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).isActive ?? true)
-                                 {
+                                {
                                     @Html.ActionLink("Chat", "Chat", "User", new { catid = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-warning" })
-                                 }
+                                }
                             </td>
                             <td>
                                 @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
-                                 {
+                                {
                                     <label>
                                         @Html.ActionLink(" ", "EditCategory", "Category", new { id = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
-                                        @Html.ActionLink(" ", "Delete", new { id = item.CatId }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
+                                        @Html.ActionLink(" ", "Delete", "Category", new { id = item.CatId }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
                                     </label>
-                                 }
+                                }
                             </td>
                         </tr>
-                     }
+                    }
                 </table>
             </div>
-
             <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
                 <i class="fa fa-chevron-circle-left"></i>
                 <span>Back</span>

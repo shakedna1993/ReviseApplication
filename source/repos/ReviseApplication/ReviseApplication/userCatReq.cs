@@ -14,14 +14,10 @@ namespace ReviseApplication
     
     public partial class userCatReq
     {
-        public int catId { get; set; }
         public int reqId { get; set; }
         public Nullable<int> rate { get; set; }
-        public int projid { get; set; }
         public string usrid { get; set; }
     
-        public virtual category category { get; set; }
-        public virtual project project { get; set; }
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }
     }

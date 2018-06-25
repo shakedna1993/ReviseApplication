@@ -64,11 +64,16 @@ namespace ReviseApplication.Repository
         {
             List<category> CatList = new List<category>();
             ReviseDBEntities con = new ReviseDBEntities();
+            var prjcat = con.projCats.Where(p => p.projId == pid).ToList();
 
             foreach (var cat in con.categories)
-                CatList.Add(cat);
+                foreach (var prj in prjcat)
+                    if(prj.catId == cat.CatId)
+                        CatList.Add(cat);
+            int roleNum = 7;
 
-            int roleNum = con.projUsers.Where(u => u.userid == uid).SingleOrDefault(p => p.projid == pid).role ?? 7;
+            if (con.projUsers.Where(u => u.userid == uid).SingleOrDefault(p => p.projid == pid) != null)
+                roleNum = con.projUsers.Where(u => u.userid == uid).SingleOrDefault(p => p.projid == pid).role ?? 7;
 
             var ShowView = new CategoryMain()
             {
@@ -93,6 +98,20 @@ namespace ReviseApplication.Repository
             };
             return ShowView;
 
+        }
+
+        public Categories Requirement(int id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            string req = con.requirements.SingleOrDefault(r => r.reqId == id).reqName;
+            string desc = con.requirements.SingleOrDefault(r => r.reqId == id).description;
+            var ShowView = new Categories()
+            {
+                reqid = id,
+                reqname = req,
+                reqdesc = desc
+            };
+            return ShowView;
         }
 
     }

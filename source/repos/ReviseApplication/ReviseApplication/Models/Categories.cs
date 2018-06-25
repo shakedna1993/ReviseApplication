@@ -16,6 +16,9 @@ namespace ReviseApplication.Models
         [Required]
         public int status { get; set; }
 
+        [Display(Name = "Requirement ID:")]
+        public int reqid { get; set; }
+
         [Display(Name = "Requirement Name:")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement name")]
         public string reqname { get; set; }
@@ -60,7 +63,10 @@ namespace ReviseApplication.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter category satasfiction limit")]
         [Range(0,100)]
         public int totalLimit { get; set; }
+
+        [Display(Name = "Category ID:")]
         public int catid { get; set; }
+
         public int projid { get; set; }
 
     }

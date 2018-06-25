@@ -8,6 +8,10 @@
 <html lang="en">
 
 <body>
+    @if (TempData["FailedProj"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["FailedProj"]</p>
+    }
     @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
     {
         if (ViewBag.Message != null)

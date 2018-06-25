@@ -1,0 +1,63 @@
+﻿@model ReviseApplication.Models.Categories
+
+@{
+    ViewBag.Title = "Vote for requirement";
+    Layout = "~/Views/Shared/my_layout2.cshtml";
+
+}
+
+<h2>Vote</h2>
+
+<html>
+<body>
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>@ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="container" ng-controller="mainController">
+                <div class="row main">
+                    <div class="main-center">
+                        <h1> Create New Category</h1>
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.reqvote, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.reqvote, new { htmlAttributes = new { @class = "form-control", style = "width:50px" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.reqvote, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Set</button>
+                    </div>
+                </div>
+            </div>
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>@ViewBag.Message
+                </div>
+            }
+        }
+    }
+    @section Scripts{
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

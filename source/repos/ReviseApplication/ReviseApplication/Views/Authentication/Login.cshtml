@@ -45,6 +45,26 @@
     </style>
 </head>
 <body>
+    @if (TempData["EmptyLogin"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["EmptyLogin"]</p>
+    }
+    @if (TempData["UserLogin"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["UserLogin"]</p>
+    }
+    @if (TempData["FailedLogin"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["FailedLogin"]</p>
+    }
+    @if (TempData["UserName"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["UserName"]</p>
+    }
+    @if (TempData["Unknown"] != null)
+    {
+        <p class="alert alert-danger" id="failedMessage">@TempData["Unknown"]</p>
+    }
 </body>
 </html>
 

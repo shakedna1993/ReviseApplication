@@ -1,0 +1,78 @@
+﻿@model ReviseApplication.Models.Categories
+
+@{
+    ViewBag.Title = "Requirement";
+    Layout = "~/Views/Shared/my_layout2.cshtml";
+
+}
+
+<html>
+<body>
+    @if (TempData["FailedReq"] != null)
+    {
+        <p class="alert alert-warning" id="failedMessage">@TempData["FailedReq"]</p>
+    }
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>@ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="container" ng-controller="mainController">
+                <div class="row main">
+                    <div class="main-center">
+                        <h1> Requirement</h1>
+                    </div>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+                    <div class="form-group">
+                        @Html.LabelFor(x => Model.reqname, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.EditorFor(model => model.reqname, new { htmlAttributes = new { @class = "form-control", style = "width:200px" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.reqname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => Model.reqdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                    <div class="input-group col-md-4">
+                        <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                        @if(Model == null)
+                        {
+                            <textarea class="form-control text-box single-line" style="width:300px" data-val="true" data-val-length="Maximum length of 3000 characters" data-val-length-max="3000" data-val-required="Please enter project description" id="reqdesc" name="reqdesc" value="" rows="6"></textarea>
+                        }
+                        else{@Html.TextArea("reqdesc", Model.reqdesc, 4, 36, new { @id = "reqdesc", @title = "reqdesc" }) }
+                    </div>
+                    @Html.ValidationMessageFor(model => model.reqdesc, "", new { @class = "text-danger" })
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2 col-sm-offset-1">
+                        <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Set</button>
+                    </div>
+                </div>
+            </div>
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>@ViewBag.Message
+                </div>
+            }
+        }
+    }
+    @section Scripts{
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>
+

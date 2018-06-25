@@ -54,7 +54,8 @@ namespace ReviseApplication.Controllers
             {
                 if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 {
-                    return Json(new { success = "Failed", error = "One or more field is empty" });
+                    TempData["EmptyLogin"] = "One or more field is empty";
+                    return RedirectToAction("Login", "Authentication");
                 }
                 using (var con = new ReviseDBEntities())
                 {
@@ -63,7 +64,8 @@ namespace ReviseApplication.Controllers
                     var user = users.First();
                     if (users.First().isConnected == 1)
                     {
-                        return Json(new { success = false, message = "User is alredy logged in" });
+                        TempData["UserLogin"] = "User is alredy logged in";
+                        return RedirectToAction("Login", "Authentication");
                     }
 
                     if (users.First().password == password)
@@ -78,17 +80,20 @@ namespace ReviseApplication.Controllers
                     }
                     else
                     {
-                        return Json(new { success = false, message = "User not found or details are mismatched" });
+                        TempData["FailedLogin"] = "User not found or details are mismatched";
+                        return RedirectToAction("Login", "Authentication");
                     }
                 }
             }
             catch (FormatException)
             {
-                return Json(new { success = false, message = "UserName is incorrect!" });
+                TempData["UserName"] = "UserName is incorrect!";
+                return RedirectToAction("Login", "Authentication");
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("Login", "Authentication");
             }
         }
 
@@ -284,7 +289,8 @@ namespace ReviseApplication.Controllers
                     var user = con.users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
                     if (user != null)
                     {
-                        user.password = Crypto.Hash(model.NewPassword);
+                        // user.password = Crypto.Hash(model.NewPassword);
+                        user.password = model.NewPassword;
                         user.ResetPasswordCode = "";
                         con.Configuration.ValidateOnSaveEnabled = false;
                         con.SaveChanges();
