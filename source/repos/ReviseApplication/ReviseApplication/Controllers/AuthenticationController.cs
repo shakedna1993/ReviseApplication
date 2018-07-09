@@ -183,8 +183,8 @@ namespace ReviseApplication.Controllers
             }
             else if (emailFor == "ResetPassword")
             {
-                subject = "Reset Password";
-                body = "Hi,<br/>br/>We got request for reset your account password. Please click on the below link to reset your password" +
+                subject = "Reset Password-REVISE application";
+                body = "Hello,<br/><br/>We got request for reset your account password. Please click on the below link to reset your password" +
                     "<br/><br/><a href=" + link + ">Reset Password link</a>";
             }
 

@@ -114,10 +114,49 @@ namespace ReviseApplication.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult Vote()
         {
+            int projId = Convert.ToInt32(Session["projectid"]);
+            int catId = Convert.ToInt32(Session["Catid"]);
+            int reqId = Convert.ToInt32(Session["ReqId"]);
+            int IsExist = Convert.ToInt32(Session["ReqExisit"]);
+            string userID = Session["userid"].ToString();
+
+            ReviseDBEntities con = new ReviseDBEntities();
+            if (IsExist == 1)
+            {
+                var reqVote = con.userCatReqs.Find(reqId, userID);
+                if (reqVote.rate == null)
+                {
+                    var repo = new MainRepository();
+                    var Main = repo.Vote(reqId, userID);
+                    return View(Main);
+                }
+            }
+            else
+                Session["RateExist"] = 0;
+
             return View();
         }
+
+        /* [HttpPost]
+         public ActionResult Vote()
+         {
+             int projId = Convert.ToInt32(Session["projectid"]);
+             int catId = Convert.ToInt32(Session["Catid"]);
+             int reqId = Convert.ToInt32(Session["ReqId"]);
+             int IsExist = Convert.ToInt32(Session["ReqExisit"]);
+             string userID = Session["userid"].ToString();
+
+             ReviseDBEntities con = new ReviseDBEntities();
+
+             if (IsExist == 0)
+                 return RedirectToAction("Vote", "Category");
+             return RedirectToAction("Vote", "Category");
+
+
+         }*/
 
         [HttpPost]
         public ActionResult Requirement(string reqname, string reqdesc)

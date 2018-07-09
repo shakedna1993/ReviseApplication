@@ -114,5 +114,16 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        public ReqRate Vote(int reqid, string usrid)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            var reqRate = con.userCatReqs.Find(reqid, usrid).rate;
+            var ShowView = new ReqRate()
+            {
+                reqvote = reqRate ?? 0
+            };
+            return ShowView;
+        }
+
     }
 }

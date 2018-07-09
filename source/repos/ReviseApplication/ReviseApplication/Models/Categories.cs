@@ -26,10 +26,13 @@ namespace ReviseApplication.Models
         [Display(Name = "Description:")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement description")]
         public string reqdesc { get; set; }
+    }
 
+    public class ReqRate
+    {
         [Display(Name = "Please enter a number between 0-100:")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement rate")]
-        [Range(0,100)]
+        [Range(0, 100)]
         public int reqvote { get; set; }
     }
 

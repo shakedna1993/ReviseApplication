@@ -98,12 +98,6 @@
                 <br />
                 <img src="~/images/bggreen.jpg" /> - requirement is Aprroved.
                 <br /><br />*@
-            @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
-            {
-                <div>
-                    @Html.ActionLink("Create New Category", "CreateCategory", "Category", new { projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
-                </div>
-            }
             <br />
             <div class="table">
                 <table class="table">
@@ -152,10 +146,21 @@
                     }
                 </table>
             </div>
-            <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
-                <i class="fa fa-chevron-circle-left"></i>
-                <span>Back</span>
-            </a>
+            <div class="row">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                    <i class="fa fa-chevron-circle-left"></i>
+                    <span>Back</span>
+                </a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
+                {
+                    <div class="col-sm-offset-1">
+                        @Html.ActionLink("Create New Category", "CreateCategory", "Category", new { projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
+                    </div>
+                }
+            </div>
+
         </div>
     }
 
