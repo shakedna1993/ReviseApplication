@@ -1,0 +1,90 @@
+﻿@model ReviseApplication.Models.Gamfication
+@{
+    Layout = "~/Views/Shared/my_layout2.cshtml";
+    ViewBag.Title = "Gamification";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table {
+            display: table-row;
+        }
+    </style>
+
+</head>
+<body>
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success!</strong>@ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="main-center">
+                <h1> Choose gamification</h1>
+            </div>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label" })
+                    </th>
+                    <th>
+                        @Html.LabelFor(model => model.SelectedGame, new { htmlAttributes = new { @class = "control-label" } })
+                    </th>                           
+                </tr>
+                <tr>
+                    <td>
+                        <div class="input-group col-md-10">
+                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            @Html.DisplayFor(model => model.projname, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="input-group">
+                                @Html.DropDownListFor(x => Model.SelectedGame, new SelectList(Model.Gamification, "Value", "Text"), htmlAttributes: new { @class = "form-control cols-sm-2", style = "height: 30px;", id = "Gamification" })
+                                @Html.ValidationMessageFor(x => x.SelectedGame, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="row">
+                <div>
+                    <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                        <i class="fa fa-chevron-circle-left"></i>
+                        <span>Back</span>
+                    </a>
+                </div>
+                <div class="form-group col-md-2 col-md-offset-1">
+                    <button type="submit" value="Submit" class="btn btn-primary btn-md btn-block">Set</button>
+                </div>
+            </div>
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    <strong>Error!</strong>@ViewBag.Message
+                </div>
+            }
+        }
+    }
+    @section Scripts{
+        <script src="~/Scripts/bootstrap.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

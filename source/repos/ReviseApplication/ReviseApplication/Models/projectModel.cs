@@ -33,4 +33,18 @@ namespace ReviseApplication.Models
 
         public int MemberRole { get; set; }
     }
+
+    public class Gamfication
+    {
+        [Required]
+        [Display(Name = "Project Name")]
+        public string projname { get; set; }
+
+        [Required]
+        [Display(Name = "Gamification")]
+        public string SelectedGame { get; set; }
+        public IEnumerable<SelectListItem> Gamification { get; set; }
+
+    }
+
 }

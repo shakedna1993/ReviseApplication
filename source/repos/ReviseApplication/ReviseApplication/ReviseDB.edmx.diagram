@@ -8,7 +8,6 @@
         <EntityTypeShape EntityType="ReviseDBModel.category" Width="1.5" PointX="0.75" PointY="1.875" />
         <EntityTypeShape EntityType="ReviseDBModel.chat" Width="1.5" PointX="5.25" PointY="10.875" />
         <EntityTypeShape EntityType="ReviseDBModel.department" Width="1.5" PointX="7.5" PointY="2.625" />
-        <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="8.75" PointY="5.75" />
         <EntityTypeShape EntityType="ReviseDBModel.message" Width="1.5" PointX="3" PointY="5.375" />
         <EntityTypeShape EntityType="ReviseDBModel.projCat" Width="1.5" PointX="3" PointY="1.5" />
         <EntityTypeShape EntityType="ReviseDBModel.project" Width="1.5" PointX="0.75" PointY="5.375" />
@@ -32,6 +31,8 @@
         <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="6" PointY="5.875" />
         <AssociationConnector Association="ReviseDBModel.FK_requirement_category" />
         <AssociationConnector Association="ReviseDBModel.FK_requirement_project" />
+        <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="0.75" PointY="10.25" />
+        <AssociationConnector Association="ReviseDBModel.FK_project_gamification" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

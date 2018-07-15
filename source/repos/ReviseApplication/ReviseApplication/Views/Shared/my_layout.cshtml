@@ -66,7 +66,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav navbar-right">
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-user white"></i> @Convert.ToString(Session["UserName"])
@@ -76,7 +76,7 @@
                     </div>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link"  href="/Authentication/Logout"><i class="fa fa-sign-out"></i> Log out</a>
+                    <a class="nav-link" href="/Authentication/Logout"><i class="fa fa-sign-out"></i> Log out</a>
                 </li>
             </ul>
         </div>
@@ -84,7 +84,7 @@
 
     <div id="page-wrapper">
 
-        <div class="container-fluid">
+        <div class="container" align="center">
 
             @RenderSection("ContentBody")
 

@@ -70,6 +70,7 @@
           <Property Name="creation_date" Type="date" Nullable="false" />
           <Property Name="description" Type="varchar(max)" />
           <Property Name="totalScore" Type="int" />
+          <Property Name="game" Type="int" />
         </EntityType>
         <EntityType Name="projUser">
           <Key>
@@ -225,6 +226,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_project_gamification">
+          <End Role="gamification" Type="Self.gamification" Multiplicity="0..1" />
+          <End Role="project" Type="Self.project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gamification">
+              <PropertyRef Name="gamId" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_projUser_department">
           <End Role="department" Type="Self.department" Multiplicity="0..1" />
           <End Role="projUser" Type="Self.projUser" Multiplicity="*" />
@@ -375,6 +388,10 @@
             <End Role="project" EntitySet="project" />
             <End Role="projCat" EntitySet="projCat" />
           </AssociationSet>
+          <AssociationSet Name="FK_project_gamification" Association="Self.FK_project_gamification">
+            <End Role="gamification" EntitySet="gamification" />
+            <End Role="project" EntitySet="project" />
+          </AssociationSet>
           <AssociationSet Name="FK_projUser_department" Association="Self.FK_projUser_department">
             <End Role="department" EntitySet="department" />
             <End Role="projUser" EntitySet="projUser" />
@@ -420,7 +437,6 @@
           <EntitySet Name="categories" EntityType="ReviseDBModel.category" />
           <EntitySet Name="chats" EntityType="ReviseDBModel.chat" />
           <EntitySet Name="departments" EntityType="ReviseDBModel.department" />
-          <EntitySet Name="gamifications" EntityType="ReviseDBModel.gamification" />
           <EntitySet Name="messages" EntityType="ReviseDBModel.message" />
           <EntitySet Name="projCats" EntityType="ReviseDBModel.projCat" />
           <EntitySet Name="projects" EntityType="ReviseDBModel.project" />
@@ -489,6 +505,11 @@
             <End Role="project" EntitySet="projects" />
             <End Role="requirement" EntitySet="requirements" />
           </AssociationSet>
+          <EntitySet Name="gamifications" EntityType="ReviseDBModel.gamification" />
+          <AssociationSet Name="FK_project_gamification" Association="ReviseDBModel.FK_project_gamification">
+            <End Role="gamification" EntitySet="gamifications" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
           <Key>
@@ -519,13 +540,6 @@
           <Property Name="depName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="depScore" Type="Int32" Nullable="false" />
           <NavigationProperty Name="projUsers" Relationship="ReviseDBModel.FK_projUser_department" FromRole="department" ToRole="projUser" />
-        </EntityType>
-        <EntityType Name="gamification">
-          <Key>
-            <PropertyRef Name="gamId" />
-          </Key>
-          <Property Name="gamId" Type="Int32" Nullable="false" />
-          <Property Name="gamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="message">
           <Key>
@@ -571,6 +585,8 @@
           <NavigationProperty Name="projCats" Relationship="ReviseDBModel.FK_projCat_project" FromRole="project" ToRole="projCat" />
           <NavigationProperty Name="projUsers" Relationship="ReviseDBModel.FK_projUser_project" FromRole="project" ToRole="projUser" />
           <NavigationProperty Name="requirements" Relationship="ReviseDBModel.FK_requirement_project" FromRole="project" ToRole="requirement" />
+          <Property Name="game" Type="Int32" />
+          <NavigationProperty Name="gamification" Relationship="ReviseDBModel.FK_project_gamification" FromRole="project" ToRole="gamification" />
         </EntityType>
         <EntityType Name="projUser">
           <Key>
@@ -816,6 +832,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="gamification">
+          <Key>
+            <PropertyRef Name="gamId" />
+          </Key>
+          <Property Name="gamId" Type="Int32" Nullable="false" />
+          <Property Name="gamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="projects" Relationship="ReviseDBModel.FK_project_gamification" FromRole="gamification" ToRole="project" />
+        </EntityType>
+        <Association Name="FK_project_gamification">
+          <End Type="ReviseDBModel.gamification" Role="gamification" Multiplicity="0..1" />
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gamification">
+              <PropertyRef Name="gamId" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -848,14 +884,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="gamifications">
-            <EntityTypeMapping TypeName="ReviseDBModel.gamification">
-              <MappingFragment StoreEntitySet="gamification">
-                <ScalarProperty Name="gamName" ColumnName="gamName" />
-                <ScalarProperty Name="gamId" ColumnName="gamId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="messages">
             <EntityTypeMapping TypeName="ReviseDBModel.message">
               <MappingFragment StoreEntitySet="message">
@@ -884,6 +912,7 @@
           <EntitySetMapping Name="projects">
             <EntityTypeMapping TypeName="ReviseDBModel.project">
               <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="game" ColumnName="game" />
                 <ScalarProperty Name="totalScore" ColumnName="totalScore" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="creation_date" ColumnName="creation_date" />
@@ -958,6 +987,14 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="reqName" ColumnName="reqName" />
                 <ScalarProperty Name="reqId" ColumnName="reqId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gamifications">
+            <EntityTypeMapping TypeName="ReviseDBModel.gamification">
+              <MappingFragment StoreEntitySet="gamification">
+                <ScalarProperty Name="gamName" ColumnName="gamName" />
+                <ScalarProperty Name="gamId" ColumnName="gamId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

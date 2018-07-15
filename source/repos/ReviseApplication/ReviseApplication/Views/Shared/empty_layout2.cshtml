@@ -3,6 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>@ViewBag.Title - Revise Application</title>
 
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -12,6 +16,7 @@
     <link href="~/Content/bootswatch.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/angular-material.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="~/Scripts/angular.js"></script>
     <script src="~/Scripts/jquery-3.0.0.min.js"></script>
@@ -22,21 +27,39 @@
     <script src="~/Scripts/bootstrap-toggle.js"></script>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-
     <script src="~/Scripts/views/angular.view.models.js"></script>
 
-</head> 
-<body ng-controller="mainController">
-      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00004d;">
-           <a href="#!top"> <img src="~/css/revise_main.png" style="max-height: 120px; max-width: 140px; padding: 0px 1px 1px 5px;" /></a>
-      </nav>
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <!-- Website CSS style -->
+    <link href="~/css/main.css" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Website Font style -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+    <style>
+        h1 {
+            display: block;
+            font-family: Berlin Sans FB;
+            font-size: 20px;
+            color: darkblue;
+            text-decoration: underline;
+        }
+    </style>
+
+
+</head>
+<body ng-controller="mainController" style="background-color:#E8E8E8;">
 
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Revise S&R</p>
-        </footer>
     </div>
 
 

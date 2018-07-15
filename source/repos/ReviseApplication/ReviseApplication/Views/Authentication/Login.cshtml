@@ -45,83 +45,84 @@
     </style>
 </head>
 <body>
-    @if (TempData["EmptyLogin"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["EmptyLogin"]</p>
-    }
-    @if (TempData["UserLogin"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["UserLogin"]</p>
-    }
-    @if (TempData["FailedLogin"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["FailedLogin"]</p>
-    }
-    @if (TempData["UserName"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["UserName"]</p>
-    }
-    @if (TempData["Unknown"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["Unknown"]</p>
-    }
-</body>
-</html>
 
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="container" ng-controller="mainController">
-        <br /><br /><br />
-        <div class="row">
-            <div class="col-md-4 center-block">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong> Sign in</strong>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="center-block">
-                                <img class="profile-img" src="~/css/revise.jpg" />
-                            </div>
-                            <div class="col-lg-12">
-                                <form id="login-form" method="post" role="form" ng-show="!registered" ng-submit="login()">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="glyphicon glyphicon-user"></i>
-                                            </span>
-                                            @Html.EditorFor(m => m.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Username" } })
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                    </div>
 
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="glyphicon glyphicon-lock"></i>
-                                            </span>
-                                            @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                    </div>
-                                    <br />
-                                    <p></p>
-                                    <div class="form-group">
-                                        <input type="submit" value="Sign in" class="btn btn-lg btn-primary btn-block" />
-                                    </div>
-                                </form>
-                                <div>
-                                    @Html.ActionLink("Forgot password?", "RenewPass", "Authentication")
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="container" ng-controller="mainController">
+            <br /><br /><br />
+            <div class="row">
+                <div class="col-md-4 center-block">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong> Sign in</strong>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="center-block">
+                                    <img class="profile-img" src="~/css/revise.jpg" />
                                 </div>
-                                <div>
-                                    @Html.ActionLink("Register Now", "Registration", "Authentication", new
-                                    {
-                                        @class = "t-button",
-                                        @style = "width:500px; text-align:center"
-                                    })
+                                <div class="col-lg-12">
+                                    <form id="login-form" method="post" role="form" ng-show="!registered" ng-submit="login()">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-user"></i>
+                                                </span>
+                                                @Html.EditorFor(m => m.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Username", style = "height:36px;" } })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="glyphicon glyphicon-lock"></i>
+                                                </span>
+                                                @Html.EditorFor(m => m.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", style = "height:35px;" } })
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                        <br />
+                                        <p></p>
+                                        @if (TempData["EmptyLogin"] != null)
+                                        {
+                                            <p class="alert alert-danger" id="failedMessage">@TempData["EmptyLogin"]</p>
+                                        }
+                                        @if (TempData["UserLogin"] != null)
+                                        {
+                                            <p class="alert alert-danger" id="failedMessage">@TempData["UserLogin"]</p>
+                                        }
+                                        @if (TempData["FailedLogin"] != null)
+                                        {
+                                            <p class="alert alert-danger" id="failedMessage">@TempData["FailedLogin"]</p>
+                                        }
+                                        @if (TempData["UserName"] != null)
+                                        {
+                                            <p class="alert alert-danger" id="failedMessage">@TempData["UserName"]</p>
+                                        }
+                                        @if (TempData["Unknown"] != null)
+                                        {
+                                            <p class="alert alert-danger" id="failedMessage">@TempData["Unknown"]</p>
+                                        }
+                                        <div class="form-group">
+                                            <input type="submit" value="Sign in" class="btn btn-lg btn-primary btn-block" />
+                                        </div>
+                                    </form>
+                                    <div>
+                                        @Html.ActionLink("Forgot password?", "RenewPass", "Authentication")
+                                    </div>
+                                    <div>
+                                        @Html.ActionLink("Register Now", "Registration", "Authentication", new
+                                        {
+                                            @class = "t-button",
+                                            @style = "width:500px; text-align:center"
+                                        })
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -129,12 +130,12 @@
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
 
 
-@section Scripts{
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}
-
+    @section Scripts{
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }
+</body>
+</html>

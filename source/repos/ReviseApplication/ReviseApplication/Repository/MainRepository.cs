@@ -51,11 +51,18 @@ namespace ReviseApplication.Repository
         public ProjectDetails ProjView(int? id)
         {
             ReviseDBEntities con = new ReviseDBEntities();
+            int ? game = con.projects.Find(id).game;
+            string name;
+            if (game == null)
+                name = "Gamfication is not set";
+            else
+                name = con.gamifications.Find(game).gamName;
             var ShowView = new ProjectDetails()
             {
                 projid = id ?? default(int),
                 projname = con.projects.Find(id).ProjName,
-                projdesc = con.projects.Find(id).description
+                projdesc = con.projects.Find(id).description,
+                projgame = name
             };
             return (ShowView);
         }
@@ -121,6 +128,18 @@ namespace ReviseApplication.Repository
             var ShowView = new ReqRate()
             {
                 reqvote = reqRate ?? 0
+            };
+            return ShowView;
+        }
+
+        public Gamfication GameView(int ? id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            var gRepo = new GameRepository();
+            var ShowView = new Gamfication()
+            {
+                projname = con.projects.Find(id).ProjName,
+                Gamification = gRepo.GetGame()
             };
             return ShowView;
         }

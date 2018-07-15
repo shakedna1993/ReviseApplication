@@ -113,6 +113,47 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        [HttpGet]
+
+        public ActionResult Gamification(int ? id)
+        {
+            Session["GameProjId"] = id;
+            var repo = new MainRepository();
+            var Main = repo.GameView(id);
+            return View(Main);
+        }
+
+        [HttpPost]
+        public ActionResult Gamification(IEnumerable<string> SelectedGame)
+        {
+            if (SelectedGame == null)
+            {
+                TempData["NoGame"] = "No gamfication method selected";
+                return RedirectToAction("ProjectMain", "Project");
+            }
+
+            var ChooseAssignGame = SelectedGame.ToList();
+            int proj = Convert.ToInt32(Session["GameProjId"]);
+            ReviseDBEntities con = new ReviseDBEntities();
+
+            if (ChooseAssignGame.SingleOrDefault() == "")
+            {
+                TempData["NoGame"] = "No gamfication method selected";
+                return RedirectToAction("ProjectMain", "Project");
+            }
+            else
+            {
+                int game_id = Int32.Parse(ChooseAssignGame.SingleOrDefault());
+                var game = con.gamifications.Where(g => g.gamId == game_id);
+                con.projects.Find(proj).game = game_id;
+                con.projects.Find(proj).gamification = con.gamifications.Find(game_id);
+
+            }
+
+            con.SaveChanges();
+            return RedirectToAction("ProjectMain", "Project");
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [Authorize]

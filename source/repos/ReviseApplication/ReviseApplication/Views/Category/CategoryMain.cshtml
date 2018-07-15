@@ -9,30 +9,12 @@
 @section TitleSection{
     Project @Convert.ToString(Session["projectName"])
 }
-@*@section HeaderSection{
-        <style>
-            .stylish-input-group .input-group-addon {
-                background: white !important;
-            }
-
-            .stylish-input-group .form-control {
-                border-right: 0;
-                box-shadow: 0 0 0;
-                border-color: #ccc;
-            }
-
-            .stylish-input-group button {
-                border: 0;
-                background: transparent;
-            }
-        </style>
-    }*@
+@**@
 <html>
 <head>
     <style>
         table {
             display: table-row;
-            width: inherit;
         }
 
         th {
@@ -45,9 +27,14 @@
         }
 
         h2 {
-            display: block;
-            font-family: Berlin Sans FB;
+            font-family: 'Berlin Sans FB';
             font-size: 16px;
+            color: black;
+        }
+
+        label {
+            font-family: Tahoma;
+            font-size: 14px;
             color: black;
         }
     </style>
@@ -62,105 +49,96 @@
         <p class="alert alert-warning" id="failedMessage">@TempData["emptyIDcat"]</p>
     }
     @section ContentBody{
-        <nav style="margin-top:-35px;" class="col-sm-offset-2">
-            <div class="form-group">
-                @Html.LabelFor(model => model.score, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <nav class="nav layout-align-end" style="margin-top:-20px;">
+            <div class="form-group col-lg-2">
+                @Html.LabelFor(model => model.score, htmlAttributes: new { @class = "control-label" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.rate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group col-lg-2">
+                @Html.LabelFor(model => model.rate, htmlAttributes: new { @class = "control-label" })
             </div>
         </nav>
-        <br /><br />
+        <br />
 
-        <div class="col-sm-offset-1">
-            <h1>
-                Requierments for @Convert.ToString(Session["projectName"]) project
-            </h1>
-            &nbsp;&nbsp;
-            <div class="row" style="margin-left:25px;">
-                <h2>
-                    Participants:
-                </h2>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                @foreach (var member in ViewBag.memberslist)
-                {
-                    <a>
-                        &nbsp;<img class="img-circle" src="@member.pic" width="50" height="50" alt="">
-                    </a>
-                }
-
-            </div>
-            <br />
-            @Html.ValidationMessage("CredentialError", new { style = "color:green;" })
-            @* <br />
-                <img src="http://www.iconshock.com/img_jpg/BRILLIANT/graphics/jpg/16/ellipse_icon.jpg" /> - active requirement<br />
-                <img src="http://www.iconshock.com/img_jpg/BRILLIANT/transportation/jpg/16/no_entry_sign_icon.jpg" /> - nonactive requirement
-                <br />
-                <img src="~/images/bggreen.jpg" /> - requirement is Aprroved.
-                <br /><br />*@
-            <br />
-            <div class="table">
-                <table class="table">
-                    <tr class="active">
-                        <th>
-                            Category
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th>
-                            Limit
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    @foreach (var item in Model.Cat)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CatName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).status)%
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).totalLimit)%
-                            </td>
-                            <td nowrap>
-                                @if (item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).isActive ?? true)
-                                {
-                                    @Html.ActionLink("Chat", "Chat", "User", new { catid = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-warning" })
-                                }
-                            </td>
-                            <td>
-                                @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
-                                {
-                                    <label>
-                                        @Html.ActionLink(" ", "EditCategory", "Category", new { id = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
-                                        @Html.ActionLink(" ", "Delete", "Category", new { id = item.CatId }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
-                                    </label>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </table>
-            </div>
-            <div class="row">
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
-                    <i class="fa fa-chevron-circle-left"></i>
-                    <span>Back</span>
+        <h1>
+            Requierments for @Convert.ToString(Session["projectName"]) project
+        </h1>
+        <br />
+        <div class="row layout-align-center">
+            <h2>
+                Participants:
+            </h2>&nbsp;
+            @foreach (var member in ViewBag.memberslist)
+            {
+                <a>
+                    &nbsp;<img class="img-circle" src="@member.pic" width="50" height="50" alt="">
                 </a>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
-                {
-                    <div class="col-sm-offset-1">
-                        @Html.ActionLink("Create New Category", "CreateCategory", "Category", new { projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
-                    </div>
-                }
-            </div>
+            }
 
+        </div>
+        <br />
+        @Html.ValidationMessage("CredentialError", new { style = "color:green;" })
+        @* <br />
+            <img src="http://www.iconshock.com/img_jpg/BRILLIANT/graphics/jpg/16/ellipse_icon.jpg" /> - active requirement<br />
+            <img src="http://www.iconshock.com/img_jpg/BRILLIANT/transportation/jpg/16/no_entry_sign_icon.jpg" /> - nonactive requirement
+            <br />
+            <img src="~/images/bggreen.jpg" /> - requirement is Aprroved.
+            <br /><br />*@
+        <br />
+        <div class="table">
+            <table class="table">
+                <tr class="active">
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Limit
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Cat)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CatName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).status)%
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).totalLimit)%
+                        </td>
+                        <td nowrap>
+                            @if (item.projCats.SingleOrDefault(p => p.project.ProjId == Convert.ToInt32(Session["projectid"])).isActive ?? true)
+                            {
+                                @Html.ActionLink("Chat", "Chat", "User", new { catid = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-warning" })
+                            }
+                            @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
+                            {
+                                <label>
+                                    @Html.ActionLink(" ", "EditCategory", "Category", new { id = item.CatId, projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
+                                    @Html.ActionLink(" ", "Delete", "Category", new { id = item.CatId }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
+                                </label>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="row layout-align-center">
+            <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                <i class="fa fa-chevron-circle-left"></i>
+                <span>Back</span>
+            </a>
+            @if (Convert.ToBoolean(Session["IsAdmin"]) || Model.role == 6)
+            {
+                <div class="col-sm-offset-1">
+                    @Html.ActionLink("Create New Category", "CreateCategory", "Category", new { projid = Convert.ToInt32(Session["projectid"]) }, new { @role = "button", @class = "btn btn-success" })
+                </div>
+            }
         </div>
     }
 

@@ -1,7 +1,11 @@
 ﻿@model ReviseApplication.Models.CreateCategory
 @{
-    Layout = "~/Views/Shared/my_Layout2.cshtml";
+    Layout = "~/Views/Shared/my_Layout.cshtml";
     ViewBag.Title = "Create New Category";
+}
+
+@section TitleSection{
+    Project @Convert.ToString(Session["projectName"])
 }
 
 <!DOCTYPE html>
@@ -16,61 +20,61 @@
 </head>
 
 <body>
-    @if (TempData["FailedCat"] != null)
-    {
-        <p class="alert alert-danger" id="failedMessage">@TempData["FailedCat"]</p>
-    }
-
-    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
-    {
-        if (ViewBag.Message != null)
+    @section ContentBody{
+        @if (TempData["FailedCat"] != null)
         {
-            <div class="alert alert-success">
-                <strong>Success!</strong>@ViewBag.Message
-            </div>
+            <p class="alert alert-danger" id="failedMessage">@TempData["FailedCat"]</p>
         }
-    }
-    else
-    {
-        using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <div class="container" ng-controller="mainController">
-                <div class="row main">
-                    <div class="main-center">
-                        <h1> Create New Category</h1>
-                    </div>
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
 
-                    <table class="table">
-                        <tr>
-                            <th>
-                                @Html.LabelFor(x => Model.catname, htmlAttributes: new { @class = "control-label" })
-                            </th>
-                            <td>
-                                <div class="input-group col-md-10">
-                                    <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                                    @Html.EditorFor(model => model.catname, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                                @Html.ValidationMessageFor(model => model.catname, "", new { @class = "text-danger" })
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                @Html.LabelFor(x => Model.totalLimit, htmlAttributes: new { @class = "control-label" })
-                            </th>
-                            <td>
-                                <div class="input-group col-md-10">
-                                    <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                                    @Html.EditorFor(model => model.totalLimit, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                                @Html.ValidationMessageFor(model => model.totalLimit, "", new { @class = "text-danger" })
-                            </td>
-                        </tr>
-                    </table>
+        @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+        {
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    <strong>Success!</strong>@ViewBag.Message
                 </div>
-                <div class="row">
+            }
+        }
+        else
+        {
+            using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="main-center">
+                    <h1> Create New Category</h1>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.LabelFor(x => Model.catname, htmlAttributes: new { @class = "control-label" })
+                        </th>
+                        <td>
+                            <div class="input-group col-md-10">
+                                <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                                @Html.EditorFor(model => model.catname, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.catname, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.LabelFor(x => Model.totalLimit, htmlAttributes: new { @class = "control-label" })
+                        </th>
+                        <td>
+                            <div class="input-group col-md-10">
+                                <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                                @Html.EditorFor(model => model.totalLimit, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.totalLimit, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <div class="row layout-align-center">
                     <div>
                         <a href="@Url.Action("CategoryMain", "Category", new { id = Convert.ToInt32( Session["projectid"]), name = Session["projectName"].ToString() } )" class="btn btn-default btn-md" style="border:none; width:110px;">
                             <i class="fa fa-chevron-circle-left"></i>
@@ -81,12 +85,12 @@
                         <button type="submit" value="Create" class="btn btn-primary btn-md btn-block login-button">Create</button>
                     </div>
                 </div>
-            </div>
-            if (ViewBag.Message != null)
-            {
-                <div class="alert alert-danger">
-                    <strong>Error!</strong>@ViewBag.Message
-                </div>
+                if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>@ViewBag.Message
+                    </div>
+                }
             }
         }
     }

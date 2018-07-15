@@ -70,5 +70,8 @@ namespace ReviseApplication.Models
 
         [Display(Name = "Description:")]
         public string projdesc { get; set; }
+
+        [Display(Name = "Gamfication:")]
+        public string projgame { get; set; }
     }
 }

@@ -5,7 +5,6 @@
     <style>
         table {
             display: table-row;
-            width: inherit;
         }
 
         td {
@@ -15,12 +14,6 @@
         th {
             color: darkblue;
             text-align: center;
-        }
-
-        h1 {
-            margin-left: 15px;
-            margin-top: 0px;
-            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -49,52 +42,33 @@
 
     @section ContentBody{
         <br />
-
-        <div class="table col-sm-offset-1">
-            <div class="row">
-                <h1>My Projects List:</h1>
+        <div class="table">
+            <h1>My Projects List:</h1>
+            <div class="row layout-align-center">
+                <div class="col-lg-3">
+                    <div id="imaginary_container">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="input-group stylish-input-group">
+                                <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search for project">
+                                <span class="input-group-addon">
+                                    <button type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
                 @if (Convert.ToBoolean(Session["IsAdmin"]))
                 {
-                    <div class="col-md-2 col-sm-offset-1">
-                        <div id="imaginary_container">
-                            @using (Html.BeginForm())
-                            {
-                                <div class="input-group stylish-input-group">
-                                    <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search for project">
-                                    <span class="input-group-addon">
-                                        <button type="submit">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            }
-                        </div>
-                    </div>
                     <div>
                         @Html.ActionLink("Create New Project", "CreateProj", null, new { @role = "button", @class = "btn btn-success" })
                     </div>
                 }
-                else
-                {
-                    <div class="col-md-2 col-sm-offset-2">
-                        <div id="imaginary_container">
-                            @using (Html.BeginForm())
-                            {
-                                <div class="input-group stylish-input-group">
-                                    <input type="text" class="form-control" name="txtfind" id="txtfind" placeholder="Search for project">
-                                    <span class="input-group-addon">
-                                        <button type="submit">
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
 
             </div>
-
+            <br />
             <table class="table  table-responsive-lg">
                 <tr class="active">
                     <th>
@@ -155,8 +129,9 @@
                             @Html.ActionLink(" ", "ProjectDetails", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-primary glyphicon glyphicon-info-sign" })
                             @if (Convert.ToBoolean(Session["IsAdmin"]) || item.MemberRole == 6)
                             {
-                                @Html.ActionLink(" ", "EditProject", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
                                 <label>
+                                    @Html.ActionLink(" ", "EditProject", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
+                                    @Html.ActionLink(" ", "Gamification", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-warning glyphicon glyphicon-king" })
                                     @Html.ActionLink(" ", "Delete", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
                                 </label>
 

@@ -127,36 +127,15 @@ namespace ReviseApplication.Controllers
             if (IsExist == 1)
             {
                 var reqVote = con.userCatReqs.Find(reqId, userID);
-                if (reqVote.rate == null)
+                if (reqVote != null)
                 {
                     var repo = new MainRepository();
                     var Main = repo.Vote(reqId, userID);
                     return View(Main);
                 }
             }
-            else
-                Session["RateExist"] = 0;
-
             return View();
         }
-
-        /* [HttpPost]
-         public ActionResult Vote()
-         {
-             int projId = Convert.ToInt32(Session["projectid"]);
-             int catId = Convert.ToInt32(Session["Catid"]);
-             int reqId = Convert.ToInt32(Session["ReqId"]);
-             int IsExist = Convert.ToInt32(Session["ReqExisit"]);
-             string userID = Session["userid"].ToString();
-
-             ReviseDBEntities con = new ReviseDBEntities();
-
-             if (IsExist == 0)
-                 return RedirectToAction("Vote", "Category");
-             return RedirectToAction("Vote", "Category");
-
-
-         }*/
 
         [HttpPost]
         public ActionResult Requirement(string reqname, string reqdesc)
@@ -175,7 +154,7 @@ namespace ReviseApplication.Controllers
             catch
             {
                 TempData["FailedReq"] = "Unknown error occurred!";
-                return RedirectToAction("Requirement", "Category");  //need to add projid, catid
+                return RedirectToAction("Requirement", "Category");  
             }
 
             if (ModelState.IsValid)
@@ -209,6 +188,47 @@ namespace ReviseApplication.Controllers
         }
 
         [HttpPost]
+        public ActionResult Vote(int reqvote)
+        {
+            int projId = Convert.ToInt32(Session["projectid"]);
+            int catId = Convert.ToInt32(Session["Catid"]);
+            int reqId = Convert.ToInt32(Session["ReqId"]);
+            int IsExist = Convert.ToInt32(Session["ReqExisit"]);
+            string userID = Session["userid"].ToString();
+
+            ReviseDBEntities con = new ReviseDBEntities();
+            try
+            {
+                if (reqvote == 0)
+                {
+                    TempData["EmptyVote"] = "No vote was set";
+                    return RedirectToAction("Vote", "Category");
+                }
+            }
+            catch
+            {
+                TempData["FailedVote"] = "Unknown error occurred!";
+                return RedirectToAction("Vote", "Category");
+            }
+
+            if(con.userCatReqs.Find(reqId, userID) != null)
+                con.userCatReqs.Find(reqId, userID).rate = reqvote;
+            else
+            {
+                userCatReq RateReq = new userCatReq()
+                {
+                    usrid = userID,
+                    reqId = reqId,
+                    rate = reqvote
+                };
+                con.userCatReqs.Add(RateReq);
+            }
+            con.SaveChanges();
+
+            return RedirectToAction("Vote", "Category");
+        }
+
+        [HttpPost]
         public ActionResult EditCategory(int ? id, string catname, int ? totalLimit)
         {
             try
@@ -228,7 +248,7 @@ namespace ReviseApplication.Controllers
 
             try
             {
-                if (CatName == catname || CatLimit == totalLimit)
+                if (CatName == catname && CatLimit == totalLimit)
                     return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString()});
             }
             catch
@@ -238,8 +258,8 @@ namespace ReviseApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                con.categories.Find(id).CatName = CatName;
-                con.projCats.Where(c => c.catId == id).SingleOrDefault(p => p.projId == projid).totalLimit = CatLimit;
+                con.categories.Find(id).CatName = catname;
+                con.projCats.Where(c => c.catId == id).SingleOrDefault(p => p.projId == projid).totalLimit = totalLimit;
                 con.SaveChanges();
                 return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
             }

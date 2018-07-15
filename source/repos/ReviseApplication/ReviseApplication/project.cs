@@ -29,6 +29,7 @@ namespace ReviseApplication
         public System.DateTime creation_date { get; set; }
         public string description { get; set; }
         public Nullable<int> totalScore { get; set; }
+        public Nullable<int> game { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<message> messages { get; set; }
@@ -38,5 +39,6 @@ namespace ReviseApplication
         public virtual ICollection<projUser> projUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<requirement> requirements { get; set; }
+        public virtual gamification gamification { get; set; }
     }
 }

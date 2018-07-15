@@ -14,7 +14,16 @@ namespace ReviseApplication
     
     public partial class gamification
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public gamification()
+        {
+            this.projects = new HashSet<project>();
+        }
+    
         public int gamId { get; set; }
         public string gamName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project> projects { get; set; }
     }
 }

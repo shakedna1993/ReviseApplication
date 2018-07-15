@@ -28,7 +28,6 @@ namespace ReviseApplication
         public virtual DbSet<category> categories { get; set; }
         public virtual DbSet<chat> chats { get; set; }
         public virtual DbSet<department> departments { get; set; }
-        public virtual DbSet<gamification> gamifications { get; set; }
         public virtual DbSet<message> messages { get; set; }
         public virtual DbSet<projCat> projCats { get; set; }
         public virtual DbSet<project> projects { get; set; }
@@ -37,5 +36,6 @@ namespace ReviseApplication
         public virtual DbSet<user> users { get; set; }
         public virtual DbSet<userCatReq> userCatReqs { get; set; }
         public virtual DbSet<requirement> requirements { get; set; }
+        public virtual DbSet<gamification> gamifications { get; set; }
     }
 }

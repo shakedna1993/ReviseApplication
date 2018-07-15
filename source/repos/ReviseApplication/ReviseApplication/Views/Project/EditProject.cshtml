@@ -1,7 +1,10 @@
 ﻿@model ReviseApplication.Models.EditProject
 @{
-    Layout = "~/Views/Shared/my_Layout2.cshtml";
+    Layout = "~/Views/Shared/my_Layout.cshtml";
     ViewBag.Title = "Edit Project";
+}
+@section TitleSection{
+    Project @Convert.ToString(Session["projectName"])
 }
 
 <!DOCTYPE html>
@@ -15,104 +18,105 @@
 
 </head>
 <body>
-    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
-    {
-        if (ViewBag.Message != null)
+    @section ContentBody{
+        @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
         {
-            <div class="alert alert-success">
-                <strong>Success!</strong>@ViewBag.Message
-            </div>
-        }
-    }
-    else
-    {
-        using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <div class="main-center">
-                <h1> Edit Project</h1>
-            </div>
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
-
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label" })
-                    </th>
-                    <td>
-                        <b>
-                            @Html.DisplayFor(model => model.projid, new { htmlAttributes = new { @class = "form-control" } })
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label" })
-                    </th>
-                    <td>
-                        <div class="input-group col-md-6">
-                            <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
-                            @Html.EditorFor(model => model.projname, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.projname, "", new { @class = "text-danger" })
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                    </th>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
-                            @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc" })
-                        </div>
-                        @Html.ValidationMessageFor(model => model.projdesc, "", new { @class = "text-danger" })
-                    </td>
-                </tr>
-                <tr>
-                    <th>Participants:</th>
-                    <td>
-                        <table class="table-striped">
-                            <tr>
-                                <th>
-                                    @Html.LabelFor(x => Model.SelectRemoveUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
-                                        @Html.ListBoxFor(model => model.SelectRemoveUser, Model.RemoveUser, new { @class = "col-sm-12", style = "height:105px;" })
-                                    </div>
-                                </th>
-                                <td>
-                                    @Html.LabelFor(x => Model.SelectedUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
-                                        @Html.ListBoxFor(model => model.SelectedUser, Model.AssignUser, new { @class = "col-sm-12", style = "height:105px;" })
-                                    </div>
-
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <br />
-            <div class="row">
-                <div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
-                        <i class="fa fa-chevron-circle-left"></i>
-                        <span>Back</span>
-                    </a>
-                </div>
-                <div class="form-group col-md-2 col-md-offset-3">
-                    <button type="submit" value="Submit" class="btn btn-primary btn-md btn-block">Save changes</button>
-                </div>
-            </div>
             if (ViewBag.Message != null)
             {
-                <div class="alert alert-danger">
-                    <strong>Error!</strong>@ViewBag.Message
+                <div class="alert alert-success">
+                    <strong>Success!</strong>@ViewBag.Message
                 </div>
+            }
+        }
+        else
+        {
+            using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="main-center">
+                    <h1> Edit Project</h1>
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("CredentialError", new { style = "color:red;" })
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.LabelFor(x => Model.projid, htmlAttributes: new { @class = "control-label" })
+                        </th>
+                        <td>
+                            <b>
+                                @Html.DisplayFor(model => model.projid, new { htmlAttributes = new { @class = "form-control" } })
+                            </b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.LabelFor(x => Model.projname, htmlAttributes: new { @class = "control-label" })
+                        </th>
+                        <td>
+                            <div class="input-group col-md-6">
+                                <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                                @Html.EditorFor(model => model.projname, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.projname, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            @Html.LabelFor(x => Model.projdesc, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                        </th>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                                @Html.TextArea("projdesc", Model.projdesc, 4, 36, new { @id = "projdesc", @title = "projdesc" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.projdesc, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Participants:</th>
+                        <td>
+                            <table class="table-striped">
+                                <tr>
+                                    <th>
+                                        @Html.LabelFor(x => Model.SelectRemoveUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                                            @Html.ListBoxFor(model => model.SelectRemoveUser, Model.RemoveUser, new { @class = "col-sm-12", style = "height:105px;" })
+                                        </div>
+                                    </th>
+                                    <td>
+                                        @Html.LabelFor(x => Model.SelectedUser, htmlAttributes: new { @class = "control-label cols-sm-2" })
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                                            @Html.ListBoxFor(model => model.SelectedUser, Model.AssignUser, new { @class = "col-sm-12", style = "height:105px;" })
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <div class="row layout-align-center">
+                    <div>
+                        <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+                            <i class="fa fa-chevron-circle-left"></i>
+                            <span>Back</span>
+                        </a>
+                    </div>
+                    <div class="form-group col-lg-2  col-sm-offset-1">
+                        <button type="submit" value="Submit" class="btn btn-primary btn-md btn-block">Save changes</button>
+                    </div>
+                </div>
+                if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>@ViewBag.Message
+                    </div>
+                }
             }
         }
     }
