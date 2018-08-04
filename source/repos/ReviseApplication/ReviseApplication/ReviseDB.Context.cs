@@ -34,8 +34,8 @@ namespace ReviseApplication
         public virtual DbSet<projUser> projUsers { get; set; }
         public virtual DbSet<role> roles { get; set; }
         public virtual DbSet<user> users { get; set; }
+        public virtual DbSet<gamification> gamifications { get; set; }
         public virtual DbSet<userCatReq> userCatReqs { get; set; }
         public virtual DbSet<requirement> requirements { get; set; }
-        public virtual DbSet<gamification> gamifications { get; set; }
     }
 }

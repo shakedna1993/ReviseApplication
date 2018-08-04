@@ -51,6 +51,9 @@ namespace ReviseApplication.Controllers
             string userId = Session["userid"].ToString();
             var prj = con.projUsers.Where(u => u.userid == userId).ToList();
             List<projUser> Nodup = new List<projUser>();
+            int prjScore = 0;
+            int usrScore = 0;
+            int usrproj = 0;
 
             if (con.users.Find(userId).IsAdmin == true)
                 prj = con.projUsers.ToList();
@@ -67,14 +70,25 @@ namespace ReviseApplication.Controllers
             {
                 projectModel proj = new projectModel();
                 proj.projid = pr.projid;
-                proj.Date = pr.project.creation_date.ToString();
+                proj.Date = pr.project.creation_date.ToString("dd/MM/yyyy");
                 proj.status = pr.project.status;
                 proj.projname = pr.project.ProjName;
-                proj.score = pr.project.totalScore ?? 0;
                 proj.MemberRole = pr.role ?? 7;
                 memberslist.Add(con.projUsers.Where(u => u.projid == pr.projid));
+                usrproj = UserScoreCalc(pr.projid, userId);
+                foreach (var p in con.projUsers.Where(p => p.projid == pr.projid).ToList())
+                    prjScore = prjScore + p.grade ?? prjScore;
+                usrScore = usrScore + usrproj;
+                con.projects.SingleOrDefault(p => p.ProjId == pr.projid).totalScore = prjScore;
+                con.SaveChanges();
+                proj.score = prjScore;
                 ProjectsList.Add(proj);
+                prjScore = 0;
             }
+
+            con.users.Find(userId).score = usrScore;
+            con.SaveChanges();
+            Session["UserScore"] = usrScore;
 
             Session["members"] = memberslist;
             Session["projects"] = ProjectsList.ToList();
@@ -177,6 +191,7 @@ namespace ReviseApplication.Controllers
             project proj = con.projects.Find(id);
             List<projUser> tempList = new List<projUser>();
             List<user> Assigned = new List<user>();
+            List<message> MessagesToDel = new List<message>();
             List<user> Remove = new List<user>();
 
             try
@@ -207,7 +222,13 @@ namespace ReviseApplication.Controllers
 
 
                     foreach(var tmp in tempList)
+                    {
+                        MessagesToDel = con.messages.Where(p => p.projId == tmp.projid).Where(u => u.userid == tmp.userid).ToList();
+                        if (MessagesToDel != null)
+                            foreach (var msg in MessagesToDel)
+                                con.messages.Remove(msg);
                         con.projUsers.Remove(tmp);
+                    }
                     con.SaveChanges();
                 }
                 con.SaveChanges();
@@ -437,6 +458,44 @@ namespace ReviseApplication.Controllers
             con.projects.Remove(proj);
             con.SaveChanges();
             return RedirectToAction("ProjectMain", "Project");
+        }
+
+        public int UserScoreCalc(int prjid, string usrid)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            int usrPrjScore = 0;
+
+            List<message> message = con.messages.ToList();
+            int count = 0;
+
+            foreach (var msg in message)
+                if (msg.projId == prjid && msg.userid == usrid)
+                    count++;
+            usrPrjScore = count;
+            if (usrPrjScore == 0)
+                return 0;
+            con.projUsers.Where(u => u.userid == usrid).SingleOrDefault(p => p.projid == prjid).grade = usrPrjScore;
+            con.SaveChanges();
+            return usrPrjScore;
+        }
+
+        public ActionResult ReqExport(int id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            int ProjectId = id;
+            ViewBag.MemberProjectList = con.projUsers.Where(p => p.projid == ProjectId).ToList();
+            var req = con.requirements.Where(p => p.projid == ProjectId).ToList();
+            Session["projectName"] = con.projects.SingleOrDefault(p => p.ProjId == id).ProjName;
+            List<ReviseApplication.Models.Categories> list = new List<Categories>();
+            foreach (var r in req)
+            {
+                ReviseApplication.Models.Categories cat = new ReviseApplication.Models.Categories();
+                cat.category = r.category.CatName;
+                cat.reqname = r.reqName;
+                cat.reqdesc = r.description;
+                list.Add(cat);
+            }
+            return View(list);
         }
     }
 }

@@ -156,24 +156,17 @@ function AddUser(chatHub, id, name) {
 
     var code = "";
 
-    if (userId == id) {
 
-        code = $('<div class="loginUser">' + name + "</div>");
+    code = $('<a id="' + id + '" class="user" >' + name + '<a></br>');
 
-    }
-    else {
+    $(code).dblclick(function () {
 
-        code = $('<a id="' + id + '" class="user" >' + name + '<a></br>');
+        var id = $(this).attr('id');
 
-        $(code).dblclick(function () {
+        if (userId != id)
+            OpenPrivateChatWindow(chatHub, id, name);
 
-            var id = $(this).attr('id');
-
-            if (userId != id)
-                OpenPrivateChatWindow(chatHub, id, name);
-
-        });
-    }
+    });
 
     $("#divusers").append(code);
 
@@ -202,12 +195,10 @@ function AddMessage(userName, message, createdDate) {
             + '<p>' + message + '</p>'
             + '<time datetime="' + createdDate + '">' + userName + ' • ' + setRoleNameTag(memberDetails) + ' • ' + createdDate + '</time></div></div>'
             + '<div class="col-lg-1 col-md-2 col-xs-2 avatar">'
-            + ' <img class="img-circle" src="' + picURL + '" class="img-responsive">' + getGradeDiv(memberDetails.grade)
             + '</div></div>');
     } else {
         $('#messages-area').append('<div class="row msg_container base_receive">'
             + '<div class="col-lg-1 col-md-2 col-xs-2 avatar">'
-            + '<img class="img-circle" src="' + picURL + '" class="img-responsive">' + getGradeDiv(memberDetails.grade) + '</div>'
             + '<div class="col-lg-11 col-md-9 col-xs-10"><div class="messages msg_receive"><p>' + message
             + '</p><time datetime="' + createdDate + '">' + userName + '  •  ' + setRoleNameTag(memberDetails) + '  •  ' + createdDate + '</time>'
             + '</div></div></div>')
@@ -218,31 +209,13 @@ function AddMessage(userName, message, createdDate) {
 
 //Returnd Member Role Name.
 function setRoleNameTag(memberDetails) {
-    if (memberDetails.roleId == 1) {
+    if (memberDetails.roleId == 6) {
         return '<span class="label label-primary">' + memberDetails.roleName + '</span>'
     }
-    if (memberDetails.roleId == 2) {
-        return '<span class="label label-default">' + memberDetails.roleName + '</span>'
-    }
-    if (memberDetails.roleId == 3) {
+    else
         return '<span class="label label-info">' + memberDetails.roleName + '</span>'
-    }
-    if (memberDetails.roleId == 4) {
-        return '<span class="label label-warning">' + memberDetails.roleName + '</span>'
-    }
-
-
 }
 
-//Returnd Member Gade Stars element.
-function getGradeDiv(memerGarde) {
-    starSym = "<div>";
-    var i;
-    for (i = 0, len = memerGarde; i < len; i++) {
-        starSym += '<span class="glyphicon glyphicon-star" style="color:#f9e933 "></span>';
-    }
-    return starSym + "</div>";
-}
 
 //Return MemberDetails Object fron a global client side global variable.
 function getMemberDetails(userName) {

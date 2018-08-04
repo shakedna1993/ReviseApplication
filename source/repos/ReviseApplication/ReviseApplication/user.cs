@@ -21,7 +21,6 @@ namespace ReviseApplication
             this.projUsers = new HashSet<projUser>();
             this.chats = new HashSet<chat>();
             this.userCatReqs = new HashSet<userCatReq>();
-            this.userCatReqs1 = new HashSet<userCatReq>();
         }
     
         public string userid { get; set; }
@@ -47,7 +46,5 @@ namespace ReviseApplication
         public virtual ICollection<chat> chats { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<userCatReq> userCatReqs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<userCatReq> userCatReqs1 { get; set; }
     }
 }

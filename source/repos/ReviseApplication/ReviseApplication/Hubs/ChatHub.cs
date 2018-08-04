@@ -52,7 +52,6 @@ namespace ReviseApplication.Hubs
             CurrentMessages = con.messages.ToList();
 
             var id = Context.ConnectionId;
-            var userName = Context.User.Identity.Name.ToString();
             int catid = Convert.ToInt32(Clients.Caller.catid);
             int projid = Convert.ToInt32(Clients.Caller.projid);
             string userid = Clients.Caller.userid;
@@ -71,13 +70,12 @@ namespace ReviseApplication.Hubs
                                             firstName = md.fname,
                                             lastName = md.lname,
                                             picURL = md.pic,
-                                            //roleId = pm.,
-                                            //roleName = con.roles.Find(pm.role).RoleName,
-                                            grade = pm.grade
+                                            roleId = pm.role,
+                                            roleName = pm.role1.RoleName,
                                         };
 
             var currentMemberDetails = projectMembersDetails.Where(m => m.userId == userid).First();
-
+            var userName = currentMemberDetails.userName;
             var projAttached = con.projUsers.Where(p => p.user.userid == currentMemberDetails.userId);
 
             var catAttached = con.projCats.Where(c => c.project.ProjId == projid);
@@ -92,7 +90,7 @@ namespace ReviseApplication.Hubs
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new ChatUserDetails { CatId = catid, userid = currentMemberDetails.userId, ConnectionId = id, UserName = userName, projid = projid });
+                ConnectedUsers.Add(new ChatUserDetails { CatId = catid, userid = currentMemberDetails.userId, ConnectionId = id, UserName = currentMemberDetails.userName, projid = projid });
 
                 // send to caller
                 var messages = CurrentMessages.Where(c => c.CatId.Equals(catid)).Where(p => p.projId == projid).Select(m => new MessageDetail { UserName = m.user.UserName, Message = m.msg, Date = m.createDate.ToString() });

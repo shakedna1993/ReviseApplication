@@ -25,14 +25,14 @@
         <AssociationConnector Association="ReviseDBModel.FK_projUser_role" />
         <AssociationConnector Association="ReviseDBModel.FK_projUser_user" />
         <AssociationConnector Association="ReviseDBModel.userChat" />
-        <EntityTypeShape EntityType="ReviseDBModel.userCatReq" Width="1.5" PointX="9.75" PointY="12" />
-        <AssociationConnector Association="ReviseDBModel.FK_req_userCatReq" />
-        <AssociationConnector Association="ReviseDBModel.FK_userCatReq_user" />
-        <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="6" PointY="5.875" />
-        <AssociationConnector Association="ReviseDBModel.FK_requirement_category" />
-        <AssociationConnector Association="ReviseDBModel.FK_requirement_project" />
         <EntityTypeShape EntityType="ReviseDBModel.gamification" Width="1.5" PointX="0.75" PointY="10.25" />
         <AssociationConnector Association="ReviseDBModel.FK_project_gamification" />
+        <EntityTypeShape EntityType="ReviseDBModel.userCatReq" Width="1.5" PointX="9.75" PointY="12" />
+        <AssociationConnector Association="ReviseDBModel.FK_userCatReq_user" />
+        <EntityTypeShape EntityType="ReviseDBModel.requirement" Width="1.5" PointX="6" PointY="6" />
+        <AssociationConnector Association="ReviseDBModel.FK_requirement_category" />
+        <AssociationConnector Association="ReviseDBModel.FK_requirement_project" />
+        <AssociationConnector Association="ReviseDBModel.FK_userCatReq_requirement" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

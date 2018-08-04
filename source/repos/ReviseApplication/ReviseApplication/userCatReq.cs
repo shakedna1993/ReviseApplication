@@ -19,6 +19,6 @@ namespace ReviseApplication
         public string usrid { get; set; }
     
         public virtual user user { get; set; }
-        public virtual user user1 { get; set; }
+        public virtual requirement requirement { get; set; }
     }
 }

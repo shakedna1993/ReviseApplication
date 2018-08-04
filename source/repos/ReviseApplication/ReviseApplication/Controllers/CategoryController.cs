@@ -25,6 +25,7 @@ namespace ReviseApplication.Controllers
             string name = proj.ProjName.ToString();
             Session["projectName"] = name;
             Session["projectid"] = id;
+            string usrid = Session["userid"].ToString();
             var prj = con.projUsers.Where(u => u.projid == id).ToList();
             var numOfMembers = con.projUsers.Where(u => u.projid == id).Count();
             
@@ -50,11 +51,27 @@ namespace ReviseApplication.Controllers
                 double total = Convert.ToDouble((numerator / denominator)) * 100;
                 cat.projCats.SingleOrDefault(p => p.project.ProjId == id).score = Convert.ToInt32(total);
                 int TotalLimit = cat.projCats.SingleOrDefault(p => p.project.ProjId == id).totalLimit ?? 0;
+                int Req = 0;
+                int UserScore = 0;
+
+                if (con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid) != null)
+                     Req = con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid).reqId;
+                int VoteCount = con.userCatReqs.Count(r => r.reqId == Req);
+                if (VoteCount < con.projUsers.Count(p => p.projid == prjcat.projId))
+                    VoteCount = con.projUsers.Count(p => p.projid == prjcat.projId);
+                List<userCatReq> Vote = con.userCatReqs.Where(r => r.reqId == Req).ToList();
+                int? VoteSum = 0;
+                foreach (var v in Vote)
+                    VoteSum = v.rate;
+                if (VoteSum != 0)
+                    prjcat.status = VoteSum / VoteCount;
+
                 if (prjcat.status == null)
                     prjcat.status = 0;
     
                 if (TotalLimit >= prjcat.status)
                     prjcat.isActive = true;
+
 
                 else
                     prjcat.isActive = false;
@@ -65,6 +82,7 @@ namespace ReviseApplication.Controllers
 
                 con.projCats.Find(id, catid).isActive = prjcat.isActive;
                 con.projCats.Find(id, catid).isFinish = prjcat.isFinish;
+                con.projCats.Find(id, catid).status = prjcat.status;
                 con.SaveChanges();
             }
 
@@ -223,6 +241,8 @@ namespace ReviseApplication.Controllers
                 };
                 con.userCatReqs.Add(RateReq);
             }
+
+
             con.SaveChanges();
 
             return RedirectToAction("Vote", "Category");

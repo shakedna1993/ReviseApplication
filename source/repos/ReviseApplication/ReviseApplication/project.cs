@@ -37,8 +37,8 @@ namespace ReviseApplication
         public virtual ICollection<projCat> projCats { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<projUser> projUsers { get; set; }
+        public virtual gamification gamification { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<requirement> requirements { get; set; }
-        public virtual gamification gamification { get; set; }
     }
 }

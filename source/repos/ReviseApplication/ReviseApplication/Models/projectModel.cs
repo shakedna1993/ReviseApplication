@@ -40,7 +40,7 @@ namespace ReviseApplication.Models
         [Display(Name = "Project Name")]
         public string projname { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "Please select gamigication method")]
         [Display(Name = "Gamification")]
         public string SelectedGame { get; set; }
         public IEnumerable<SelectListItem> Gamification { get; set; }

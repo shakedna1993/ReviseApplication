@@ -86,8 +86,6 @@
         <EntityType Name="requirement">
           <Key>
             <PropertyRef Name="reqId" />
-            <PropertyRef Name="projid" />
-            <PropertyRef Name="catid" />
           </Key>
           <Property Name="reqId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="reqName" Type="varchar" MaxLength="50" Nullable="false" />
@@ -286,18 +284,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_req_userCatReq">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="userCatReq">
-              <PropertyRef Name="usrid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_requirement_category">
           <End Role="category" Type="Self.category" Multiplicity="1" />
           <End Role="requirement" Type="Self.requirement" Multiplicity="*" />
@@ -331,6 +317,18 @@
             </Principal>
             <Dependent Role="userChat">
               <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userCatReq_requirement">
+          <End Role="requirement" Type="Self.requirement" Multiplicity="1" />
+          <End Role="userCatReq" Type="Self.userCatReq" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="requirement">
+              <PropertyRef Name="reqId" />
+            </Principal>
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="reqId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -408,10 +406,6 @@
             <End Role="user" EntitySet="user" />
             <End Role="projUser" EntitySet="projUser" />
           </AssociationSet>
-          <AssociationSet Name="FK_req_userCatReq" Association="Self.FK_req_userCatReq">
-            <End Role="user" EntitySet="user" />
-            <End Role="userCatReq" EntitySet="userCatReq" />
-          </AssociationSet>
           <AssociationSet Name="FK_requirement_category" Association="Self.FK_requirement_category">
             <End Role="category" EntitySet="category" />
             <End Role="requirement" EntitySet="requirement" />
@@ -423,6 +417,10 @@
           <AssociationSet Name="FK_user_userChat" Association="Self.FK_user_userChat">
             <End Role="user" EntitySet="user" />
             <End Role="userChat" EntitySet="userChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userCatReq_requirement" Association="Self.FK_userCatReq_requirement">
+            <End Role="requirement" EntitySet="requirement" />
+            <End Role="userCatReq" EntitySet="userCatReq" />
           </AssociationSet>
           <AssociationSet Name="FK_userCatReq_user" Association="Self.FK_userCatReq_user">
             <End Role="user" EntitySet="user" />
@@ -487,11 +485,12 @@
             <End Role="chat" EntitySet="chats" />
             <End Role="user" EntitySet="users" />
           </AssociationSet>
-          <EntitySet Name="userCatReqs" EntityType="ReviseDBModel.userCatReq" />
-          <AssociationSet Name="FK_req_userCatReq" Association="ReviseDBModel.FK_req_userCatReq">
-            <End Role="user" EntitySet="users" />
-            <End Role="userCatReq" EntitySet="userCatReqs" />
+          <EntitySet Name="gamifications" EntityType="ReviseDBModel.gamification" />
+          <AssociationSet Name="FK_project_gamification" Association="ReviseDBModel.FK_project_gamification">
+            <End Role="gamification" EntitySet="gamifications" />
+            <End Role="project" EntitySet="projects" />
           </AssociationSet>
+          <EntitySet Name="userCatReqs" EntityType="ReviseDBModel.userCatReq" />
           <AssociationSet Name="FK_userCatReq_user" Association="ReviseDBModel.FK_userCatReq_user">
             <End Role="user" EntitySet="users" />
             <End Role="userCatReq" EntitySet="userCatReqs" />
@@ -505,10 +504,9 @@
             <End Role="project" EntitySet="projects" />
             <End Role="requirement" EntitySet="requirements" />
           </AssociationSet>
-          <EntitySet Name="gamifications" EntityType="ReviseDBModel.gamification" />
-          <AssociationSet Name="FK_project_gamification" Association="ReviseDBModel.FK_project_gamification">
-            <End Role="gamification" EntitySet="gamifications" />
-            <End Role="project" EntitySet="projects" />
+          <AssociationSet Name="FK_userCatReq_requirement" Association="ReviseDBModel.FK_userCatReq_requirement">
+            <End Role="requirement" EntitySet="requirements" />
+            <End Role="userCatReq" EntitySet="userCatReqs" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="category">
@@ -584,9 +582,9 @@
           <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_proj" FromRole="project" ToRole="message" />
           <NavigationProperty Name="projCats" Relationship="ReviseDBModel.FK_projCat_project" FromRole="project" ToRole="projCat" />
           <NavigationProperty Name="projUsers" Relationship="ReviseDBModel.FK_projUser_project" FromRole="project" ToRole="projUser" />
-          <NavigationProperty Name="requirements" Relationship="ReviseDBModel.FK_requirement_project" FromRole="project" ToRole="requirement" />
           <Property Name="game" Type="Int32" />
           <NavigationProperty Name="gamification" Relationship="ReviseDBModel.FK_project_gamification" FromRole="project" ToRole="gamification" />
+          <NavigationProperty Name="requirements" Relationship="ReviseDBModel.FK_requirement_project" FromRole="project" ToRole="requirement" />
         </EntityType>
         <EntityType Name="projUser">
           <Key>
@@ -632,8 +630,7 @@
           <NavigationProperty Name="messages" Relationship="ReviseDBModel.FK_message_user" FromRole="user" ToRole="message" />
           <NavigationProperty Name="projUsers" Relationship="ReviseDBModel.FK_projUser_user" FromRole="user" ToRole="projUser" />
           <NavigationProperty Name="chats" Relationship="ReviseDBModel.userChat" FromRole="user" ToRole="chat" />
-          <NavigationProperty Name="userCatReqs" Relationship="ReviseDBModel.FK_req_userCatReq" FromRole="user" ToRole="userCatReq" />
-          <NavigationProperty Name="userCatReqs1" Relationship="ReviseDBModel.FK_userCatReq_user" FromRole="user" ToRole="userCatReq" />
+          <NavigationProperty Name="userCatReqs" Relationship="ReviseDBModel.FK_userCatReq_user" FromRole="user" ToRole="userCatReq" />
           </EntityType>
         <Association Name="FK_message_category">
           <End Type="ReviseDBModel.category" Role="category" Multiplicity="1" />
@@ -759,6 +756,26 @@
           <End Type="ReviseDBModel.chat" Role="chat" Multiplicity="*" />
           <End Type="ReviseDBModel.user" Role="user" Multiplicity="*" />
         </Association>
+        <EntityType Name="gamification">
+          <Key>
+            <PropertyRef Name="gamId" />
+          </Key>
+          <Property Name="gamId" Type="Int32" Nullable="false" />
+          <Property Name="gamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="projects" Relationship="ReviseDBModel.FK_project_gamification" FromRole="gamification" ToRole="project" />
+        </EntityType>
+        <Association Name="FK_project_gamification">
+          <End Type="ReviseDBModel.gamification" Role="gamification" Multiplicity="0..1" />
+          <End Type="ReviseDBModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gamification">
+              <PropertyRef Name="gamId" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="game" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="userCatReq">
           <Key>
             <PropertyRef Name="reqId" />
@@ -767,21 +784,9 @@
           <Property Name="reqId" Type="Int32" Nullable="false" />
           <Property Name="rate" Type="Int32" />
           <Property Name="usrid" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="user" Relationship="ReviseDBModel.FK_req_userCatReq" FromRole="userCatReq" ToRole="user" />
-          <NavigationProperty Name="user1" Relationship="ReviseDBModel.FK_userCatReq_user" FromRole="userCatReq" ToRole="user" />
+          <NavigationProperty Name="user" Relationship="ReviseDBModel.FK_userCatReq_user" FromRole="userCatReq" ToRole="user" />
+          <NavigationProperty Name="requirement" Relationship="ReviseDBModel.FK_userCatReq_requirement" FromRole="userCatReq" ToRole="requirement" />
         </EntityType>
-        <Association Name="FK_req_userCatReq">
-          <End Type="ReviseDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="ReviseDBModel.userCatReq" Role="userCatReq" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="userCatReq">
-              <PropertyRef Name="usrid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_userCatReq_user">
           <End Type="ReviseDBModel.user" Role="user" Multiplicity="1" />
           <End Type="ReviseDBModel.userCatReq" Role="userCatReq" Multiplicity="*" />
@@ -797,8 +802,6 @@
         <EntityType Name="requirement">
           <Key>
             <PropertyRef Name="reqId" />
-            <PropertyRef Name="projid" />
-            <PropertyRef Name="catid" />
           </Key>
           <Property Name="reqId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="reqName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -807,6 +810,7 @@
           <Property Name="catid" Type="Int32" Nullable="false" />
           <NavigationProperty Name="category" Relationship="ReviseDBModel.FK_requirement_category" FromRole="requirement" ToRole="category" />
           <NavigationProperty Name="project" Relationship="ReviseDBModel.FK_requirement_project" FromRole="requirement" ToRole="project" />
+          <NavigationProperty Name="userCatReqs" Relationship="ReviseDBModel.FK_userCatReq_requirement" FromRole="requirement" ToRole="userCatReq" />
         </EntityType>
         <Association Name="FK_requirement_category">
           <End Type="ReviseDBModel.category" Role="category" Multiplicity="1" />
@@ -832,23 +836,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="gamification">
-          <Key>
-            <PropertyRef Name="gamId" />
-          </Key>
-          <Property Name="gamId" Type="Int32" Nullable="false" />
-          <Property Name="gamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="projects" Relationship="ReviseDBModel.FK_project_gamification" FromRole="gamification" ToRole="project" />
-        </EntityType>
-        <Association Name="FK_project_gamification">
-          <End Type="ReviseDBModel.gamification" Role="gamification" Multiplicity="0..1" />
-          <End Type="ReviseDBModel.project" Role="project" Multiplicity="*" />
+        <Association Name="FK_userCatReq_requirement">
+          <End Type="ReviseDBModel.requirement" Role="requirement" Multiplicity="1" />
+          <End Type="ReviseDBModel.userCatReq" Role="userCatReq" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="gamification">
-              <PropertyRef Name="gamId" />
+            <Principal Role="requirement">
+              <PropertyRef Name="reqId" />
             </Principal>
-            <Dependent Role="project">
-              <PropertyRef Name="game" />
+            <Dependent Role="userCatReq">
+              <PropertyRef Name="reqId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -970,6 +966,14 @@
               <ScalarProperty Name="chatId" ColumnName="chatId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="gamifications">
+            <EntityTypeMapping TypeName="ReviseDBModel.gamification">
+              <MappingFragment StoreEntitySet="gamification">
+                <ScalarProperty Name="gamName" ColumnName="gamName" />
+                <ScalarProperty Name="gamId" ColumnName="gamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="userCatReqs">
             <EntityTypeMapping TypeName="ReviseDBModel.userCatReq">
               <MappingFragment StoreEntitySet="userCatReq">
@@ -987,14 +991,6 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="reqName" ColumnName="reqName" />
                 <ScalarProperty Name="reqId" ColumnName="reqId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="gamifications">
-            <EntityTypeMapping TypeName="ReviseDBModel.gamification">
-              <MappingFragment StoreEntitySet="gamification">
-                <ScalarProperty Name="gamName" ColumnName="gamName" />
-                <ScalarProperty Name="gamId" ColumnName="gamId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

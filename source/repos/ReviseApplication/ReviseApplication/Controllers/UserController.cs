@@ -46,14 +46,33 @@ namespace ReviseApplication.Controllers
             ViewBag.projid = projid;
 
             Session["Catid"] = catid;
-
+            string userId = Session["userid"].ToString();
+            UserScoreCalc(userId);
+            Session["UserScore"] = con.users.Find(userId).score;
             var showView = new Categories()
             {
-                category = cat.CatName,
-                //status = 
+                category = cat.CatName
             };
-
+     
             return View(showView);
+        }
+
+        public void UserScoreCalc(string usrid)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            int usrScore = 0;
+
+            List<message> message = con.messages.ToList();
+            int count = 0;
+
+            foreach (var msg in message)
+                if (msg.userid == usrid)
+                    count++;
+            usrScore = count;
+            if (usrScore == 0)
+                return ;
+            con.users.Find(usrid).score = usrScore;
+            con.SaveChanges();
         }
     }
 }

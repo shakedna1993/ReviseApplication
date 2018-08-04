@@ -30,11 +30,12 @@ namespace ReviseApplication.Models
 
     public class ReqRate
     {
-        [Display(Name = "Please enter a number between 0-100:")]
+        [Display(Name = " ")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter requirement rate")]
         [Range(0, 100)]
         public int reqvote { get; set; }
     }
+
 
     public class CategoryMain
     {

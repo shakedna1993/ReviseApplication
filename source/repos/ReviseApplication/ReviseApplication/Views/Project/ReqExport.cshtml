@@ -1,0 +1,110 @@
+﻿@using ReviseApplication.Models;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@model IEnumerable<ReviseApplication.Models.Categories>
+<html>
+<head>
+    <style>
+        table {
+            width: 800px;
+            table-layout: fixed;
+        }
+
+        td {
+            word-wrap: break-word;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width" />
+    <title>ReqExport</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="~/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        var doc = new jsPDF();
+
+        // We'll make our own renderer to skip this editor
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+
+        $('#cmd').click(function () {
+            doc.fromHTML($('#content').get(0), 15, 15, {
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+            doc.save('Requirements-list.pdf');
+        });
+    });
+    </script>
+</head>
+<body>
+        @Html.ActionLink("Back", "ProjectMain", "Project", new { @role = "button", @class = "btn btn-default" }) &nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="cmd" type="button" class="btn btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp;Export to PDF</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-default" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> &nbsp; print</button>
+        <div id="content">
+            <p dir="rtl">
+                <img src="~/css/revise_main.png" width="200" />
+            </p>
+            <center>
+                <div class="alert alert-warning" role="alert">
+                    <h4>
+                        <b>  Participants in project:</b>&nbsp;
+
+                        @foreach (var MemberProject in ViewBag.MemberProjectList)
+                {
+                    <us>
+                        @MemberProject.user.fname
+                        @MemberProject.user.lname
+                        @MemberProject.role1.RoleName
+                        &nbsp;
+                    </us>
+        }
+
+                    </h4>
+                </div>
+            </center>
+            <center>
+                <h1>
+                    <b>
+                        Requirements list for @Convert.ToString(Session["projectName"]) project
+                    </b>
+                </h1>
+            </center>
+            <br /><br />
+
+            <br /><br /><br />
+            @foreach (var item in Model)
+                {
+                    <table class="table">
+                        <tr class="active">
+                            <td>
+                                <h4>@item.category</h4>
+                                <br />
+                                <h5>@item.reqname</h5>
+                            </td>
+                        </tr>
+                        <tr class="active">
+                            <td>
+                                <p><h5>@item.reqdesc</h5></p>
+                            </td>
+                        </tr>
+                    </table>
+
+                }
+        </div>
+            <div id="editor"></div>
+</body>
+</html>

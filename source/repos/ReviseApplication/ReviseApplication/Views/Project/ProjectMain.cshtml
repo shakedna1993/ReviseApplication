@@ -128,14 +128,15 @@
                         <td nowrap>
                             @Html.ActionLink(" ", "ProjectDetails", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-primary glyphicon glyphicon-info-sign" })
                             @if (Convert.ToBoolean(Session["IsAdmin"]) || item.MemberRole == 6)
-                            {
-                                <label>
-                                    @Html.ActionLink(" ", "EditProject", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
-                                    @Html.ActionLink(" ", "Gamification", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-warning glyphicon glyphicon-king" })
-                                    @Html.ActionLink(" ", "Delete", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
-                                </label>
+    {
+                        <label>
+                            @Html.ActionLink(" ", "EditProject", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-pencil" })
+                            @Html.ActionLink(" ", "Gamification", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-warning glyphicon glyphicon-king" })
+                            @Html.ActionLink(" ", "Delete", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-danger glyphicon glyphicon-trash" })
+                        </label>
 
-                            }
+}
+                            @Html.ActionLink(" ", "ReqExport", "Project", new { id = item.projid }, new { @role = "button", @class = "btn btn-success glyphicon glyphicon-export" })
                         </td>
                     </tr>
                     i++;

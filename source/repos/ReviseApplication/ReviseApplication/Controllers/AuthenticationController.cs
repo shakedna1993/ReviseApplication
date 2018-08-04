@@ -75,6 +75,10 @@ namespace ReviseApplication.Controllers
                         System.Web.HttpContext.Current.Session["username"] = user.UserName;
                         Session["userid"] = user.userid;
                         Session["IsAdmin"] = user.IsAdmin;
+                        if(user.score != null)
+                            Session["UserScore"] = user.score;
+                        else
+                            Session["UserScore"] = 0;
                         System.Web.HttpContext.Current.Session.Timeout = 30;
                         return RedirectToAction("ProjectMain", "Project");
                     }
