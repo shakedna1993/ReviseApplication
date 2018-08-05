@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "my_layout";
 }
 
@@ -57,6 +56,10 @@
             color: darkblue;
             text-decoration: underline;
         }
+
+        li {
+            width: 110px;
+        }
     </style>
 </head>
 <body ng-controller="mainController" style="background-color:#E8E8E8;">
@@ -67,16 +70,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav navbar-right" style="margin-right:170px;">
+                <li class="nav-item active">
+                    <a class="nav-link"><span class=""></span><b>My Score:</b> @Convert.ToString(Session["UserScore"])</a>
+                </li>
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-user"></span> @Convert.ToString(Session["UserName"])
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/personalFile">Personal File</a>
+                        <a class="dropdown-item" href="/Authentication/PersonalFile">Personal File</a>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-item"> <span class="glyphicon glyphicon-user"></span> @Convert.ToString(Session["UserScore"])</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/Authentication/Logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a>

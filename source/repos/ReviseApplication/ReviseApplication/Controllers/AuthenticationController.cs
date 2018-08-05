@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using ReviseApplication.Models;
 using ReviseApplication.MyUtils;
+using ReviseApplication.Repository;
 
 namespace ReviseApplication.Controllers
 {
@@ -46,7 +47,17 @@ namespace ReviseApplication.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-    [HttpPost]
+        [HttpGet]
+        public ActionResult PersonalFile()
+        {
+            string user = Session["userid"].ToString();
+            var repo = new MainRepository();
+            var Main = repo.PersonalFileView(user);
+
+            return View(Main);
+        }
+
+        [HttpPost]
     [AllowAnonymous]
     public ActionResult Login(string username, string password)
         {
@@ -103,12 +114,64 @@ namespace ReviseApplication.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult PersonalFile(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string pic)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            string userInfo = Session["userid"].ToString();
+            var isUserExists = false;
+            if (firstname == con.users.Find(userInfo).fname && lastname == con.users.Find(userInfo).lname && username == con.users.Find(userInfo).UserName &&
+                EmailID == con.users.Find(userInfo).Email && phonenum == con.users.Find(userInfo).PhoneNum && string.IsNullOrEmpty(pic))
+            {
+                TempData["NoInfoChanges"] = "No Changes where made";
+                return RedirectToAction("ProjectMain", "Project");
+            }
+
+            if (string.IsNullOrEmpty(pic) && string.IsNullOrEmpty(con.users.Find(userInfo).pic))
+                pic = "https://he.gravatar.com/userimage/138919762/622efbcbeb0e8cea9b64cf6e8bffffc0.jpg";
+
+            #region Save to Database
+            try
+            {
+                using (var conn = new ReviseDBEntities())
+                {
+                    foreach (var usr in conn.users)
+                        if (usr.userid != userInfo)
+                            if (usr.UserName == username || usr.Email == EmailID)
+                                isUserExists = true;
+
+                    if (!isUserExists)
+                    {
+                        conn.users.Find(userInfo).Email = EmailID;
+                        conn.users.Find(userInfo).fname = firstname;
+                        conn.users.Find(userInfo).lname = lastname;
+                        conn.users.Find(userInfo).UserName = username;
+                        conn.users.Find(userInfo).PhoneNum = phonenum;
+                        if(!string.IsNullOrEmpty(pic))
+                            conn.users.Find(userInfo).pic = pic;
+                        conn.SaveChanges();
+                        #endregion
+                        return RedirectToAction("ProjectMain", "Project");
+                    }
+                    TempData["UserExist"] = "User with this user name or email is already exists";
+                    return RedirectToAction("ProjectMain", "Project");
+                }
+            }
+            catch
+            {
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("ProjectMain", "Project");
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult Registration(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string password, string pic, Nullable<System.DateTime> DateOfBirth)
         {
             if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname) || string.IsNullOrEmpty(username) ||
                 string.IsNullOrEmpty(EmailID) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(phonenum))
             {
-                return Json(new { success = false, message = "One or more fields is missing, Please fill all blank fields" });
+                TempData["EmptyFildes"] = "One or more fields is missing, Please fill all blank fields";
+                return RedirectToAction("Registration", "Authentication");
             }
 
             if (string.IsNullOrEmpty(pic))
@@ -140,12 +203,14 @@ namespace ReviseApplication.Controllers
             #endregion 
                         return RedirectToAction("Login", "Authentication");
                     }
-                    return Json(new { success = false, message = "User already exists!" });
+                    TempData["Exists"] = "User already exists!";
+                    return RedirectToAction("Registration", "Authentication");
                 }
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!!";
+                return RedirectToAction("Registration", "Authentication");
             }
         }
 

@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/empty_layout.cshtml";
-    ViewBag.Title = "Registration";
+    ViewBag.Title = "Personal File";
 }
 
 <!DOCTYPE html>
@@ -25,7 +25,7 @@
     <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
-    <title>Registration - Revise Application</title>
+    <title>Personal File - Revise Application</title>
     <style>
         body {
             background-color: #E8E8E8;
@@ -52,18 +52,6 @@
 </head>
 <body>
 
-    @if (TempData["EmptyFildes"] != null)
-    {
-        <p class="alert alert-warning" id="failedMessage">@TempData["EmptyFildes"]</p>
-    }
-    @if (TempData["Exists"] != null)
-    {
-        <p class="alert alert-warning" id="failedMessage">@TempData["Exists"]</p>
-    }
-    @if (TempData["Unknown"] != null)
-    {
-        <p class="alert alert-warning" id="failedMessage">@TempData["Unknown"]</p>
-    }
 
     @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
     {
@@ -87,7 +75,7 @@
                     <div class="col-md-4 center-block">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <strong>Registration</strong>
+                                <strong>Personal File</strong>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
@@ -103,10 +91,9 @@
                                             <div class="cols-sm-10">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                                    @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DisplayFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" ,disabled = "disabled", @readonly = "readonly" } })
                                                 </div>
                                             </div>
-                                            @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label cols-sm-2 " })
@@ -165,30 +152,9 @@
                                             <div class="cols-sm-10">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-birthday-cake" aria-hidden="true"></i></span>
-                                                    @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.DisplayFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control" ,disabled = "disabled", @readonly = "readonly" } })
                                                 </div>
                                             </div>
-                                            @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label cols-sm-2 " })
-                                            <div class="cols-sm-10">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
-                                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                                        </div>
-                                        <div class="form-group">
-                                            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label cols-sm-2 " })
-                                            <div class="cols-sm-10">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
-                                                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
-                                                </div>
-                                            </div>
-                                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
                                         </div>
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.pic, htmlAttributes: new { @class = "control-label cols-sm-2" })
@@ -202,10 +168,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group ">
-                                            <input type="submit" value="Registration" class="btn btn-primary btn-lg btn-block login-button" />
+                                            <input type="submit" value="Save Changes" class="btn btn-primary btn-lg btn-block login-button" />
                                         </div>
                                         <div>
-                                            @Html.ActionLink("Go back to Sign in", "Login", "Authentication")
+                                            @Html.ActionLink("Home", "ProjectMain", "Project")
                                         </div>
                                     </form>
                                 </div>

@@ -19,6 +19,12 @@
 </head>
 <body>
     @section ContentBody{
+
+        @if (TempData["Unknown"] != null)
+        {
+            <p class="alert alert-warning" id="failedMessage">@TempData["Unknown"]</p>
+        }
+
         @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
         {
             if (ViewBag.Message != null)

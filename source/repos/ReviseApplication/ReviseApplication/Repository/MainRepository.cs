@@ -121,6 +121,24 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        public UserRegestration PersonalFileView(string id)
+        {
+            ReviseDBEntities con = new ReviseDBEntities();
+            var user = con.users.Find(id);
+
+            var ShowView = new UserRegestration()
+            {
+                UserId = user.userid,
+                UserName = user.UserName,
+                FirstName = user.fname,
+                LastName = user.lname,
+                Phonenum = user.PhoneNum,
+                EmailID = user.Email,
+                DateOfBirth = user.birthday ?? DateTime.Today.Date
+            };
+            return ShowView;
+        }
+
         public ReqRate Vote(int reqid, string usrid)
         {
             ReviseDBEntities con = new ReviseDBEntities();

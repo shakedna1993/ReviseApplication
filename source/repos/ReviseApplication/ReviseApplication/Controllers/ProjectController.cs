@@ -201,7 +201,8 @@ namespace ReviseApplication.Controllers
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("EditProject", "Project");
             }
 
             if (ModelState.IsValid)
@@ -263,7 +264,8 @@ namespace ReviseApplication.Controllers
 
                 return RedirectToAction("ProjectMain", "Project");
             }
-            return Json(new { success = false, message = "Unknown error occurred!" });
+            TempData["Unknown"] = "Unknown error occurred!";
+            return RedirectToAction("EditProject", "Project");
         }
 
         [HttpPost]
@@ -274,11 +276,16 @@ namespace ReviseApplication.Controllers
             try
             {
                 if (string.IsNullOrEmpty(projname) || string.IsNullOrEmpty(projdesc) || SelectedUser == null)
-                    return Json(new { success = "Failed", error = "One or more field is empty" });
+                {
+                    TempData["EmptyFields"] = "One or more field is empty";
+                    return RedirectToAction("CreateProj", "Project");
+                }
+
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("CreateProj", "Project");
             }
 
             if (ModelState.IsValid)
@@ -348,7 +355,10 @@ namespace ReviseApplication.Controllers
             }
 
             if (SelectedUser == null)
-                return Json(new { success = "Failed", error = "No users selected" });
+            {
+                TempData["NoUsers"] = "No users selected";
+                return RedirectToAction("CreateProj", "Project");
+            }
             else
             {
                 StringBuilder sb = new StringBuilder();

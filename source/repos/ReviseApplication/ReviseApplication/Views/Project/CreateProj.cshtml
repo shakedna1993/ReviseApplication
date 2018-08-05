@@ -16,6 +16,18 @@
         {
             <p class="alert alert-danger" id="failedMessage">@TempData["FailedProj"]</p>
         }
+        @if (TempData["EmptyFields"] != null)
+        {
+            <p class="alert alert-warning" id="failedMessage">@TempData["EmptyFields"]</p>
+        }
+        @if (TempData["Unknown"] != null)
+        {
+            <p class="alert alert-warning" id="failedMessage">@TempData["Unknown"]</p>
+        }
+        @if (TempData["NoUsers"] != null)
+        {
+            <p class="alert alert-warning" id="failedMessage">@TempData["NoUsers"]</p>
+        }
         @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
         {
             if (ViewBag.Message != null)

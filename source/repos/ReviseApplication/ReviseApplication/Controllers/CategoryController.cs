@@ -254,11 +254,15 @@ namespace ReviseApplication.Controllers
             try
             {
                 if (string.IsNullOrEmpty(catname) || totalLimit == null)
-                    return Json(new { success = "Failed", error = "One or more field is empty" });
+                {
+                    TempData["EmptyFields"] = "One or more field is empty";
+                    return RedirectToAction("EditCategory", "Category");
+                }
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["FailedVote"] = "Unknown error occurred!";
+                return RedirectToAction("EditCategory", "Category");
             }
 
             ReviseDBEntities con = new ReviseDBEntities();
@@ -273,7 +277,8 @@ namespace ReviseApplication.Controllers
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("EditCategory", "Category");
             }
 
             if (ModelState.IsValid)
@@ -293,11 +298,15 @@ namespace ReviseApplication.Controllers
             try
             {
                 if (string.IsNullOrEmpty(catname) || totalLimit == null)
-                    return Json(new { success = "Failed", error = "One or more field is empty" });
+                {
+                    TempData["EmptyFields"] = "One or more field is empty";
+                    return RedirectToAction("CreateCategory", "Category");
+                }
             }
             catch
             {
-                return Json(new { success = false, message = "Unknown error occurred!" });
+                TempData["Unknown"] = "Unknown error occurred!";
+                return RedirectToAction("CreateCategory", "Category");
             }
             if (ModelState.IsValid)
             {
