@@ -52,7 +52,8 @@ namespace ReviseApplication.Controllers
                 cat.projCats.SingleOrDefault(p => p.project.ProjId == id).score = Convert.ToInt32(total);
                 int TotalLimit = cat.projCats.SingleOrDefault(p => p.project.ProjId == id).totalLimit ?? 0;
                 int Req = 0;
-                int UserScore = 0;
+                int usrCount = 0;
+                int reqCount = 0;
 
                 if (con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid) != null)
                      Req = con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid).reqId;
@@ -62,16 +63,20 @@ namespace ReviseApplication.Controllers
                 List<userCatReq> Vote = con.userCatReqs.Where(r => r.reqId == Req).ToList();
                 int? VoteSum = 0;
                 foreach (var v in Vote)
-                    VoteSum = v.rate;
+                    VoteSum = VoteSum + v.rate;
                 if (VoteSum != 0)
                     prjcat.status = VoteSum / VoteCount;
 
                 if (prjcat.status == null)
                     prjcat.status = 0;
-    
-                if (TotalLimit >= prjcat.status)
-                    prjcat.isActive = true;
 
+                usrCount = con.projUsers.Where(p => p.projid == prjcat.projId).Count();
+                foreach(var req in con.userCatReqs.Where(r => r.reqId == Req).ToList())
+                    if (req.rate != null)
+                        reqCount++;
+
+                if (TotalLimit >= prjcat.status || usrCount > reqCount)
+                    prjcat.isActive = true;
 
                 else
                     prjcat.isActive = false;
@@ -273,12 +278,21 @@ namespace ReviseApplication.Controllers
             try
             {
                 if (CatName == catname && CatLimit == totalLimit)
-                    return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString()});
+                {
+                    TempData["NoChanges"] = "No changes made";
+                    return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
+                }
+                if(CatName != catname && con.projCats.Where(p => p.projId == projid).Any(c => c.category.CatName == catname))
+                {
+                    TempData["CatExist"] = "Category with this name already exist";
+                    return RedirectToAction("EditCategory", "Category", new { id = id, projid = projid });
+                }
+                   
             }
             catch
             {
                 TempData["Unknown"] = "Unknown error occurred!";
-                return RedirectToAction("EditCategory", "Category");
+                return RedirectToAction("EditCategory", "Category", new { id = id, projid = projid });
             }
 
             if (ModelState.IsValid)

@@ -30,6 +30,8 @@ namespace ReviseApplication.Controllers
             }
             category cat = con.categories.SingleOrDefault(c => c.CatId == catid);
             project proj = con.projects.SingleOrDefault(p => p.ProjId == projid);
+            int pid = proj.ProjId;
+            int cid = cat.CatId;
             var prj = con.projUsers.Where(u => u.projid == proj.ProjId).ToList();
 
             if (cat == null)
@@ -51,7 +53,8 @@ namespace ReviseApplication.Controllers
             Session["UserScore"] = con.users.Find(userId).score;
             var showView = new Categories()
             {
-                category = cat.CatName
+                category = cat.CatName,
+                status = con.projCats.Find(pid, cid).status ?? 0
             };
      
             return View(showView);

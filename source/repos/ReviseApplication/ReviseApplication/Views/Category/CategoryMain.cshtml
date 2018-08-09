@@ -44,6 +44,10 @@
     {
         <p class="alert alert-warning" id="failedMessage">@TempData["NoReq"]</p>
     }
+    @if (TempData["NoChanges"] != null)
+    {
+        <p class="alert alert-warning" id="failedMessage">@TempData["NoChanges"]</p>
+    }
     @if (TempData["emptyIDcat"] != null)
     {
         <p class="alert alert-warning" id="failedMessage">@TempData["emptyIDcat"]</p>

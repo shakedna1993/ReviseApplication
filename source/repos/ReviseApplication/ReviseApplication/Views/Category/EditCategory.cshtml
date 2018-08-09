@@ -23,6 +23,10 @@
         {
             <p class="alert alert-warning" id="failedMessage">@TempData["Unknown"]</p>
         }
+        @if (TempData["CatExist"] != null)
+        {
+            <p class="alert alert-warning" id="failedMessage">@TempData["CatExist"]</p>
+        }
         @if (TempData["EmptyFields"] != null)
         {
             <p class="alert alert-warning" id="failedMessage">@TempData["EmptyFields"]</p>

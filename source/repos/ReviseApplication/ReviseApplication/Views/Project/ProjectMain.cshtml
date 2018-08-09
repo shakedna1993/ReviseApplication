@@ -34,6 +34,10 @@
     {
         <p class="alert alert-warning" id="failedMessage">@TempData["Unknown"]</p>
     }
+    @if (TempData["NoChanges"] != null)
+    {
+        <p class="alert alert-warning" id="failedMessage">@TempData["NoChanges"]</p>
+    }
     @using ReviseApplication.Models;
     @*
         @{

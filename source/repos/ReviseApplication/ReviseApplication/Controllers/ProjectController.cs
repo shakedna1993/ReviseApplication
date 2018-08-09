@@ -68,10 +68,30 @@ namespace ReviseApplication.Controllers
 
             foreach(var pr in Nodup)
             {
+                int active = 0;
                 projectModel proj = new projectModel();
                 proj.projid = pr.projid;
                 proj.Date = pr.project.creation_date.ToString("dd/MM/yyyy");
-                proj.status = pr.project.status;
+                foreach (var prjc in con.projCats.Where(p => p.projId == pr.projid).ToList())
+                    if (prjc.isActive == true || prjc.isActive == null)
+                        active++;
+                if (active == 0)
+                {
+                    con.projects.Find(pr.projid).status = "Close";
+                    con.SaveChanges();
+                    proj.status = "Close";
+                }
+                else
+                {
+                    if (con.projects.Find(pr.projid).status == "Open")
+                        proj.status = pr.project.status;
+                    else
+                    {
+                        con.projects.Find(pr.projid).status = "Open";
+                        con.SaveChanges();
+                        proj.status = "Open";
+                    }
+                }
                 proj.projname = pr.project.ProjName;
                 proj.MemberRole = pr.role ?? 7;
                 memberslist.Add(con.projUsers.Where(u => u.projid == pr.projid));
@@ -197,12 +217,22 @@ namespace ReviseApplication.Controllers
             try
             {
                 if (projname == Pname && projdesc == Pdesc && SelectedUser == null && SelectRemoveUser == null)
+                {
+                    TempData["NoChanges"] = "No changes made";
                     return RedirectToAction("ProjectMain", "Project");
+                }
+
+                if(con.projects.Any(p => p.ProjName == projname))
+                {
+                    TempData["ProjExist"] = "Project with this name already exist";
+                    return RedirectToAction("EditProject", "Project", new { id = id });
+                }
+                    
             }
             catch
             {
                 TempData["Unknown"] = "Unknown error occurred!";
-                return RedirectToAction("EditProject", "Project");
+                return RedirectToAction("EditProject", "Project", new { id = id });
             }
 
             if (ModelState.IsValid)

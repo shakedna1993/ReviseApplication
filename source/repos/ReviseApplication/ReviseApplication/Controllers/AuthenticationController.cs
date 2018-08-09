@@ -123,7 +123,7 @@ namespace ReviseApplication.Controllers
                 EmailID == con.users.Find(userInfo).Email && phonenum == con.users.Find(userInfo).PhoneNum && string.IsNullOrEmpty(pic))
             {
                 TempData["NoInfoChanges"] = "No Changes where made";
-                return RedirectToAction("ProjectMain", "Project");
+                return RedirectToAction("PersonalFile", "Authentication");
             }
 
             if (string.IsNullOrEmpty(pic) && string.IsNullOrEmpty(con.users.Find(userInfo).pic))
@@ -146,22 +146,23 @@ namespace ReviseApplication.Controllers
                         conn.users.Find(userInfo).lname = lastname;
                         conn.users.Find(userInfo).UserName = username;
                         conn.users.Find(userInfo).PhoneNum = phonenum;
-                        if(!string.IsNullOrEmpty(pic))
+                        if (!string.IsNullOrEmpty(pic))
                             conn.users.Find(userInfo).pic = pic;
                         conn.SaveChanges();
                         #endregion
                         return RedirectToAction("ProjectMain", "Project");
                     }
                     TempData["UserExist"] = "User with this user name or email is already exists";
-                    return RedirectToAction("ProjectMain", "Project");
+                    return RedirectToAction("PersonalFile", "Authentication");
                 }
             }
             catch
             {
                 TempData["Unknown"] = "Unknown error occurred!";
-                return RedirectToAction("ProjectMain", "Project");
+                return RedirectToAction("PersonalFile", "Authentication");
             }
         }
+
 
         [HttpPost]
         [AllowAnonymous]
