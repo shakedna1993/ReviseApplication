@@ -6,8 +6,16 @@ using System.Web.Mvc;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class to get user for removal
+    /// </summary>
     public class RemoveUsers
     {
+        /// <summary>
+        /// function that gets members of project and add them to a list
+        /// </summary>
+        /// <param name="id">project id</param>
+        /// <returns>returns list of users to remove from a project</returns>
         public IEnumerable<SelectListItem> GetUsers(int? id)
         {
             using (var context = new ReviseDBEntities())

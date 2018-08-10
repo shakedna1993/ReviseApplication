@@ -15,18 +15,26 @@ using System.Net;
 
 namespace ReviseApplication.Controllers
 {
+    /// <summary>
+    /// controller for all the things connected to projects
+    /// </summary>
     public class ProjectController : Controller
     {
+        /// <summary>
+        /// function for assign role to uesrs in a project
+        /// </summary>
+        /// <param name="id">the project id</param>
+        /// <returns></returns>
         public ActionResult AssignMembers(int? id)
         {
 
             List<user> memberslist = new List<user>();
             ReviseDBEntities con = new ReviseDBEntities();
             List<user> Allusers = new List<user>();
-            var prj = con.projUsers.Where(u => u.projid == id).ToList();
+            var prj = con.projUsers.Where(u => u.projid == id).ToList();  //finding all the project uesrs
 
             foreach (var p in prj)
-                memberslist.Add(con.users.SingleOrDefault(u => u.userid == p.userid));
+                memberslist.Add(con.users.SingleOrDefault(u => u.userid == p.userid));   //creating a list from those users
     
             ViewBag.memberslist = memberslist;
             Session["AssignList"] = memberslist;
@@ -55,6 +63,7 @@ namespace ReviseApplication.Controllers
             int usrScore = 0;
             int usrproj = 0;
 
+            //if the connected user is admin, shows him all projects
             if (con.users.Find(userId).IsAdmin == true)
                 prj = con.projUsers.ToList();
 
@@ -66,12 +75,14 @@ namespace ReviseApplication.Controllers
                         break;
                     }
 
-            foreach(var pr in Nodup)
+            foreach(var pr in Nodup)   //shows only the projects the user is assign to
             {
                 int active = 0;
                 projectModel proj = new projectModel();
                 proj.projid = pr.projid;
                 proj.Date = pr.project.creation_date.ToString("dd/MM/yyyy");
+
+                //updating the project status
                 foreach (var prjc in con.projCats.Where(p => p.projId == pr.projid).ToList())
                     if (prjc.isActive == true || prjc.isActive == null)
                         active++;
@@ -96,6 +107,8 @@ namespace ReviseApplication.Controllers
                 proj.MemberRole = pr.role ?? 7;
                 memberslist.Add(con.projUsers.Where(u => u.projid == pr.projid));
                 usrproj = UserScoreCalc(pr.projid, userId);
+
+                //calculating the project score
                 foreach (var p in con.projUsers.Where(p => p.projid == pr.projid).ToList())
                     prjScore = prjScore + p.grade ?? prjScore;
                 usrScore = usrScore + usrproj;
@@ -116,6 +129,10 @@ namespace ReviseApplication.Controllers
             return View(ProjectsList.ToList());
         }
 
+        /// <summary>
+        /// function to show the page of create new project
+        /// </summary>
+        /// <returns>create project view</returns>
         [HttpGet]
         public ActionResult CreateProj()
         {
@@ -124,18 +141,28 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function to show the page of project details
+        /// </summary>
+        /// <param name="id">project id</param>
+        /// <returns>shows the project details</returns>
         [HttpGet]
         public ActionResult ProjectDetails(int? id)
         {
-            Session["projId"] = id;
+            Session["projId"] = id;   //updating project id
             var repo = new MainRepository();
             var Main = repo.ProjView(id);
             ReviseDBEntities con = new ReviseDBEntities();
-            List<projUser> proj = con.projUsers.Where(p => p.projid == id).ToList();
+            List<projUser> proj = con.projUsers.Where(p => p.projid == id).ToList();  //get all the participents of the project
             ViewBag.members = proj;
             return View(Main);
         }
 
+        /// <summary>
+        /// function to show the page of edit project
+        /// </summary>
+        /// <param name="id">the project id</param>
+        /// <returns>shows the edit screen</returns>
         [HttpGet]
         public ActionResult EditProject(int? id)
         {
@@ -147,8 +174,12 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function that shows the choose gamification page
+        /// </summary>
+        /// <param name="id">project id</param>
+        /// <returns>shows the gamification page</returns>
         [HttpGet]
-
         public ActionResult Gamification(int ? id)
         {
             Session["GameProjId"] = id;
@@ -157,9 +188,15 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function that set gamification method for a project
+        /// </summary>
+        /// <param name="SelectedGame">the name of the selected gamification method</param>
+        /// <returns>redirect to project main screen</returns>
         [HttpPost]
         public ActionResult Gamification(IEnumerable<string> SelectedGame)
         {
+            //if no method selected
             if (SelectedGame == null)
             {
                 TempData["NoGame"] = "No gamfication method selected";
@@ -167,7 +204,7 @@ namespace ReviseApplication.Controllers
             }
 
             var ChooseAssignGame = SelectedGame.ToList();
-            int proj = Convert.ToInt32(Session["GameProjId"]);
+            int proj = Convert.ToInt32(Session["GameProjId"]);  //gets project id
             ReviseDBEntities con = new ReviseDBEntities();
 
             if (ChooseAssignGame.SingleOrDefault() == "")
@@ -175,7 +212,7 @@ namespace ReviseApplication.Controllers
                 TempData["NoGame"] = "No gamfication method selected";
                 return RedirectToAction("ProjectMain", "Project");
             }
-            else
+            else  //update the projet gamification method
             {
                 int game_id = Int32.Parse(ChooseAssignGame.SingleOrDefault());
                 var game = con.gamifications.Where(g => g.gamId == game_id);
@@ -188,6 +225,11 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("ProjectMain", "Project");
         }
 
+        /// <summary>
+        /// function that shows all project of the user, project main screen
+        /// </summary>
+        /// <param name="txtfind">search result</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [Authorize]
@@ -198,7 +240,14 @@ namespace ReviseApplication.Controllers
             return View(projects.ToList());
         }
 
-
+        /// <summary>
+        /// function that edit the project details
+        /// </summary>
+        /// <param name="projname">the provided project name</param>
+        /// <param name="projdesc">the provided project description</param>
+        /// <param name="SelectRemoveUser">the provided users to remove from the project</param>
+        /// <param name="SelectedUser">the provided users to add to the project</param>
+        /// <returns>redirect to project main screen, if theres an error- redirect to the edit screen with error</returns>
         [HttpPost]
         [AllowAnonymous]
         [Authorize]
@@ -214,6 +263,7 @@ namespace ReviseApplication.Controllers
             List<message> MessagesToDel = new List<message>();
             List<user> Remove = new List<user>();
 
+            //if nothing change or project with this name already exist
             try
             {
                 if (projname == Pname && projdesc == Pdesc && SelectedUser == null && SelectRemoveUser == null)
@@ -221,13 +271,13 @@ namespace ReviseApplication.Controllers
                     TempData["NoChanges"] = "No changes made";
                     return RedirectToAction("ProjectMain", "Project");
                 }
-
-                if(con.projects.Any(p => p.ProjName == projname))
-                {
-                    TempData["ProjExist"] = "Project with this name already exist";
-                    return RedirectToAction("EditProject", "Project", new { id = id });
-                }
-                    
+                List<project> prjlist = con.projects.ToList();
+                foreach(var prj in prjlist)
+                    if (prj.ProjId != id && prj.ProjName == projname)
+                    {
+                        TempData["ProjExist"] = "Project with this name already exist";
+                        return RedirectToAction("EditProject", "Project", new { id = id });
+                    }
             }
             catch
             {
@@ -235,6 +285,7 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("EditProject", "Project", new { id = id });
             }
 
+            //updating the project information
             if (ModelState.IsValid)
             {
                 con.projects.Find(id).ProjName = projname;
@@ -274,7 +325,7 @@ namespace ReviseApplication.Controllers
 
                     List<projUser> prjUser = new List<projUser>();
 
-                    foreach (var usr in Assigned)
+                    foreach (var usr in Assigned)   //assign users to the project
                     {
                         var prjusr = new projUser();
                         prjusr.project = proj;
@@ -298,6 +349,13 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("EditProject", "Project");
         }
 
+        /// <summary>
+        /// function for project creation
+        /// </summary>
+        /// <param name="projname">the provided project name</param>
+        /// <param name="projdesc">the provided project description</param>
+        /// <param name="SelectedUser">the provided users to assign</param>
+        /// <returns>redirect to project main screen, if theres errors- redirect to create screen with error</returns>
         [HttpPost]
         [AllowAnonymous]
         [Authorize]
@@ -305,7 +363,7 @@ namespace ReviseApplication.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(projname) || string.IsNullOrEmpty(projdesc) || SelectedUser == null)
+                if (string.IsNullOrEmpty(projname) || string.IsNullOrEmpty(projdesc) || SelectedUser == null) //if fileds are empty
                 {
                     TempData["EmptyFields"] = "One or more field is empty";
                     return RedirectToAction("CreateProj", "Project");
@@ -318,6 +376,7 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("CreateProj", "Project");
             }
 
+            //updating the DB- create new project
             if (ModelState.IsValid)
             {
                 ReviseDBEntities con = new ReviseDBEntities();
@@ -338,7 +397,7 @@ namespace ReviseApplication.Controllers
 
                 List<projUser> Allusers = new List<projUser>();
 
-                foreach (var usr in usrList)
+                foreach (var usr in usrList)   //users to assign to the project
                 {
                     var prjusr = new projUser();
                     prjusr.project = proj;
@@ -365,6 +424,8 @@ namespace ReviseApplication.Controllers
                 
                 List<category> catlist = new List<category>();
                 catlist = con.categories.ToList();
+
+                //link categories to the project
                 foreach (var cat in catlist)
                 {
                     projCat entity = new projCat();
@@ -402,6 +463,12 @@ namespace ReviseApplication.Controllers
 
         }
 
+        /// <summary>
+        /// function that assign roles for users in a project
+        /// </summary>
+        /// <param name="SelectedDepartment">the users department</param>
+        /// <param name="SelectedRole">the users role</param>
+        /// <returns>redirect to project main screen, if there are errors- redirect to assign members with error</returns>
         [HttpPost]
         public ActionResult AssignMembers(IEnumerable<string> SelectedDepartment, IEnumerable<string> SelectedRole)
         {
@@ -414,7 +481,7 @@ namespace ReviseApplication.Controllers
             int proj = Convert.ToInt32(Session["IdProjectToAssign"]);
             ReviseDBEntities con = new ReviseDBEntities();
 
-
+            //checks if department and role selected, if so- updating the role of the users in the project
             for (int i = 0; i < UsersToAssign.Count; i++)
             {
                 if ((ChooseAssigndep.ElementAt(i) == "") ||(ChooseAssignrole.ElementAt(i) == ""))
@@ -448,6 +515,11 @@ namespace ReviseApplication.Controllers
             // return RedirectToAction("CategoryMain/" + Convert.ToInt32(Session["IdProjectToAssign"]) + "", "Category", new { id = proj });
         }
 
+        /// <summary>
+        /// function that delete specific project
+        /// </summary>
+        /// <param name="id">the project id for delete</param>
+        /// <returns>returns to the project main</returns>
         [HttpGet]
         public ActionResult Delete(int? id)
         {
@@ -464,6 +536,11 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function that delete specific project
+        /// </summary>
+        /// <param name="id">the category id for project</param>
+        /// <returns>pop up message to verify delete</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -471,16 +548,17 @@ namespace ReviseApplication.Controllers
             ReviseDBEntities con = new ReviseDBEntities();
             project proj = con.projects.Find(id);
             var prjusr = con.projUsers.Where(p => p.projid == id).ToList();
+            //removes the users from the project
             if (prjusr != null)
             {
-                foreach (var prj in prjusr)
+                foreach (var prj in prjusr) 
                     con.projUsers.Remove(prj);
             }
-
+            //remove all project catefories
             var prjcat = con.projCats.Where(p => p.projId == id).ToList();
             foreach (var prj in prjcat)
                 con.projCats.Remove(prj);
-
+            //remove the project
             var Projreq = con.requirements.Where(p => p.projid == id).ToList();
             if (Projreq != null)
             {
@@ -500,6 +578,12 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("ProjectMain", "Project");
         }
 
+        /// <summary>
+        /// function for score calculation
+        /// </summary>
+        /// <param name="prjid">the project id</param>
+        /// <param name="usrid">the user id</param>
+        /// <returns>returns the score of the user in the project</returns>
         public int UserScoreCalc(int prjid, string usrid)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -519,6 +603,11 @@ namespace ReviseApplication.Controllers
             return usrPrjScore;
         }
 
+        /// <summary>
+        /// function for exporting software requirement specification document
+        /// </summary>
+        /// <param name="id">the project id</param>
+        /// <returns>shows the document</returns>
         public ActionResult ReqExport(int id)
         {
             ReviseDBEntities con = new ReviseDBEntities();

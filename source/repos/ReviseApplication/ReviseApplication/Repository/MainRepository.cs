@@ -7,23 +7,34 @@ using System.Web.Mvc;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class for creating views
+    /// </summary>
     public class MainRepository
     {
+        /// <summary>
+        /// function that creates view for assign role to users in a project
+        /// </summary>
+        /// <returns>returns updated model to show in the view</returns>
         public AssignToProj CreateView()
         {
-            var dRepo = new DepartmentRepository();
-            var rRepo = new RoleRepository();
-            var ShowView = new AssignToProj()
+            var dRepo = new DepartmentRepository();   //gets list of departments
+            var rRepo = new RoleRepository();         //gets list of rols
+            var ShowView = new AssignToProj()         //updating assigntoproj model
             {
                 Departments = dRepo.GetDepart(),
                 Roles = rRepo.GetRole()
             };
-            return ShowView;
+            return ShowView;                        
         }
 
+        /// <summary>
+        /// function that creates view for create project
+        /// </summary>
+        /// <returns>returns updated model to show in the view</returns>
         public CreateProj ProjCreateView()
         {
-            var uRepo = new UserRepository();
+            var uRepo = new UserRepository();     //gets users list
             var ShowView = new CreateProj()
             {
                 Users = uRepo.GetUsers(),
@@ -31,11 +42,16 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        /// <summary>
+        /// function that creates view edit project
+        /// </summary>
+        /// <param name="id"> project id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public EditProject EditProjView(int? id)
         {
-            ReviseDBEntities con = new ReviseDBEntities();
-            var uRepo = new AssignUserRepository();
-            var rRepo = new RemoveUsers();
+            ReviseDBEntities con = new ReviseDBEntities();      //connection to the DB
+            var uRepo = new AssignUserRepository();             //gets user list to assign
+            var rRepo = new RemoveUsers();                      //gets user list to remove
 
             var ShowView = new EditProject()
             {
@@ -48,6 +64,11 @@ namespace ReviseApplication.Repository
             return (ShowView);
         }
 
+        /// <summary>
+        /// function that create view for project details  
+        /// </summary>
+        /// <param name="id">project id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public ProjectDetails ProjView(int? id)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -67,6 +88,12 @@ namespace ReviseApplication.Repository
             return (ShowView);
         }
 
+        /// <summary>
+        /// function that create view for category main
+        /// </summary>
+        /// <param name="uid">user id</param>
+        /// <param name="pid">project id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public CategoryMain CatView(string uid, int? pid)
         {
             List<category> CatList = new List<category>();
@@ -90,6 +117,12 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        /// <summary>
+        /// function that create view for category main 
+        /// </summary>
+        /// <param name="catid">category id</param>
+        /// <param name="projid">project id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public CreateCategory CatEditView(int? catid, int projid)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -107,6 +140,11 @@ namespace ReviseApplication.Repository
 
         }
 
+        /// <summary>
+        /// function that create view for requirement page
+        /// </summary>
+        /// <param name="id">requirement id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public Categories Requirement(int id)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -121,6 +159,11 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        /// <summary>
+        /// function that create view for personal file page
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public UserRegestration PersonalFileView(string id)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -139,6 +182,12 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+        /// <summary>
+        /// function that create view for vote page
+        /// </summary>
+        /// <param name="reqid">requirement id</param>
+        /// <param name="usrid">user id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public ReqRate Vote(int reqid, string usrid)
         {
             ReviseDBEntities con = new ReviseDBEntities();
@@ -150,6 +199,12 @@ namespace ReviseApplication.Repository
             return ShowView;
         }
 
+
+        /// <summary>
+        /// function that create view for gamification choice
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <returns>returns updated model to show in the view</returns>
         public Gamfication GameView(int ? id)
         {
             ReviseDBEntities con = new ReviseDBEntities();

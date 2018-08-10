@@ -6,8 +6,15 @@ using System.Web.Mvc;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class for getting all gamification
+    /// </summary>
     public class GameRepository
     {
+        /// <summary>
+        /// function that gets all the gamification and puts them in a dropdown list
+        /// </summary>
+        /// <returns>returns select list of gamification</returns>
         public IEnumerable<SelectListItem> GetGame()
         {
             using (var context = new ReviseDBEntities())

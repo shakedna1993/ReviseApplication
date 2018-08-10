@@ -10,8 +10,17 @@ using ReviseApplication.Repository;
 
 namespace ReviseApplication.Controllers
 {
+    /// <summary>
+    /// Category contorller contains all the related pages of categories and requirements
+    /// </summary>
     public class CategoryController : Controller
     {
+        /// <summary>
+        /// function that shows all the categories of a project
+        /// calculets each category status
+        /// </summary>
+        /// <param name="id">the project id</param>
+        /// <returns>View the categories of the project</returns>
         // GET: Category
         [HttpGet]
         public ActionResult CategoryMain(int? id)
@@ -35,10 +44,10 @@ namespace ReviseApplication.Controllers
             foreach (var p in prj)
                 memberslist.Add(p.user);
 
-            ViewBag.memberslist = memberslist;
+            ViewBag.memberslist = memberslist;   //the members fo the project
             Session["MemberInProj"] = memberslist;
 
-           foreach(var cat in catlist)
+           foreach(var cat in catlist) //going over all the categories anf find the categories of the project
             {
                 var prjcat = cat.projCats.SingleOrDefault(p => p.project.ProjId == id);
                 int catid = cat.CatId;
@@ -55,6 +64,7 @@ namespace ReviseApplication.Controllers
                 int usrCount = 0;
                 int reqCount = 0;
 
+                //the calculation of the project status
                 if (con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid) != null)
                      Req = con.requirements.Where(p => p.projid == prjcat.projId).SingleOrDefault(c => c.catid == catid).reqId;
                 int VoteCount = con.userCatReqs.Count(r => r.reqId == Req);
@@ -75,6 +85,7 @@ namespace ReviseApplication.Controllers
                     if (req.rate != null)
                         reqCount++;
 
+                //checks if the category is open for discussion or closed
                 if (TotalLimit >= prjcat.status || usrCount > reqCount)
                     prjcat.isActive = true;
 
@@ -84,7 +95,8 @@ namespace ReviseApplication.Controllers
                 // if the thresholdScoreValue bigger than the thresholdScore so the requirement is aprroved
                 if (total >= cat.projCats.SingleOrDefault(p => p.project.ProjId == id).score)
                     prjcat.isFinish = true;
-
+                
+                //updating the DB
                 con.projCats.Find(id, catid).isActive = prjcat.isActive;
                 con.projCats.Find(id, catid).isFinish = prjcat.isFinish;
                 con.projCats.Find(id, catid).status = prjcat.status;
@@ -97,6 +109,13 @@ namespace ReviseApplication.Controllers
             //return View();
         }
 
+        /// <summary>
+        /// function that shows the create category view
+        /// </summary>
+        /// <param name="projid">the project id</param>
+        /// <returns>create category view</returns>
+        /// 
+        //GET: CreateCategory 
         [HttpGet]
         public ActionResult CreateCategory(int? projid)
         {
@@ -104,6 +123,13 @@ namespace ReviseApplication.Controllers
             return View();
         }
 
+        /// <summary>
+        /// function that shows the edit category view
+        /// </summary>
+        /// <param name="id">the category id </param>
+        /// <param name="projid">the project id</param>
+        /// <returns>edit category view</returns>
+        //GET: EditCategory 
         [HttpGet]
         public ActionResult EditCategory(int? id, int projid)
         {
@@ -112,12 +138,19 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function that shows the requirement view
+        /// </summary>
+        /// <returns>requirement view</returns>
+        //GET: Requirement 
         [HttpGet]
         public ActionResult Requirement()
         {
+            //getting the project and category id
             int projId = Convert.ToInt32(Session["projectid"]);
             int catId = Convert.ToInt32(Session["Catid"]);
 
+            //checks if a requirement exist
             ReviseDBEntities con = new ReviseDBEntities();
             int req = 0;
             if (con.requirements.Where(p => p.projid == projId).SingleOrDefault(c => c.catid == catId) != null)
@@ -137,15 +170,22 @@ namespace ReviseApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// function that shows the vote view
+        /// </summary>
+        /// <returns>vote view</returns>
         [HttpGet]
+        //GET: Vote 
         public ActionResult Vote()
         {
+            //gets the project, category and requirement id
             int projId = Convert.ToInt32(Session["projectid"]);
             int catId = Convert.ToInt32(Session["Catid"]);
             int reqId = Convert.ToInt32(Session["ReqId"]);
             int IsExist = Convert.ToInt32(Session["ReqExisit"]);
             string userID = Session["userid"].ToString();
 
+            //checks if a vote exist
             ReviseDBEntities con = new ReviseDBEntities();
             if (IsExist == 1)
             {
@@ -160,12 +200,20 @@ namespace ReviseApplication.Controllers
             return View();
         }
 
+        /// <summary>
+        /// the function create requirement for a category in a project
+        /// </summary>
+        /// <param name="reqname"> the name of the requirement</param>
+        /// <param name="reqdesc">the description of the requirement</param>
+        /// <returns> redirect to the requirement view, if not everything is OK shows error</returns>
         [HttpPost]
         public ActionResult Requirement(string reqname, string reqdesc)
         {
+            //gets the project and category id
             int projId = Convert.ToInt32(Session["projectid"]);
             int catId = Convert.ToInt32(Session["Catid"]);
 
+            //check if no requirement created
             try
             {
                 if (string.IsNullOrEmpty(reqname) || string.IsNullOrEmpty(reqdesc))
@@ -180,6 +228,7 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("Requirement", "Category");  
             }
 
+            //if requirement created, adding it to the DB
             if (ModelState.IsValid)
             {
                 ReviseDBEntities con = new ReviseDBEntities();
@@ -210,9 +259,15 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("Requirement", "Category");
         }
 
+        /// <summary>
+        /// the function updates usres vote on requirement
+        /// </summary>
+        /// <param name="reqvote">the number the user vote</param>
+        /// <returns>redirect to the same page</returns>
         [HttpPost]
         public ActionResult Vote(int reqvote)
         {
+            //gets the project, category, user and requirement id
             int projId = Convert.ToInt32(Session["projectid"]);
             int catId = Convert.ToInt32(Session["Catid"]);
             int reqId = Convert.ToInt32(Session["ReqId"]);
@@ -220,6 +275,7 @@ namespace ReviseApplication.Controllers
             string userID = Session["userid"].ToString();
 
             ReviseDBEntities con = new ReviseDBEntities();
+            //checks if there is no vote
             try
             {
                 if (reqvote == 0)
@@ -234,6 +290,7 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("Vote", "Category");
             }
 
+            //updaets the user vote
             if(con.userCatReqs.Find(reqId, userID) != null)
                 con.userCatReqs.Find(reqId, userID).rate = reqvote;
             else
@@ -253,14 +310,22 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("Vote", "Category");
         }
 
+        /// <summary>
+        /// function that updates changes of a category
+        /// </summary>
+        /// <param name="id">category id</param>
+        /// <param name="catname">categry name</param>
+        /// <param name="totalLimit">the limit of the category</param>
+        /// <returns>if everything is OK redirect to category main, if not redirect to category edit with error</returns>
         [HttpPost]
         public ActionResult EditCategory(int ? id, string catname, int ? totalLimit)
         {
+            //checks if there are empty fields
             try
             {
                 if (string.IsNullOrEmpty(catname) || totalLimit == null)
                 {
-                    TempData["EmptyFields"] = "One or more field is empty";
+                    TempData["EmptyFields"] = "One or more fields are empty";
                     return RedirectToAction("EditCategory", "Category");
                 }
             }
@@ -270,11 +335,13 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("EditCategory", "Category");
             }
 
+            //gets category information from the DB
             ReviseDBEntities con = new ReviseDBEntities();
             var CatName = con.categories.Find(id).CatName;
             int projid = Convert.ToInt32(Session["projectid"]);
             var CatLimit = con.projCats.Where(c => c.catId == id).SingleOrDefault(p => p.projId == projid).totalLimit ?? 0;
 
+            // checks if there were no changes, checks if the category already exist
             try
             {
                 if (CatName == catname && CatLimit == totalLimit)
@@ -295,6 +362,7 @@ namespace ReviseApplication.Controllers
                 return RedirectToAction("EditCategory", "Category", new { id = id, projid = projid });
             }
 
+            //save changes to the DB
             if (ModelState.IsValid)
             {
                 con.categories.Find(id).CatName = catname;
@@ -305,10 +373,17 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
         }
 
+        /// <summary>
+        /// function create new category and link it to the specific project
+        /// </summary>
+        /// <param name="catname"> category name provided</param>
+        /// <param name="totalLimit">category limit provided</param>
+        /// <returns>if created successfully, redirect to category main, if not, redirect to create category again</returns>
         [HttpPost]
         public ActionResult CreateCategory(string catname, int? totalLimit)
         {
-            int projid = Convert.ToInt32(Session["projectid"]);
+            int projid = Convert.ToInt32(Session["projectid"]);    //gets the project id
+            //checks if one of the fields are empty
             try
             {
                 if (string.IsNullOrEmpty(catname) || totalLimit == null)
@@ -322,6 +397,8 @@ namespace ReviseApplication.Controllers
                 TempData["Unknown"] = "Unknown error occurred!";
                 return RedirectToAction("CreateCategory", "Category");
             }
+
+            //update the DB, creating new category
             if (ModelState.IsValid)
             {
                 int total = 0;
@@ -340,7 +417,7 @@ namespace ReviseApplication.Controllers
                     else
                     {
                         total = totalLimit ?? 0;
-                        var projcat = new projCat
+                        var projcat = new projCat  //link the category to the specific project
                         {
                             catId = catid,
                             projId = projid,
@@ -379,7 +456,7 @@ namespace ReviseApplication.Controllers
                     
                     con.SaveChanges();
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException)   //if the category already exist
                 {
                     TempData["FailedCat"] = "Category with this name already exist";
                     return RedirectToAction("CreateCategory", "Category", new { id = projid });
@@ -390,6 +467,12 @@ namespace ReviseApplication.Controllers
             return RedirectToAction("CategoryMain", "Category", new { id = projid, name = Session["projectName"].ToString() });
         }
 
+
+        /// <summary>
+        /// function that delete specific category
+        /// </summary>
+        /// <param name="id">the category id for delete</param>
+        /// <returns>returns to the category main</returns>
         [HttpGet]
         public ActionResult Delete(int? id)
         {
@@ -403,6 +486,11 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// function that delete specific category
+        /// </summary>
+        /// <param name="id">the category id for delete</param>
+        /// <returns>pop up message to verify delete</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -410,6 +498,7 @@ namespace ReviseApplication.Controllers
             int projid = Convert.ToInt32(Session["projectid"]);
             ReviseDBEntities con = new ReviseDBEntities();
 
+            //finds the category in DB, delete it from the specific project
             category cat = con.categories.Find(id);
             var catprj = con.projCats.Where(c => c.catId == id).SingleOrDefault(p => p.projId == projid);
             con.projCats.Remove(catprj);

@@ -8,8 +8,15 @@ using ReviseApplication.Models;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class to get users
+    /// </summary>
     public class UserRepository
     {
+        /// <summary>
+        /// function that gets all users and adds them to a list
+        /// </summary>
+        /// <returns>returns list of users</returns>
         public IEnumerable<SelectListItem> GetUsers()
         {
             using (var context = new ReviseDBEntities())

@@ -16,21 +16,30 @@ using ReviseApplication.Repository;
 
 namespace ReviseApplication.Controllers
 {
+    /// <summary>
+    /// The Authentication Controller Contains all logic that belongs to the issues checking the user's privileges identity.
+    /// </summary>
     public class AuthenticationController : Controller
     {
+        // GET: Login
         [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
+
+        // GET: Registration
         public ActionResult Registration()
         {
             return View();
         }
+
+        // GET: RenewPass
         public ActionResult RenewPass()
         {
             return View();
         }
+
 
         [HttpGet]
         public JsonResult GetUserInfo()
@@ -47,6 +56,8 @@ namespace ReviseApplication.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+
+        // GET: PersonalFile
         [HttpGet]
         public ActionResult PersonalFile()
         {
@@ -57,13 +68,19 @@ namespace ReviseApplication.Controllers
             return View(Main);
         }
 
+        /// <summary>
+        /// The function logges the user in to the web and check the detials that he provided in the Log-in screen.
+        /// </summary>
+        /// <param name="username">contains the user name that the user provided on the screen</param>
+        /// <param name="password">contains the password that the user provided on the screen</param>
+        /// <returns>Redirect to the right page if the details for the web site correct, if not, return to the log-in screen again with an error.</returns>
         [HttpPost]
     [AllowAnonymous]
     public ActionResult Login(string username, string password)
         {
             try
             {
-                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) //if the user didn't fill in the details
                 {
                     TempData["EmptyLogin"] = "One or more field is empty";
                     return RedirectToAction("Login", "Authentication");
@@ -73,15 +90,15 @@ namespace ReviseApplication.Controllers
                     var usr = username;
                     var users = con.users.Where(u => u.UserName == usr).ToList();
                     var user = users.First();
-                    if (users.First().isConnected == 1)
+                    if (users.First().isConnected == 1) //checks if the user is already connected
                     {
                         TempData["UserLogin"] = "User is alredy logged in";
                         return RedirectToAction("Login", "Authentication");
                     }
 
-                    if (users.First().password == password)
+                    if (users.First().password == password)  //checks the password matches the regestration password
                     {
-                        users.First().isConnected = 1;
+                        users.First().isConnected = 1;      //marking the user as "connected"
                         con.SaveChanges();
                         System.Web.HttpContext.Current.Session["username"] = user.UserName;
                         Session["userid"] = user.userid;
@@ -112,21 +129,33 @@ namespace ReviseApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// function that change the user regestration information
+        /// </summary>
+        /// <param name="firstname">cotains the provided first name</param>
+        /// <param name="lastname">cotains the provided last name</param>
+        /// <param name="UserId">cotains the user id</param>
+        /// <param name="username">cotains the provided user name</param>
+        /// <param name="phonenum">cotains the provided phone number</param>
+        /// <param name="EmailID">cotains the provided email</param>
+        /// <param name="pic">cotains the provided picture</param>
+        /// <returns>redirect to the main page if everything is correct, if not redirect to the personal file page again</returns>
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult PersonalFile(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string pic)
         {
-            ReviseDBEntities con = new ReviseDBEntities();
+            ReviseDBEntities con = new ReviseDBEntities();   //connection to the DB
             string userInfo = Session["userid"].ToString();
             var isUserExists = false;
             if (firstname == con.users.Find(userInfo).fname && lastname == con.users.Find(userInfo).lname && username == con.users.Find(userInfo).UserName &&
-                EmailID == con.users.Find(userInfo).Email && phonenum == con.users.Find(userInfo).PhoneNum && string.IsNullOrEmpty(pic))
+                EmailID == con.users.Find(userInfo).Email && phonenum == con.users.Find(userInfo).PhoneNum && string.IsNullOrEmpty(pic))  //checks if the information equal to the one in the DB
             {
                 TempData["NoInfoChanges"] = "No Changes where made";
                 return RedirectToAction("PersonalFile", "Authentication");
             }
 
-            if (string.IsNullOrEmpty(pic) && string.IsNullOrEmpty(con.users.Find(userInfo).pic))
+            if (string.IsNullOrEmpty(pic) && string.IsNullOrEmpty(con.users.Find(userInfo).pic))    //if no picture provided now and thers no picture in the DB, assign the default
                 pic = "https://he.gravatar.com/userimage/138919762/622efbcbeb0e8cea9b64cf6e8bffffc0.jpg";
 
             #region Save to Database
@@ -139,7 +168,7 @@ namespace ReviseApplication.Controllers
                             if (usr.UserName == username || usr.Email == EmailID)
                                 isUserExists = true;
 
-                    if (!isUserExists)
+                    if (!isUserExists)   //updating the user information
                     {
                         conn.users.Find(userInfo).Email = EmailID;
                         conn.users.Find(userInfo).fname = firstname;
@@ -163,19 +192,31 @@ namespace ReviseApplication.Controllers
             }
         }
 
-
+        /// <summary>
+        /// function that register the user in order to use the application
+        /// </summary>
+        /// <param name="firstname">cotains the provided first name</param>
+        /// <param name="lastname">cotains the provided last name</param>
+        /// <param name="UserId">cotains the provided id</param>
+        /// <param name="username">cotains the provided user name</param>
+        /// <param name="phonenum">cotains the provided phone</param>
+        /// <param name="EmailID">cotains the provided email</param>
+        /// <param name="password">cotains the provided password</param>
+        /// <param name="pic">cotains the provided picture</param>
+        /// <param name="DateOfBirth">cotains the provided date of birth</param>
+        /// <returns>if all information is correct redirect to the main screen, if not redirect to the registraion again with error</returns>
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Registration(string firstname, string lastname, string UserId, string username, string phonenum, string EmailID, string password, string pic, Nullable<System.DateTime> DateOfBirth)
         {
             if (string.IsNullOrEmpty(firstname) || string.IsNullOrEmpty(lastname) || string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(EmailID) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(phonenum))
+                string.IsNullOrEmpty(EmailID) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(phonenum)) //checks if one of the filldes is empty
             {
                 TempData["EmptyFildes"] = "One or more fields is missing, Please fill all blank fields";
                 return RedirectToAction("Registration", "Authentication");
             }
 
-            if (string.IsNullOrEmpty(pic))
+            if (string.IsNullOrEmpty(pic))    //if no picture provided, assign the default
                 pic = "https://he.gravatar.com/userimage/138919762/622efbcbeb0e8cea9b64cf6e8bffffc0.jpg";
 
             #region Save to Database
@@ -185,7 +226,7 @@ namespace ReviseApplication.Controllers
                 {
                     var isUserExists = con.users.Where(u => u.UserName == username || u.Email == EmailID || u.userid == UserId).Any();
 
-                    if (!isUserExists)
+                    if (!isUserExists)  //creat new user
                     {
                         var user = new user
                         {
@@ -199,7 +240,7 @@ namespace ReviseApplication.Controllers
                             PhoneNum = phonenum,
                             pic = pic
                         };
-                        con.users.Add(user);
+                        con.users.Add(user);  //save the user in the DB
                         con.SaveChanges();
             #endregion 
                         return RedirectToAction("Login", "Authentication");
@@ -215,7 +256,10 @@ namespace ReviseApplication.Controllers
             }
         }
 
-       
+       /// <summary>
+       /// logs out the connected user
+       /// </summary>
+       /// <returns>redirect to the log-in screen</returns>
         public ActionResult Logout()
         {
             try
@@ -232,19 +276,26 @@ namespace ReviseApplication.Controllers
             }
         }
 
+
+        /// <summary>
+        /// this function sends verification email for resrt password
+        /// </summary>
+        /// <param name="emailID">the user email</param>
+        /// <param name="activationCode">code for the activation</param>
+        /// <param name="emailFor"> the resone the email is send</param>
         [NonAction]
         public void SendVerificationLinkEmail(string emailID, string activationCode, string emailFor = "VerifyAccount")
         {
             var verifyUrl = "/Authentication/" + emailFor + "/" + activationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
-            var fromEmail = new MailAddress("reviseproj@gmail.com", "Revise Administrator");
+            var fromEmail = new MailAddress("reviseproj@gmail.com", "Revise Administrator");   //details about the sender and reciver
             var toEmail = new MailAddress(emailID);
             var fromEmailPassword = "Aa12345!";
 
             string subject = "";
             string body = "";
-            if (emailFor == "VerifyAccount")
+            if (emailFor == "VerifyAccount")   //the message that will be sent 
             {
                 subject = "Your account is successfully created!";
                 body = "<br/><br/>We are excited to tell you that your Revise Application account is" +
@@ -278,6 +329,9 @@ namespace ReviseApplication.Controllers
                 smtp.Send(message);
         }
 
+        /// <summary>
+        /// function that encrypt the password
+        /// </summary>
         public static class Crypto
         {
             public static string Hash(string value)
@@ -289,12 +343,15 @@ namespace ReviseApplication.Controllers
             }
         }
 
+        /// <summary>
+        ///Verify Email ID, Generate Reset password link ,Send Email 
+        /// </summary>
+        /// <param name="EmailID">the user's email</param>
+        /// <returns>showing the page</returns>
         [HttpPost]
         public ActionResult RenewPass(string EmailID)
         {
-            //Verify Email ID
-            //Generate Reset password link 
-            //Send Email 
+
             string message = "";
 
             using (var con = new ReviseDBEntities())
@@ -321,11 +378,15 @@ namespace ReviseApplication.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Verify the reset password link
+        /// Find account associated with this link
+        /// redirect to reset password page
+        /// </summary>
+        /// <param name="id">the reset code</param>
+        /// <returns></returns>
         public ActionResult ResetPassword(string id)
         {
-            //Verify the reset password link
-            //Find account associated with this link
-            //redirect to reset password page
             if (string.IsNullOrWhiteSpace(id))
             {
                 return HttpNotFound();
@@ -347,6 +408,11 @@ namespace ReviseApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// function that updating the user's password after reset
+        /// </summary>
+        /// <param name="model"> contains the new password</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)

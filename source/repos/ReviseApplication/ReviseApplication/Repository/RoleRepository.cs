@@ -6,8 +6,15 @@ using System.Web.Mvc;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class for role list
+    /// </summary>
     public class RoleRepository
     {
+        /// <summary>
+        /// function that gets roles from the DB and add them to a list
+        /// </summary>
+        /// <returns>return list of roles</returns>
         public IEnumerable<SelectListItem> GetRole()
         {
             using (var context = new ReviseDBEntities())

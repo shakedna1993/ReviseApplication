@@ -8,8 +8,16 @@ using ReviseApplication.Models;
 
 namespace ReviseApplication.Repository
 {
+    /// <summary>
+    /// class for assign users to project
+    /// </summary>
     public class AssignUserRepository
     {
+        /// <summary>
+        /// function that gets all users of a project and puts them in dropdown list
+        /// </summary>
+        /// <param name="id">the project id</param>
+        /// <returns>return select list of users</returns>
         public IEnumerable<SelectListItem> GetUsers(int? id)
         {
             using (var context = new ReviseDBEntities())
