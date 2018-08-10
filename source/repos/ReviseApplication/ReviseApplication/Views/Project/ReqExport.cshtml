@@ -8,17 +8,9 @@
 @model IEnumerable<ReviseApplication.Models.Categories>
 <html>
 <head>
-    <style>
-        table {
-            width: 800px;
-            table-layout: fixed;
-        }
 
-        td {
-            word-wrap: break-word;
-        }
-    </style>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>ReqExport</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -29,53 +21,95 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- Website Font style -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Latest compiled JavaScript -->
     <script>
-    $(document).ready(function () {
-        var doc = new jsPDF();
+        $(document).ready(function () {
+            var doc = new jsPDF();
 
-        // We'll make our own renderer to skip this editor
-        var specialElementHandlers = {
-            '#editor': function (element, renderer) {
-                return true;
-            }
-        };
+            // We'll make our own renderer to skip this editor
+            var specialElementHandlers = {
+                '#editor': function (element, renderer) {
+                    return true;
+                }
+            };
 
-        $('#cmd').click(function () {
-            doc.fromHTML($('#content').get(0), 15, 15, {
-                'width': 170,
-                'elementHandlers': specialElementHandlers
+            $('#cmd').click(function () {
+                doc.fromHTML($('#content').get(0), 15, 15, {
+                    'width': 400,
+                    'elementHandlers': specialElementHandlers
+                });
+                doc.save('Requirements-list.pdf');
             });
-            doc.save('Requirements-list.pdf');
         });
-    });
     </script>
-</head>
-<body>
-        @Html.ActionLink("Back", "ProjectMain", "Project", new { @role = "button", @class = "btn btn-default" }) &nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="cmd" type="button" class="btn btn-default"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp;Export to PDF</button>&nbsp;&nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-default" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> &nbsp; print</button>
-        <div id="content">
-            <p dir="rtl">
-                <img src="~/css/revise_main.png" width="200" />
-            </p>
-            <center>
-                <div class="alert alert-warning" role="alert">
-                    <h4>
-                        <b>  Participants in project:</b>&nbsp;
-
-                        @foreach (var MemberProject in ViewBag.MemberProjectList)
-                {
-                    <us>
-                        @MemberProject.user.fname
-                        @MemberProject.user.lname
-                        @MemberProject.role1.RoleName
-                        &nbsp;
-                    </us>
+    <style>
+        table {
+            width: 700px;
         }
 
-                    </h4>
-                </div>
-            </center>
+        li {
+            width: 110px;
+        }
+
+        h1, h2, h3 {
+            font-family: Tahoma;
+        }
+
+        h1 {
+            font-size: 22px;
+            text-decoration: underline;
+            color: darkblue;
+        }
+
+        h2 {
+            font-size: 17px;
+            text-decoration: underline;
+            color: darkblue;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: black;
+        }
+    </style>
+</head>
+<body ng-controller="mainController" style="background-color:#E8E8E8;">
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00004d;">
+        <a href="/Project/ProjectMain"> <img src="~/css/revise_main.png" style="max-height: 145px; max-width: 170px; padding: 5px 0px 0px 0px; margin-left:170px;" /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav navbar-right" style="margin-right:130px;">
+                <li class="nav-item active">
+                    <a class="nav-link"><span class=""></span><b>My Score:</b> @Convert.ToString(Session["UserScore"])</a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user"></span> @Convert.ToString(Session["UserName"])
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/personalFile">Personal File</a>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Authentication/Logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+    <div id="content" style="margin-left:170px; margin-right:170px;">
+        <div class="alert alert-warning center" role="alert">
             <center>
                 <h1>
                     <b>
@@ -83,28 +117,51 @@
                     </b>
                 </h1>
             </center>
-            <br /><br />
-
-            <br /><br /><br />
-            @foreach (var item in Model)
+            <h2>
+                <b>  Participants in project:</b>
+            </h2>
+            <h3>
+                @foreach (var MemberProject in ViewBag.MemberProjectList)
                 {
-                    <table class="table">
-                        <tr class="active">
-                            <td>
-                                <h4>@item.category</h4>
-                                <br />
-                                <h5>@item.reqname</h5>
-                            </td>
-                        </tr>
-                        <tr class="active">
-                            <td>
-                                <p><h5>@item.reqdesc</h5></p>
-                            </td>
-                        </tr>
-                    </table>
-
+                    <us>
+                        <b>@MemberProject.role1.RoleName:</b>
+                        @MemberProject.user.fname
+                        @MemberProject.user.lname
+                    </us>
+                    <br />
                 }
+            </h3>
         </div>
-            <div id="editor"></div>
+        <br />
+        @foreach (var item in Model)
+        {
+            <table class="table">
+                <tr class="active">
+                    <td>
+                        <h3><b>@item.category</b></h3>
+                        <br />
+                        <h3><u>Requirement Name:</u> @item.reqname</h3>
+                    </td>
+                </tr>
+                <tr class="active">
+                    <td>
+                        <h3><u>Requirement Description:</u> @item.reqdesc</h3>
+                    </td>
+                </tr>
+            </table>
+
+        }
+    </div>
+    <div id="editor"></div>
+    <center>
+        <a href="@Url.Action("ProjectMain", "Project")" class="btn btn-default btn-md" style="border:none; width:110px;">
+            <i class="fa fa-chevron-circle-left"></i>
+            <span>Back</span>
+        </a>
+        <button id="cmd" type="button" class="btn btn-default btn-md" style="border:none;"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp;Export to PDF</button>
+        <button type="button" class="btn btn-default btn-md" style="border:none;" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> &nbsp; print</button>
+    </center>
+    <br />
+    <br />
 </body>
 </html>
