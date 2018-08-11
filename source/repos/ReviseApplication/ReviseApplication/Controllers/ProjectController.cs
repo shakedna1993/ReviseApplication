@@ -554,16 +554,22 @@ namespace ReviseApplication.Controllers
                 foreach (var prj in prjusr) 
                     con.projUsers.Remove(prj);
             }
-            //remove all project catefories
+            //remove all project categories
             var prjcat = con.projCats.Where(p => p.projId == id).ToList();
             foreach (var prj in prjcat)
                 con.projCats.Remove(prj);
-            //remove the project
+            //remove all project requirements
             var Projreq = con.requirements.Where(p => p.projid == id).ToList();
+            var Projreqvote = con.userCatReqs.ToList();
             if (Projreq != null)
             {
                 foreach (var req in Projreq)
+                {
+                    foreach (var vote in Projreqvote)
+                        if (vote.reqId == req.reqId)
+                            con.userCatReqs.Remove(vote);
                     con.requirements.Remove(req);
+                }
             }
             
             var message = con.messages.Where(p => p.projId == id).ToList();
